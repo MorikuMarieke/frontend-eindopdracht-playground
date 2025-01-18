@@ -1,0 +1,16 @@
+.nav-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.nav-bar-links {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+}
+
+.nav-bar li + li {
+    margin-left: 8px;
+}
