@@ -1,0 +1,27 @@
+.outer-container--main {
+    background-color: var(--color-tertiary);
+}
+
+.introduction {
+    background-color: var(--color-main-white);
+    width: calc(50vw - 1em);
+    padding: 1em;
+    border-radius: 1.2em;
+}
+
+.introduction p {
+    color: var(--color-secundary);
+}
+
+.registration-form-title {
+    background-color: var(--color-secundary);
+    width: calc(50vw - 1em);
+    padding: 1em;
+    border-radius: 1.2em 1.2em 0 0;
+}
+
+.registration-form-container {
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}

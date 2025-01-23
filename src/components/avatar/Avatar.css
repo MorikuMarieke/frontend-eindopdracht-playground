@@ -1,0 +1,13 @@
+.avatar {
+    background-color: var(--color-secundary);
+    border-radius: 50%;
+    border: 3px solid var(--color-main-white);
+    width: 100px;
+    overflow: hidden;
+    margin-left: 1em;
+    box-shadow: 4px 4px 12px var(--color-tertiary);
+}
+
+.avatar-img {
+    width: 100%;
+}

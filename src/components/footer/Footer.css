@@ -1,0 +1,8 @@
+.outer-container--footer {
+    background-color: var(--color-tertiary);
+}
+
+footer p {
+    font-size: 0.7em;
+    color: var(--color-main-white);
+}

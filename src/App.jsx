@@ -7,13 +7,13 @@ import PlaylistOverview from './pages/playlistOverview/PlaylistOverview.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Playlist from './pages/playlist/Playlist.jsx';
 import ErrorPage from './pages/errorPage/ErrorPage.jsx';
+import Footer from './components/footer/Footer.jsx';
 
 function App() {
 
   return (
     <>
         <NavBar/>
-        <main>
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
@@ -21,10 +21,7 @@ function App() {
             <Route path="/playlist" element={<Playlist />} />
             <Route path="/error" element={<ErrorPage />} />
         </Routes>
-        </main>
-        <footer>
-            Footer
-        </footer>
+        <Footer/>
     </>
   )
 }
