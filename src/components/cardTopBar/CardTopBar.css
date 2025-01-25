@@ -1,0 +1,24 @@
+/* ========================================
+   Component: Card Top Bar
+======================================== */
+
+/* ===== 1. General Top Bar Styles ===== */
+
+.card-top-bar {
+    padding: 1em;
+    border-radius: 1.2em 1.2em 0 0;
+}
+
+/* ===== 2. Specific Top Bar Styles ===== */
+
+.top-bar-registration-form {
+    background-color: var(--color-secundary);
+}
+
+.top-bar-genre-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-secundary);
+    color: var(--color-main-white);
+}

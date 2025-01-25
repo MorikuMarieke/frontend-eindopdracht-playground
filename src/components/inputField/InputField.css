@@ -1,0 +1,25 @@
+/* ========================================
+   Component: Input Field
+======================================== */
+
+/* ===== 1. General Button Styles ===== */
+
+input {
+    font-family: inherit;
+    padding: 0.3em 1.2em 0.3em 1.2em ;
+    outline: none;
+    border: none;
+    border-radius: 1em;
+}
+
+/* ===== 2. Specific Button Styles ===== */
+
+.registration-form-input {
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    margin-bottom: 0.8em;
+}
+
+.registration-form-input::placeholder {
+    color: var(--color-main-white);
+}

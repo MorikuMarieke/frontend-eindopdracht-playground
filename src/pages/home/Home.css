@@ -1,27 +1,69 @@
+/* ========================================
+   Page: Home
+======================================== */
+
+/* ===== 1. General Styles ===== */
+
 .outer-container--main {
     background-color: var(--color-tertiary);
 }
 
+/* ===== 2. Cards ===== */
+
+/* ===== 2.1 Introduction Card ===== */
+
 .introduction {
     background-color: var(--color-main-white);
-    width: calc(50vw - 1em);
-    padding: 1em;
     border-radius: 1.2em;
+    padding: 1em;
 }
 
 .introduction p {
     color: var(--color-secundary);
 }
 
-.registration-form-title {
-    background-color: var(--color-secundary);
-    width: calc(50vw - 1em);
-    padding: 1em;
-    border-radius: 1.2em 1.2em 0 0;
-}
+/* ===== 2.2 Registration Form Card ===== */
 
 .registration-form-container {
+    display: flex;
+    flex-direction: column;
     background-color: var(--color-main-white);
+    padding: 0.8em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.login-button {
+    align-self: center;
+}
+
+/* ===== 2.3 Connect to Spotify Card ===== */
+
+.connect-spotify {
+    display: flex;
+    align-items: center;
+    color: var(--color-secundary);
+    padding: 1em;
+    background-color: var(--color-main-white);
+}
+
+.spotify-img-wrapper {
+    flex: 0 0 3em;
+    margin-right: 1em;
+}
+
+.spotify-img-wrapper img {
+    width: 100%;
+}
+
+/* ===== 2.4 Genre Selection Card ===== */
+
+.genre-selection {
+    background-color: var(--color-primary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
+}
+
+.search-button--genre {
+    background-color: transparent;
+    padding: 0 0.5em 0 0;
 }

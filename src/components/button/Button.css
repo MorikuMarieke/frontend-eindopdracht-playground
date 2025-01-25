@@ -1,0 +1,67 @@
+/* ========================================
+   Component: Button
+======================================== */
+
+/* ===== 1. General Button Styles ===== */
+button {
+    /*padding: 0.3em 1.2em 0.3em 1.2em;*/
+    border-radius: 1em;
+    border: none;
+    font-family: 'Jura', serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* ===== 2. Specific Button Styles ===== */
+
+/* ===== 2.1 Login Button ===== */
+
+.login-button {
+    background-color: var(--color-secundary);
+    color: var(--color-main-white);
+    width: 25%;
+    padding: 0.3em 1.2em 0.3em 1.2em;
+}
+
+/* ===== 2.2 Search Button -- Genre ===== */
+
+.genre-selection-button {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em 1em;
+}
+
+.search-icon-genre {
+    color: var(--color-main-white);
+}
+
+/* ===== 2.2 Search Button -- Genre ===== */
+
+
+.selected-genre {
+    display: inline flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    padding: 0.3em 0.5em;
+}
+
+.selected-genre, .selected-genre {
+    margin-right: 0.5em;
+}
+
+.selected-genre .search-icon-genre {
+    margin-right: 0.5em;
+}
+
+.hovered-icon {
+    color: var(--color-primary);
+}
+
+.default-icon {
+    color: var(--color-secundary);
+}
+
