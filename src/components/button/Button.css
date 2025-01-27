@@ -14,14 +14,17 @@ button {
 
 /* ===== 2. Specific Button Styles ===== */
 
-/* ===== 2.1 Login Button ===== */
+/* ===== 2.1 Login and Registration Button ===== */
 
-.login-button {
+.login-button, .registration-button {
     background-color: var(--color-secundary);
     color: var(--color-main-white);
-    width: 25%;
+    width: 30%;
     padding: 0.3em 1.2em 0.3em 1.2em;
+    align-self: center;
 }
+
+
 
 /* ===== 2.2 Search Button -- Genre ===== */
 
@@ -37,9 +40,6 @@ button {
 .search-icon-genre {
     color: var(--color-main-white);
 }
-
-/* ===== 2.2 Search Button -- Genre ===== */
-
 
 .selected-genre {
     display: inline flex;
@@ -65,3 +65,13 @@ button {
     color: var(--color-secundary);
 }
 
+/* ===== 2.3 Button - Edit my playlists ===== */
+
+.button--edit-my-playlists {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em 1em;
+}

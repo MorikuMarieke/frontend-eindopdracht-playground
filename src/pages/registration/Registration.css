@@ -1,31 +1,24 @@
-.page-playlist-overview {
+.page-registration {
     display: flex;
     flex-direction: column;
     justify-content: center;
     flex: 1;
 }
 
-.outer-container--playlist-overview {
+.outer-container--registration {
     background-color: var(--color-tertiary);
 }
 
-.my-playlists-wrapper {
-    width: 70%;
+.create-account {
+    width: 50%;
     align-self: center;
 }
 
-.playlist-overview-card-wrapper {
+.registration-form-container {
     display: flex;
     flex-direction: column;
-    gap: 1em;
     background-color: var(--color-main-white);
-    padding: 1em;
+    padding: 0.8em;
     border-radius: 0 0 1.2em 1.2em;
 }
 
-
-.playlist-overview-card {
-    background-color: var(--color-secundary);
-    border-radius: 1em;
-    padding: 1em;
-}

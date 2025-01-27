@@ -4,8 +4,13 @@
 
 /* ===== 1. General Styles ===== */
 
-.outer-container--main {
-    background-color: var(--color-tertiary);
+.page-home {
+    column-count: 2;
+    column-gap: 1em;
+    gap: 1em;
+    width: 100%;
+    max-width: 1200px;
+    margin: 1em;
 }
 
 /* ===== 2. Cards ===== */
@@ -22,9 +27,9 @@
     color: var(--color-secundary);
 }
 
-/* ===== 2.2 Registration Form Card ===== */
+/* ===== 2.2 Login Form Card ===== */
 
-.registration-form-container {
+.login-form-container {
     display: flex;
     flex-direction: column;
     background-color: var(--color-main-white);
@@ -32,8 +37,9 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.login-button {
-    align-self: center;
+.login-form-button-container {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 /* ===== 2.3 Connect to Spotify Card ===== */
@@ -67,3 +73,41 @@
     background-color: transparent;
     padding: 0 0.5em 0 0;
 }
+
+/* ===== 2.5 Artist Selection Card ===== */
+
+.artist-selection {
+    display: flex;
+    background-color: var(--color-secundary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.artist-selection form {
+    display: flex;
+}
+
+.artist-selection input, input::placeholder {
+    background-color: transparent;
+    font-family: "Jura", serif;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--color-main-white);
+    margin-left: 0.8em;
+}
+
+/* ===== 2.6 Music Suggestions Card ===== */
+
+.music-suggestions {
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.music-suggestions-playlist {
+    background-color: var(--color-secundary);
+    border-radius: 1em;
+    padding: 1em;
+}
+

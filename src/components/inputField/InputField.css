@@ -2,7 +2,7 @@
    Component: Input Field
 ======================================== */
 
-/* ===== 1. General Button Styles ===== */
+/* ===== 1. General Input Styles ===== */
 
 input {
     font-family: inherit;
@@ -12,7 +12,7 @@ input {
     border-radius: 1em;
 }
 
-/* ===== 2. Specific Button Styles ===== */
+/* ===== 2. Specific Input Styles ===== */
 
 .registration-form-input {
     background-color: var(--color-primary);

@@ -7,6 +7,7 @@ import PlaylistOverview from './pages/playlistOverview/PlaylistOverview.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Playlist from './pages/playlist/Playlist.jsx';
 import ErrorPage from './pages/errorPage/ErrorPage.jsx';
+import Registration from './pages/registration/Registration.jsx';
 import Footer from './components/footer/Footer.jsx';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/playlist-overview" element={<PlaylistOverview />} />
             <Route path="/playlist" element={<Playlist />} />
             <Route path="/error" element={<ErrorPage />} />
+            <Route path="/registration" element={<Registration />} />
         </Routes>
         <Footer/>
     </>

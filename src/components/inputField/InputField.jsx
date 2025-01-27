@@ -1,7 +1,7 @@
 import './InputField.css';
 
 export default function InputField({
-                        inputText,
+                        labelText,
                         type,
                         id,
                         name,
@@ -14,7 +14,7 @@ export default function InputField({
     return (
         <>
             <label htmlFor={id}>
-                {inputText}
+                {labelText}
             </label>
             <input
                 type={type}
