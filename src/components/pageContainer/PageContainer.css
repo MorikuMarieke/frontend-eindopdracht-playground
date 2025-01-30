@@ -1,0 +1,33 @@
+/* ========================================
+   Component: Page Container
+======================================== */
+
+/* ===== 1. General Page Container Styles ===== */
+.page-container {
+    column-count: 2;
+    column-gap: 1em;
+    gap: 1em;
+    width: 100%;
+    max-width: 1200px;
+    margin: 1em;
+}
+
+.page-error {
+    column-count: 1;
+    width: 70%;
+}
+
+.page-registration {
+    column-count: 1;
+    width: 60%;
+}
+
+.page-playlist-overview {
+    column-count: 1;
+    width: 60%;
+}
+
+.page-playlist {
+    column-count: 1;
+    width: 70%;
+}

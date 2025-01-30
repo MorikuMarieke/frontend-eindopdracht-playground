@@ -16,15 +16,12 @@ button {
 
 /* ===== 2.1 Login and Registration Button ===== */
 
-.login-button, .registration-button {
+.secondary-button {
     background-color: var(--color-secundary);
     color: var(--color-main-white);
-    width: 30%;
-    padding: 0.3em 1.2em 0.3em 1.2em;
+    padding: 0.3em 1.6em;
     align-self: center;
 }
-
-
 
 /* ===== 2.2 Search Button -- Genre ===== */
 
@@ -67,7 +64,8 @@ button {
 
 /* ===== 2.3 Button - Edit my playlists ===== */
 
-.button--edit-my-playlists {
+.button--edit-my-playlists,
+.button--edit-playlist{
     display: flex;
     flex-direction: row-reverse;
     align-items: center;

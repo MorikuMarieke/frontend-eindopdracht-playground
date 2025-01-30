@@ -1,0 +1,5 @@
+.playlist-card {
+    background-color: var(--color-secundary);
+    border-radius: 1em;
+    padding: 1em;
+}

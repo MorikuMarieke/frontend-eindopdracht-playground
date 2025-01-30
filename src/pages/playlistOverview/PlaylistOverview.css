@@ -1,17 +1,5 @@
-.page-playlist-overview {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex: 1;
-}
-
 .outer-container--playlist-overview {
     background-color: var(--color-tertiary);
-}
-
-.my-playlists-wrapper {
-    width: 70%;
-    align-self: center;
 }
 
 .playlist-overview-card-wrapper {
@@ -22,7 +10,6 @@
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
-
 
 .playlist-overview-card {
     background-color: var(--color-secundary);

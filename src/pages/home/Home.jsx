@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
@@ -7,84 +7,86 @@ import {MagnifyingGlass, Funnel, CheckCircle, XCircle} from "@phosphor-icons/rea
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import {useNavigate} from 'react-router-dom';
+import CardContainer from '../../components/cardContainer/CardContainer.jsx';
+import PageContainer from '../../components/pageContainer/PageContainer.jsx';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 export default function Home() {
+    const { isAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const HandleSubmit = () => {
         //     logic
     }
 
-    // TODO: Consider removing the section classnames, as I don't use them for css (yet)?
+    // TODO: Consider removing the CardContainer classnames, as I don't use them for css (yet)?
 
     return (
         <main>
             <OuterContainer type="main">
-                <div className="page-home">
-
-                    <section className="introduction">
+                <PageContainer>
+                    <CardContainer className="introduction">
                         <h2>Hello world!</h2>
-                        <p>Welcome to PLAYGROUND! I have created this page for those people that are always looking for
-                            new
-                            music to expand their collection with. Play around, tell us what you like, listen to the
-                            song
-                            selection and add them to your own personal library.</p>
-                    </section>
+                        <p>Welcome to PLAYGROUND! I have created this page for people that are always looking for
+                            new music to expand their collection with.</p>
+                        <p>Play around, tell us what you like, listen to the
+                            song selection and add them to your own personal library.</p>
+                    </CardContainer>
 
                     {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}
-                    <section className="login-account">
-                        <form className="login-form" onSubmit={HandleSubmit}>
-                            <CardTopBar
-                                cardName="registration-form"
-                            >
-                                <h3>Log in to your account to save your playlists</h3>
-                            </CardTopBar>
-                            <div className="login-form-container">
+                    <CardContainer className="login-account">
+                        <CardTopBar cardName="registration-form" color="secondary">
+                            <h3>Log in to your account to save your playlists</h3>
+                        </CardTopBar>
+                        <form className="form" onSubmit={HandleSubmit}>
                                 {/*TODO: I want to create logic where you can log in with username or e-mail*/}
                                 <InputField
                                     type="text"
                                     id="username-or-email"
-                                    className="registration-form-input"
+                                    className="form-input"
                                     placeholder="Username or e-mail"
                                     required={true}
                                 />
                                 <InputField
                                     type="text"
                                     id="password"
-                                    className="registration-form-input"
+                                    className="form-input"
                                     placeholder="Password"
                                     required={true}
                                 />
-                                <div className="login-form-button-container">
+                                <div className="form-button-container">
                                     <Button
                                         buttonText="Log in"
                                         type="submit"
-                                        className="login-button"
+                                        className="secondary-button"
                                     />
                                     <Button
                                         buttonText="Register"
                                         type="button"
-                                        className="registration-button"
+                                        className="secondary-button"
                                         onClick={() => navigate("/registration")}
                                     />
                                 </div>
-                            </div>
                         </form>
-                    </section>
+                    </CardContainer>
 
                     {/*TODO: This section appears when user is logged in*/}
-                    <section className="connect-spotify">
+                    {isAuth ?
+                    <CardContainer className="connect-spotify">
                         <div className="spotify-img-wrapper">
                             <img src={spotifyLogo} alt="spotify-logo"/>
                         </div>
                         <p>Connect your Spotify account to your profile and import your playlists directly to
                             Spotify</p>
-                    </section>
+                    </CardContainer>
+                        :
+                        <></>
+                    }
 
                     {/*TODO: Consideration: only one is visible, first a selection tool for one or the other? Artist or Genre*/}
-                    <section className="genre-selection-wrapper">
+                    <CardContainer className="genre-selection-wrapper">
                         <CardTopBar
-                            cardName="genre-selection">
+                            cardName="genre-selection" color="secondary">
                             {/*TODO: when clicked the magnifying glass, the search will execute based on the input, the input will stay visible*/}
                             <Button type="button" className="search-button--genre">
                                 <MagnifyingGlass size={32} className="search-icon-genre"/>
@@ -112,12 +114,12 @@ export default function Home() {
                                 hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                 defaultIcon={<CheckCircle className="default-icon" size={22}/>}
                             />
-                        {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
+                            {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
                         </div>
-                    </section>
+                    </CardContainer>
 
-                    <section className="artist-selection-wrapper">
-                        <CardTopBar cardName="artist-selection">
+                    <CardContainer className="artist-selection-wrapper">
+                        <CardTopBar cardName="artist-selection" color="light">
                             <h3>What is the name of your favorite artist?</h3>
                         </CardTopBar>
                         <div className="artist-selection">
@@ -134,11 +136,11 @@ export default function Home() {
                                 />
                             </form>
                         </div>
-                    </section>
+                    </CardContainer>
 
                     {/*TODO: Visible after giving input through Genre or Artist*/}
-                    <section className="music-suggestions-wrapper">
-                        <CardTopBar cardName="music-suggestions">
+                    <CardContainer className="music-suggestions-wrapper">
+                        <CardTopBar cardName="music-suggestions" color="primary">
                             <h3>Music suggestions based on your picks</h3>
                         </CardTopBar>
                         <div className="music-suggestions">
@@ -146,9 +148,8 @@ export default function Home() {
                                 <p>List of music suggestions will be generated here with clickable links</p>
                             </div>
                         </div>
-                    </section>
-
-                </div>
+                    </CardContainer>
+                </PageContainer>
             </OuterContainer>
         </main>
     )

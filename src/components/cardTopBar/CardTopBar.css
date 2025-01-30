@@ -9,39 +9,32 @@
     border-radius: 1.2em 1.2em 0 0;
 }
 
-/* ===== 2. Unique Top Bar Styles ===== */
+.color-primary {
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
 
-.top-bar-login-form {
+}
+
+.color-secondary {
     background-color: var(--color-secundary);
     color: var(--color-main-white);
 }
 
-.top-bar-registration-form {
-    background-color: var(--color-secundary);
-    color: var(--color-main-white);
+.color-light {
+    background-color: var(--color-main-white);
 }
+
+/* ===== 2. Specified Top Bar Styles ===== */
 
 .top-bar-genre-selection {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--color-secundary);
-    color: var(--color-main-white);
 }
 
-.top-bar-artist-selection {
-    background-color: var(--color-main-white);
-}
-
-.top-bar-music-suggestions {
-    background-color: var(--color-primary);
-    color: var(--color-main-white);
-}
-
-.top-bar-my-playlists {
+.top-bar-my-playlists,
+.top-bar-playlist {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--color-primary);
-    color: var(--color-main-white);
 }
