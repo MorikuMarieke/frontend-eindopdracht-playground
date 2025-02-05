@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css'
 import NavBar from './components/navBar/NavBar.jsx';
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Home from './pages/home/Home.jsx';
 import PlaylistOverview from './pages/playlistOverview/PlaylistOverview.jsx';
 import Profile from './pages/profile/Profile.jsx';
@@ -10,9 +10,11 @@ import ErrorPage from './pages/errorPage/ErrorPage.jsx';
 import Registration from './pages/registration/Registration.jsx';
 import Footer from './components/footer/Footer.jsx';
 import {Helmet} from 'react-helmet-async';
+import {AuthContext} from './context/AuthContext.jsx';
 
 
 function App() {
+    const {isAuth} = useContext(AuthContext);
 
     return (
         <>
@@ -26,9 +28,30 @@ function App() {
             <NavBar/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/profile" element={<Profile/>}/>
-                <Route path="/playlist-overview" element={<PlaylistOverview/>}/>
-                <Route path="/playlist" element={<Playlist/>}/>
+                <Route
+                    path="/profile"
+                    element={isAuth === true ?
+                        <Profile/>
+                        :
+                        <Navigate to="/"/>
+                    }
+                />
+                <Route
+                    path="/playlist-overview"
+                    element={isAuth === true ?
+                        <PlaylistOverview/>
+                        :
+                        <Navigate to="/"/>
+                    }
+                />
+                <Route
+                    path="/playlist"
+                    element={isAuth === true ?
+                        <Playlist/>
+                        :
+                        <Navigate to="/"/>
+                    }
+                />
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route path="/registration" element={<Registration/>}/>
             </Routes>

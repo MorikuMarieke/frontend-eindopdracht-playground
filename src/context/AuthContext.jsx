@@ -1,48 +1,129 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+import {NOVI_PLAYGROUND_BACKEND} from '../constants/constants.js';
 
 export const AuthContext = createContext({});
 
-export function AuthContextProvider({children}) {
-
-    const [auth, setAuth] = useState({
+export function AuthContextProvider({ children }) {
+    const [isAuth, toggleIsAuth] = useState({
         isAuth: false,
         user: {},
+        status: 'pending',
     });
 
-    // const [spotifyAuth, setSpotifyAuth] = useState({
-    //     isSpotifyAuth: false,
-    //
-    // })
+    const navigate = useNavigate();
 
-    function signIn(email) {
-        setAuth({
-            isAuth: true,
-            user: {
-                username: '',
-                email: email,
-                id: '',
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                void fetchUserData(decoded.sub, token);
+            } catch (e) {
+                console.error('Error with decoding token:', e);
+                localStorage.removeItem('token'); // Verwijder corrupte token
+                toggleIsAuth({
+                    isAuth: false,
+                    user: null,
+                    status: 'done',
+                });
             }
-        });
-        console.log('De gebruiker is ingelogd!');
+        } else {
+            toggleIsAuth({
+                isAuth: false,
+                user: null,
+                status: 'done',
+            });
+        }
+    }, []);
+
+    async function signIn(JWT) {
+        try {
+            localStorage.setItem('token', JWT);
+            const decoded = jwtDecode(JWT);
+            await fetchUserData(decoded.sub, JWT, '/profile');
+            // void fetchUserData( decoded.sub, JWT, '/profile' );
+        } catch (e) {
+            console.error('Error signing in:', e);
+            localStorage.removeItem('token');
+            toggleIsAuth({
+               isAuth: false,
+               user: null,
+               status: 'done',
+            });
+        }
+
+
+        // link de gebruiker door naar de profielpagina
+        // navigate('/profile');
     }
 
     function signOut() {
-        setAuth({
+        localStorage.removeItem('token');
+        toggleIsAuth( {
             isAuth: false,
             user: null,
+            status: 'done',
         });
-        console.log('De gebruiker is uitgelogd!');
+
+        console.log( 'Gebruiker is uitgelogd!' );
+        navigate('/');
     }
 
-    const data = {
-        isAuth: auth.isAuth,
+    async function fetchUserData(id, token, redirectUrl) {
+        try {
+            // haal gebruikersdata op met de token en id van de gebruiker
+            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${id}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            // zet de gegevens in de state
+            toggleIsAuth(prevState => ({
+                ...prevState,
+                isAuth: true,
+                user: {
+                    username: result.data.username,
+                    email: result.data.email,
+                    id: result.data.id,
+                },
+                status: 'done',
+            }));
+
+            // als er een redirect URL is meegegeven (bij het mount-effect doen we dit niet) linken we hiernnaartoe door
+            // als we de history.push in de login-functie zouden zetten, linken we al door voor de gebuiker is opgehaald!
+            if (redirectUrl) {
+                navigate(redirectUrl);
+            }
+            console.log(result.data);
+
+        } catch (e) {
+            console.error('Error fetching user data:', e);
+            localStorage.removeItem('token');
+            // ging er iets mis? Plaatsen we geen data in de state
+            toggleIsAuth( {
+                isAuth: false,
+                user: null,
+                status: 'done',
+            });
+        }
+    }
+
+    const contextData = {
+        isAuth: isAuth.isAuth,
+        user: isAuth.user,
         signIn,
         signOut,
     };
 
     return (
-        <AuthContext.Provider value={data}>
-            {children}
+        <AuthContext.Provider value={contextData}>
+            {isAuth.status === 'done' ? children : <p>Loading...</p>}
         </AuthContext.Provider>
     );
 }

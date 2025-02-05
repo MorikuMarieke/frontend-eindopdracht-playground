@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
@@ -10,13 +10,64 @@ import {useNavigate} from 'react-router-dom';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import axios from 'axios';
+import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 
 export default function Home() {
-    const { isAuth } = useContext(AuthContext);
+    // For sign in functionality
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, toggleError] = useState(false);
+
+    // For music functionalities
+    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
-    const HandleSubmit = () => {
-        //     logic
+    // Context
+    const {isAuth, signIn} = useContext(AuthContext);
+
+    useEffect(() => {
+        async function fetchToken() {
+            const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+            const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+
+            const authString = btoa(`${clientId}:${clientSecret}`);
+
+            try {
+                const response = await axios.post(
+                    'https://accounts.spotify.com/api/token',
+                    new URLSearchParams({ grant_type: 'client_credentials' }), // Correctly formatted form data
+                    {
+                        headers: {
+                            'Authorization': `Basic ${authString}`,
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }
+                );
+                console.log(response.data); //logs the access_token
+                localStorage.setItem("spotifyToken", response.data["access_token"]);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+        fetchToken();
+    }, []);
+
+    async function handleLoginSubmit(e) {
+        e.preventDefault();
+        toggleError(false);
+
+        try {
+            const result = await axios.post(`${NOVI_PLAYGROUND_BACKEND}login`, {
+                username: username,
+                password: password,
+            });
+            console.log(result.data);
+            signIn(result.data.accessToken);
+        } catch(e) {
+            console.error(e);
+            toggleError(true);
+        }
     }
 
     // TODO: Consider removing the CardContainer classnames, as I don't use them for css (yet)?
@@ -35,50 +86,52 @@ export default function Home() {
 
                     {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}
                     <CardContainer className="login-account">
-                        <CardTopBar cardName="registration-form" color="secondary">
+                        <CardTopBar color="secondary">
                             <h3>Log in to your account to save your playlists</h3>
                         </CardTopBar>
-                        <form className="form" onSubmit={HandleSubmit}>
-                                {/*TODO: I want to create logic where you can log in with username or e-mail*/}
-                                <InputField
-                                    type="text"
-                                    id="username-or-email"
-                                    className="form-input"
-                                    placeholder="Username or e-mail"
-                                    required={true}
+                        <form className="form" onSubmit={handleLoginSubmit}>
+                            {/*TODO: I want to create logic where you can log in with username or e-mail*/}
+                            <InputField
+                                type="text"
+                                id="username"
+                                value={username}
+                                className="form-input"
+                                placeholder="Username"
+                                required={true}
+                            />
+                            <InputField
+                                type="password"
+                                id="password"
+                                value={password}
+                                className="form-input"
+                                placeholder="Password"
+                                required={true}
+                            />
+                            <div className="form-button-container">
+                                <Button
+                                    buttonText="Log in"
+                                    type="submit"
+                                    className="secondary-button"
                                 />
-                                <InputField
-                                    type="text"
-                                    id="password"
-                                    className="form-input"
-                                    placeholder="Password"
-                                    required={true}
+                                <Button
+                                    buttonText="Register"
+                                    type="button"
+                                    className="secondary-button"
+                                    onClick={() => navigate("/registration")}
                                 />
-                                <div className="form-button-container">
-                                    <Button
-                                        buttonText="Log in"
-                                        type="submit"
-                                        className="secondary-button"
-                                    />
-                                    <Button
-                                        buttonText="Register"
-                                        type="button"
-                                        className="secondary-button"
-                                        onClick={() => navigate("/registration")}
-                                    />
-                                </div>
+                            </div>
                         </form>
                     </CardContainer>
 
                     {/*TODO: This section appears when user is logged in*/}
                     {isAuth ?
-                    <CardContainer className="connect-spotify">
-                        <div className="spotify-img-wrapper">
-                            <img src={spotifyLogo} alt="spotify-logo"/>
-                        </div>
-                        <p>Connect your Spotify account to your profile and import your playlists directly to
-                            Spotify</p>
-                    </CardContainer>
+                        <CardContainer className="connect-spotify">
+                            <div className="spotify-img-wrapper">
+                                <img src={spotifyLogo} alt="spotify-logo"/>
+                            </div>
+                            <p>Connect your Spotify account to your profile and import your playlists directly to
+                                Spotify</p>
+                        </CardContainer>
                         :
                         <></>
                     }
