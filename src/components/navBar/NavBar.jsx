@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './NavBar.css';
 import logo from '../../assets/website_logo_beige.svg';
 import OuterContainer from '../outerContainer/OuterContainer.jsx';
 import {NavLink} from 'react-router-dom';
 import Avatar from '../avatar/Avatar.jsx';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 function NavBar() {
+    const {isAuth} = useContext(AuthContext);
+    const data = useContext(AuthContext);
+    console.log(data);
+
     return (
         <header>
             <OuterContainer type="nav-bar">
@@ -23,8 +28,17 @@ function NavBar() {
                     </NavLink>
                     <div className="nav-links-wrapper">
                         <ul className="nav-bar-links">
-                            <li><NavLink to="/playlist-overview">Playlists</NavLink></li>
-                            <li><NavLink to="/profile">Profile</NavLink></li>
+                            {isAuth ?
+                                <>
+                                    <li><NavLink to="/playlist-overview">Playlists</NavLink></li>
+                                    <li><NavLink to="/profile">Profile</NavLink></li>
+                                </>
+                                :
+                                <>
+                                    <li><NavLink to="/registration">Register</NavLink></li>
+                                    {/*<li><NavLink to="/profile">Profile</NavLink></li>*/}
+                                </>
+                            }
                         </ul>
                         <Avatar/>
                     </div>

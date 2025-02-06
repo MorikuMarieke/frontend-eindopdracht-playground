@@ -1,0 +1,18 @@
+.outer-container--playlist-overview {
+    background-color: var(--color-tertiary);
+}
+
+.playlist-overview-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.playlist-overview-card {
+    background-color: var(--color-secundary);
+    border-radius: 1em;
+    padding: 1em;
+}

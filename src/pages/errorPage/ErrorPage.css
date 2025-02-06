@@ -1,0 +1,16 @@
+.error-card {
+    background-color: var(--color-main-white);
+    padding: 1em;
+    margin: 1em;
+    text-align: center;
+}
+
+.error-card h2 {
+    color: var(--color-primary);
+    margin-bottom: 1em;
+}
+
+.error-card a {
+    color: var(--color-primary);
+    text-decoration: underline;
+}

@@ -1,8 +1,17 @@
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 3em;
+}
+
 .outer-container--footer {
     background-color: var(--color-tertiary);
+    height: 100%;
 }
 
 footer p {
     font-size: 0.7em;
     color: var(--color-main-white);
 }
+

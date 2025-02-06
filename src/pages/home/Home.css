@@ -1,27 +1,96 @@
-.outer-container--main {
-    background-color: var(--color-tertiary);
-}
+/* ========================================
+   Page: Home
+======================================== */
+
+/* ===== 1. General Styles ===== */
+
+
+/* ===== 2. Cards ===== */
+
+/* ===== 2.1 Introduction Card ===== */
 
 .introduction {
     background-color: var(--color-main-white);
-    width: calc(50vw - 1em);
-    padding: 1em;
     border-radius: 1.2em;
+    padding: 1em;
 }
 
 .introduction p {
     color: var(--color-secundary);
+    margin-top: 0.5em;
 }
 
-.registration-form-title {
-    background-color: var(--color-secundary);
-    width: calc(50vw - 1em);
+/* ===== 2.2 Login Form Card ===== */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-main-white);
+    padding: 0.8em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.form-button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ===== 2.3 Connect to Spotify Card ===== */
+
+.connect-spotify {
+    display: flex;
+    align-items: center;
+    color: var(--color-secundary);
     padding: 1em;
-    border-radius: 1.2em 1.2em 0 0;
+    background-color: var(--color-main-white);
 }
 
-.registration-form-container {
+.spotify-img-wrapper {
+    flex: 0 0 3em;
+    margin-right: 1em;
+}
+
+.spotify-img-wrapper img {
+    width: 100%;
+}
+
+/* ===== 2.4 Genre Selection Card ===== */
+
+.genre-selection {
+    background-color: var(--color-primary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.search-button--genre {
+    background-color: transparent;
+    padding: 0 0.5em 0 0;
+}
+
+/* ===== 2.5 Artist Selection Card ===== */
+
+.artist-selection {
+    display: flex;
+    background-color: var(--color-secundary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.artist-selection form {
+    display: flex;
+}
+
+/* ===== 2.6 Music Suggestions Card ===== */
+
+.music-suggestions {
     background-color: var(--color-main-white);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
+
+.music-suggestions-playlist {
+    background-color: var(--color-secundary);
+    border-radius: 1em;
+    padding: 1em;
+}
+

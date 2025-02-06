@@ -1,16 +1,41 @@
-/* ------------------ 1. Global styles ------------------ */
 
-/* ------------------ 2. Typography ------------------ */
+/* ------------------ 1. Layout ------------------ */
+/* ------------------       1.1. Reusables ------------------ */
 
-/* ------------------ 3. Layout ------------------ */
-/* ------------------       3.1. Reusables ------------------ */
+main {
+    flex: 1;
+}
+
+.outer-container--main {
+    background-color: var(--color-tertiary);
+}
+
 .inner-container {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
     margin: 1em;
 }
-/* ------------------ 4. Areas ------------------ */
 
-/* ------------------ 5. Me ------------------ */
+main section {
+    box-sizing: border-box;
+    border-radius: 1.2em;
+    display: block;
+    break-inside: avoid;
+    height: auto;
+    margin-bottom: 1em;
+}
+/* ------------------ 4. Pages ------------------ */
+
+
+
+/* ------------------------------- 5. Media Queries -------------------------------- */
+/*Base website is built for desktop/laptop width*/
+
+/*------For Smartphones------*/
+@media screen and (max-width: 767px) {
+
+}
+
+/*------For Tablets------*/
+@media screen and  (min-width: 768px) and (max-width: 1024px) {
+
+}

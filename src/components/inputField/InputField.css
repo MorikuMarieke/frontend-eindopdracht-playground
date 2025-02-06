@@ -1,0 +1,35 @@
+/* ========================================
+   Component: Input Field
+======================================== */
+
+/* ===== 1. General Input Styles ===== */
+
+input {
+    font-family: inherit;
+    padding: 0.3em 1.2em 0.3em 1.2em ;
+    outline: none;
+    border: none;
+    border-radius: 1em;
+}
+
+/* ===== 2. Specific Input Styles ===== */
+
+.form-input {
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    margin-bottom: 0.8em;
+}
+
+.form-input::placeholder {
+    color: var(--color-main-white);
+}
+
+.artist-selection input, input::placeholder {
+    background-color: transparent;
+    font-family: "Jura", serif;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--color-main-white);
+    margin-left: 0.8em;
+}
