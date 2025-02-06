@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import './Profile.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
@@ -8,9 +8,11 @@ import spotifyLogo from '../../assets/Spotify logo black.png';
 import {Pencil} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
+import {AuthContext} from '../../context/AuthContext.jsx';
 
 
 function Profile() {
+    const { isAuth, user } = useContext(AuthContext);
 
     const HandleSubmit = () => {
         //     logic
@@ -21,7 +23,7 @@ function Profile() {
                 <OuterContainer type="main">
                     <PageContainer>
                         <CardContainer className="introduction">
-                            <h2>Hello [username]!</h2>
+                            <h2>Hello {isAuth ? user?.username : ''}!</h2>
                         </CardContainer>
 
                         {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}
@@ -35,21 +37,21 @@ function Profile() {
                                     type="text"
                                     id="username"
                                     className="form-input"
-                                    placeholder="Username or e-mail"
+                                    placeholder={isAuth ? user?.username : 'username'}
                                     required={true}
                                 />
                                 <InputField
                                     type="text"
                                     id="email"
                                     className="form-input"
-                                    placeholder="E-mail"
+                                    placeholder={isAuth ? user?.email : 'username'}
                                     required={true}
                                 />
                                 <InputField
                                     type="text"
                                     id="password"
                                     className="form-input"
-                                    placeholder="Password"
+                                    placeholder={isAuth ? user?.password : 'username'}
                                     required={true}
                                 />
                                 <div className="login-form-button-container">

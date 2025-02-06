@@ -11,6 +11,10 @@ input {
     border: none;
     border-radius: 1em;
 }
+/*TODO: check autofill options CSS*/
+/*.form-input:-webkit-autofill:active {*/
+/*    color: red !important;*/
+/*} this doesn't work yet*/
 
 /* ===== 2. Specific Input Styles ===== */
 

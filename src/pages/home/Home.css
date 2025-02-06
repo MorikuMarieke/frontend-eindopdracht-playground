@@ -32,7 +32,7 @@
 
 .form-button-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 /* ===== 2.3 Connect to Spotify Card ===== */

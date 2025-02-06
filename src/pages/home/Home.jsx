@@ -17,7 +17,8 @@ export default function Home() {
     // For sign in functionality
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, toggleError] = useState(false);
+    const [error, setError] = useState(false);
+    const [loading, toggleLoading] = useState(false);
 
     // For music functionalities
     const [categories, setCategories] = useState([]);
@@ -51,22 +52,39 @@ export default function Home() {
             }
         }
         fetchToken();
+
+        async function getUser() {
+            try {
+                const result = await axios.get(`${NOVI_PLAYGROUND_BACKEND}users/${username}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                console.log(result.data);
+            } catch (e) {
+                console.error("Error fetching user:", e);
+            }
+        }
+        getUser()
     }, []);
 
     async function handleLoginSubmit(e) {
         e.preventDefault();
-        toggleError(false);
+        setError(false);
+        toggleLoading(true);
 
         try {
-            const result = await axios.post(`${NOVI_PLAYGROUND_BACKEND}login`, {
+            const result = await axios.post(`${NOVI_PLAYGROUND_BACKEND}users/authenticate`, {
                 username: username,
-                password: password,
+                password: password
             });
             console.log(result.data);
-            signIn(result.data.accessToken);
+            signIn(result.data.jwt); //wat moet het zijn?
         } catch(e) {
             console.error(e);
-            toggleError(true);
+            setError(true);
+        } finally {
+            toggleLoading(false);
         }
     }
 
@@ -93,23 +111,27 @@ export default function Home() {
                             {/*TODO: I want to create logic where you can log in with username or e-mail*/}
                             <InputField
                                 type="text"
-                                id="username"
+                                id="username-field"
+                                name="username"
                                 value={username}
                                 className="form-input"
-                                placeholder="Username"
+                                placeholder="Name"
                                 required={true}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                             <InputField
                                 type="password"
-                                id="password"
+                                id="password-field"
+                                name="password"
                                 value={password}
                                 className="form-input"
                                 placeholder="Password"
                                 required={true}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                             <div className="form-button-container">
                                 <Button
-                                    buttonText="Log in"
+                                    buttonText={loading ? "Logging in..." : "Log in"}
                                     type="submit"
                                     className="secondary-button"
                                 />

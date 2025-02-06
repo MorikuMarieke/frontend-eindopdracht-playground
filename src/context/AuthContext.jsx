@@ -17,7 +17,6 @@ export function AuthContextProvider({ children }) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-
         if (token) {
             try {
                 const decoded = jwtDecode(token);
@@ -27,14 +26,14 @@ export function AuthContextProvider({ children }) {
                 localStorage.removeItem('token'); // Verwijder corrupte token
                 toggleIsAuth({
                     isAuth: false,
-                    user: null,
+                    user: {},
                     status: 'done',
                 });
             }
         } else {
             toggleIsAuth({
                 isAuth: false,
-                user: null,
+                user: {},
                 status: 'done',
             });
         }
@@ -51,7 +50,7 @@ export function AuthContextProvider({ children }) {
             localStorage.removeItem('token');
             toggleIsAuth({
                isAuth: false,
-               user: null,
+               user: {},
                status: 'done',
             });
         }
@@ -65,7 +64,7 @@ export function AuthContextProvider({ children }) {
         localStorage.removeItem('token');
         toggleIsAuth( {
             isAuth: false,
-            user: null,
+            user: {},
             status: 'done',
         });
 
@@ -108,7 +107,7 @@ export function AuthContextProvider({ children }) {
             // ging er iets mis? Plaatsen we geen data in de state
             toggleIsAuth( {
                 isAuth: false,
-                user: null,
+                user: {},
                 status: 'done',
             });
         }

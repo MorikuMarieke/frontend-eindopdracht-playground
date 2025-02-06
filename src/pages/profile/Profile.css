@@ -1,10 +1,16 @@
 .card--my-playlists {
     background-color: var(--color-main-white);
     padding: 1em;
-    border-radius: 0 0 1.2em 1.2em;}
+    border-radius: 0 0 1.2em 1.2em;
+}
 
 .my-playlists {
     background-color: var(--color-secundary);
     border-radius: 1em;
     padding: 1em;
+}
+
+.login-form-button-container {
+    display: flex;
+    justify-content: space-evenly;
 }

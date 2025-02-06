@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './Registration.css'
+import {SmileySad} from "@phosphor-icons/react";
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import Button from '../../components/button/Button.jsx';
@@ -17,27 +18,33 @@ export default function Registration() {
     const [password, setPassword] = useState('');
 
     // State voor functionaliteit
-    const [error, toggleError] = useState(false);
+    const [error, setError] = useState(null);
     const [loading, toggleLoading] = useState(false);
     const navigate = useNavigate();
 
 
-
     async function handleSubmit(e) {
         e.preventDefault();
-        toggleError(false);
+        setError(false);
         toggleLoading(true);
 
         try {
-            await axios.post(`${NOVI_PLAYGROUND_BACKEND}register`, {
+            await axios.post(`${NOVI_PLAYGROUND_BACKEND}users`, {
                 email: email,
                 password: password,
                 username: username,
+            }, {
+                'Content-Type': 'application/json',
+                headers: {'X-API-Key': import.meta.env.VITE_API_KEY}
             });
             navigate('/');
-        } catch(e) {
+        } catch (e) {
             console.error(e);
-            toggleError(true);
+            if (e.response && e.response.status === 409) {
+                setError("Sorry, this username is not available. Try another username.");
+            } else {
+                setError("Something went wrong. Please try again later.")
+            }
         } finally {
             toggleLoading(false);
         }
@@ -48,50 +55,60 @@ export default function Registration() {
             <OuterContainer type="registration">
                 <PageContainer className="page-registration">
                     <CardContainer className="create-account">
+                        <CardTopBar cardName="registration-form" color="secondary">
+                            <h3>Create an account to save your playlists and connect your Spotify account</h3>
+                        </CardTopBar>
+                        <form className="form registration-form" onSubmit={handleSubmit}>
+                            <InputField
+                                type="text"
+                                id="username-field"
+                                name="username"
+                                value={username}
+                                className="form-input"
+                                placeholder="Name"
+                                required={true}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                            <InputField
+                                type="email"
+                                id="email-field"
+                                name="email"
+                                value={email}
+                                className="form-input"
+                                placeholder="E-mail"
+                                required={true}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <InputField
+                                type="password"
+                                id="password-field"
+                                name="password"
+                                value={password}
+                                className="form-input"
+                                placeholder="Password"
+                                required={true}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            {/*{error && <p className="error">This email address has already been used. Try another e-mail*/}
+                            {/*    address.</p>}*/}
+                            <Button
+                                buttonText="Register"
+                                type="submit"
+                                className="secondary-button"
+                                disabled={loading}
+                            />
+                        </form>
                     </CardContainer>
-                    <CardTopBar cardName="registration-form" color="secondary">
-                        <h3>Create an account to save your playlists and connect your Spotify account</h3>
-                    </CardTopBar>
-                    <form className="form registration-form" onSubmit={handleSubmit}>
-                        <InputField
-                            type="text"
-                            id="username-field"
-                            name="username"
-                            value={username}
-                            className="form-input"
-                            placeholder="Name"
-                            required={true}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <InputField
-                            type="email"
-                            id="email-field"
-                            name="email"
-                            value={email}
-                            className="form-input"
-                            placeholder="E-mail"
-                            required={true}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <InputField
-                            type="password"
-                            id="password-field"
-                            name="password"
-                            value={password}
-                            className="form-input"
-                            placeholder="Password"
-                            required={true}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        {error && <p className="error">This email address has already been used. Try another e-mail address.</p>}
-                        <Button
-                            buttonText="Register"
-                            type="submit"
-                            className="secondary-button"
-                            disabled={loading}
-                        />
-                    </form>
-
+                    {error &&
+                        <CardContainer>
+                            <CardTopBar color="primary" cardName="registration-error-message">
+                                <SmileySad size={32} /><h3>Oops! Something went wrong</h3>
+                            </CardTopBar>
+                            <div className="card--register-error-message">
+                                <p>{error}</p>
+                            </div>
+                        </CardContainer>
+                    }
                 </PageContainer>
             </OuterContainer>
         </main>
