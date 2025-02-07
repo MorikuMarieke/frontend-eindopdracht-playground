@@ -10,22 +10,28 @@ import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {useNavigate} from 'react-router-dom';
 import {NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import axios from 'axios';
+import error from 'eslint-plugin-react/lib/util/error.js';
 
 export default function Registration() {
     // State voor het formulier
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, toggleLoading] = useState(false);
 
     // State voor functionaliteit
-    const [error, setError] = useState(null);
-    const [loading, toggleLoading] = useState(false);
+    const [generalError, setGeneralError] = useState(null);
+    const [userNameError, setUsernameError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
+
     const navigate = useNavigate();
 
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError(false);
+        setGeneralError(null);
+        setEmailError(null);
+        setUsernameError(null);
         toggleLoading(true);
 
         try {
@@ -35,15 +41,26 @@ export default function Registration() {
                 username: username,
             }, {
                 'Content-Type': 'application/json',
-                headers: {'X-API-Key': import.meta.env.VITE_API_KEY}
+                headers: {
+                    'X-API-Key': import.meta.env.VITE_API_KEY
+                }
             });
             navigate('/');
         } catch (e) {
             console.error(e);
             if (e.response && e.response.status === 409) {
-                setError("Sorry, this username is not available. Try another username.");
+                const errorMessage = e.response.data;
+                if (typeof errorMessage === 'string') {
+                    if (errorMessage.toLowerCase().includes('username')) {
+                        setUsernameError(errorMessage);
+                    } else if (errorMessage.toLowerCase().includes('email')) {
+                        setEmailError(errorMessage);
+                    } else {
+                        setGeneralError(errorMessage);
+                    }
+                }
             } else {
-                setError("Something went wrong. Please try again later.")
+                setGeneralError("Something went wrong. Please try again later.")
             }
         } finally {
             toggleLoading(false);
@@ -99,13 +116,15 @@ export default function Registration() {
                             />
                         </form>
                     </CardContainer>
-                    {error &&
+                    {userNameError || emailError || generalError &&
                         <CardContainer>
                             <CardTopBar color="primary" cardName="registration-error-message">
                                 <SmileySad size={32} /><h3>Oops! Something went wrong</h3>
                             </CardTopBar>
                             <div className="card--register-error-message">
-                                <p>{error}</p>
+                                {userNameError && <p className="error">{userNameError}</p>}
+                                {emailError && <p className="error">{emailError}</p>}
+                                {generalError && <p className="error">{generalError}</p>}
                             </div>
                         </CardContainer>
                     }

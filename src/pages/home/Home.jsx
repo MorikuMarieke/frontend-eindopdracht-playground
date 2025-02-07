@@ -3,7 +3,7 @@ import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {MagnifyingGlass, Funnel, CheckCircle, XCircle} from "@phosphor-icons/react";
+import {MagnifyingGlass, Funnel, CheckCircle, XCircle, SignOut} from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import {useNavigate} from 'react-router-dom';
@@ -17,7 +17,7 @@ export default function Home() {
     // For sign in functionality
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     const [loading, toggleLoading] = useState(false);
 
     // For music functionalities
@@ -25,7 +25,7 @@ export default function Home() {
     const navigate = useNavigate();
 
     // Context
-    const {isAuth, signIn} = useContext(AuthContext);
+    const {isAuth, signIn, signOut, user} = useContext(AuthContext);
 
     useEffect(() => {
         async function fetchToken() {
@@ -37,7 +37,7 @@ export default function Home() {
             try {
                 const response = await axios.post(
                     'https://accounts.spotify.com/api/token',
-                    new URLSearchParams({ grant_type: 'client_credentials' }), // Correctly formatted form data
+                    new URLSearchParams({grant_type: 'client_credentials'}), // Correctly formatted form data
                     {
                         headers: {
                             'Authorization': `Basic ${authString}`,
@@ -47,10 +47,11 @@ export default function Home() {
                 );
                 console.log(response.data); //logs the access_token
                 localStorage.setItem("spotifyToken", response.data["access_token"]);
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
             }
         }
+
         fetchToken();
 
         async function getUser() {
@@ -65,6 +66,7 @@ export default function Home() {
                 console.error("Error fetching user:", e);
             }
         }
+
         getUser()
     }, []);
 
@@ -79,10 +81,13 @@ export default function Home() {
                 password: password
             });
             console.log(result.data);
-            signIn(result.data.jwt); //wat moet het zijn?
-        } catch(e) {
-            console.error(e);
-            setError(true);
+            signIn(result.data.jwt);
+        } catch (e) {
+            if (e.response && e.response.status === 400) {
+                setError("User not found:");
+            } else {
+                setError("Something went wrong. Please try again later.")
+            }
         } finally {
             toggleLoading(false);
         }
@@ -94,55 +99,24 @@ export default function Home() {
         <main>
             <OuterContainer type="main">
                 <PageContainer>
-                    <CardContainer className="introduction">
-                        <h2>Hello world!</h2>
-                        <p>Welcome to PLAYGROUND! I have created this page for people that are always looking for
-                            new music to expand their collection with.</p>
-                        <p>Play around, tell us what you like, listen to the
-                            song selection and add them to your own personal library.</p>
-                    </CardContainer>
-
-                    {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}
-                    <CardContainer className="login-account">
-                        <CardTopBar color="secondary">
-                            <h3>Log in to your account to save your playlists</h3>
+                    <CardContainer>
+                        <CardTopBar cardName="introduction" color="primary">
+                            <h2>Hello {isAuth ? user?.username : 'world'}!</h2>
+                            {isAuth &&
+                                <Button
+                                className="sign-out-button"
+                                buttonText={loading ? "Signing out.." : "Sign out"}
+                                onClick={signOut}>
+                                <SignOut size={32} />
+                            </Button>
+                            }
                         </CardTopBar>
-                        <form className="form" onSubmit={handleLoginSubmit}>
-                            {/*TODO: I want to create logic where you can log in with username or e-mail*/}
-                            <InputField
-                                type="text"
-                                id="username-field"
-                                name="username"
-                                value={username}
-                                className="form-input"
-                                placeholder="Name"
-                                required={true}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <InputField
-                                type="password"
-                                id="password-field"
-                                name="password"
-                                value={password}
-                                className="form-input"
-                                placeholder="Password"
-                                required={true}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <div className="form-button-container">
-                                <Button
-                                    buttonText={loading ? "Logging in..." : "Log in"}
-                                    type="submit"
-                                    className="secondary-button"
-                                />
-                                <Button
-                                    buttonText="Register"
-                                    type="button"
-                                    className="secondary-button"
-                                    onClick={() => navigate("/registration")}
-                                />
-                            </div>
-                        </form>
+                        <div className="introduction">
+                            <p>Welcome to PLAYGROUND! I have created this page for people that are always looking for
+                                new music to expand their collection with.</p>
+                            <p>Play around, tell us what you like, listen to the
+                                song selection and add them to your own personal library.</p>
+                        </div>
                     </CardContainer>
 
                     {/*TODO: This section appears when user is logged in*/}
@@ -155,7 +129,50 @@ export default function Home() {
                                 Spotify</p>
                         </CardContainer>
                         :
-                        <></>
+                        <CardContainer className="login-account">
+                            <CardTopBar color="secondary">
+                                <h3>Log in to your account to save your playlists</h3>
+                            </CardTopBar>
+                            <form className="form" onSubmit={handleLoginSubmit}>
+                                {/*TODO: I want to create logic where you can log in with username or e-mail*/}
+
+                                <InputField
+                                    type="text"
+                                    id="username-field"
+                                    name="username"
+                                    value={username}
+                                    className="form-input"
+                                    placeholder="Name"
+                                    required={true}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                />
+                                <InputField
+                                    type="password"
+                                    id="password-field"
+                                    name="password"
+                                    value={password}
+                                    className="form-input"
+                                    placeholder="Password"
+                                    required={true}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                {/*{error && <p>{error}</p>}*/}
+                                {/*TODO: Check if error message works as soon as log out function is working*/}
+                                <div className="form-button-container">
+                                    <Button
+                                        buttonText="Log in"
+                                        type="submit"
+                                        className="secondary-button"
+                                    />
+                                    <Button
+                                        buttonText="Register"
+                                        type="button"
+                                        className="secondary-button"
+                                        onClick={() => navigate("/registration")}
+                                    />
+                                </div>
+                            </form>
+                        </CardContainer>
                     }
 
                     {/*TODO: Consideration: only one is visible, first a selection tool for one or the other? Artist or Genre*/}

@@ -5,14 +5,15 @@ import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import Button from '../../components/button/Button.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {Pencil} from '@phosphor-icons/react';
+import {Pencil, SignOut} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
 
 
 function Profile() {
-    const { isAuth, user } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const {isAuth, user, signOut} = useContext(AuthContext);
 
     const HandleSubmit = () => {
         //     logic
@@ -22,8 +23,15 @@ function Profile() {
             <main>
                 <OuterContainer type="main">
                     <PageContainer>
-                        <CardContainer className="introduction">
+                        <CardContainer className="profile-greeting">
                             <h2>Hello {isAuth ? user?.username : ''}!</h2>
+                            <Button
+                                className="sign-out-button"
+                                buttonText={loading ? "Signing out.." : "Sign out"}
+                                onClick={signOut}
+                            >
+                                <SignOut size={32}/>
+                            </Button>
                         </CardContainer>
 
                         {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}

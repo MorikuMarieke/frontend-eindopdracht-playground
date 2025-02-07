@@ -16,7 +16,7 @@
 }
 
 .color-secondary {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     color: var(--color-main-white);
 }
 
@@ -25,6 +25,11 @@
 }
 
 /* ===== 2. Specified Top Bar Styles ===== */
+
+.top-bar-introduction {
+    display: flex;
+    justify-content: space-between;
+}
 
 .top-bar-genre-selection {
     display: flex;

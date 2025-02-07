@@ -14,13 +14,20 @@ button {
 
 /* ===== 2. Specific Button Styles ===== */
 
-/* ===== 2.1 Login and Registration Button ===== */
+/* ===== 2.1 Sign in, Sign out and Registration Button ===== */
 
 .secondary-button {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     color: var(--color-main-white);
     padding: 0.3em 1.6em;
     align-self: center;
+}
+
+.sign-out-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 0.5em;
 }
 
 /* ===== 2.2 Search Button -- Genre ===== */
@@ -38,6 +45,7 @@ button {
     color: var(--color-main-white);
 }
 
+/*TODO: might need to remove these due to API limits*/
 .selected-genre {
     display: inline flex;
     align-items: center;
@@ -59,7 +67,7 @@ button {
 }
 
 .default-icon {
-    color: var(--color-secundary);
+    color: var(--color-secondary);
 }
 
 /* ===== 2.3 Button - Edit my playlists ===== */
@@ -72,4 +80,9 @@ button {
     justify-content: center;
     gap: 0.3em;
     padding: 0.3em 1em;
+}
+
+.sign-out-button {
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
 }

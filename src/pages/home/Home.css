@@ -11,12 +11,12 @@
 
 .introduction {
     background-color: var(--color-main-white);
-    border-radius: 1.2em;
+    border-radius: 0 0 1.2em 1.2em;
     padding: 1em;
 }
 
 .introduction p {
-    color: var(--color-secundary);
+    color: var(--color-secondary);
     margin-top: 0.5em;
 }
 
@@ -40,7 +40,7 @@
 .connect-spotify {
     display: flex;
     align-items: center;
-    color: var(--color-secundary);
+    color: var(--color-secondary);
     padding: 1em;
     background-color: var(--color-main-white);
 }
@@ -71,7 +71,7 @@
 
 .artist-selection {
     display: flex;
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
@@ -89,7 +89,7 @@
 }
 
 .music-suggestions-playlist {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     border-radius: 1em;
     padding: 1em;
 }
