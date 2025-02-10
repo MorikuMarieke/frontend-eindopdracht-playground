@@ -16,12 +16,12 @@ Headers: {
 
 --> Dit is nodig om post requests te kunnen maken die geen registratie van gebruiker zijn. 
 
-Stap 1. Log Out functie maken
+Stap 1. Sign Out functie maken [done]
 
-Stap 2. Anderen user functionaliteiten
+Stap 2. Andere user functionaliteiten
+- Hoe kan ik gebruiker verwijderen?
 - User data aanpassen (username, e-mail, password)
 - Automatische e-mail instellen, gaat dat makkelijk? Dit uitzoeken.
-- Hoe kan ik gebruiker verwijderen?
 
 Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met de spotify api?
 - Muziek opzoeken op basis van artiest, nummer, categorie. Goed API nakijken wat mogelijk is.

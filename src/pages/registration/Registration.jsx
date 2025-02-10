@@ -53,10 +53,13 @@ export default function Registration() {
                 if (typeof errorMessage === 'string') {
                     if (errorMessage.toLowerCase().includes('username')) {
                         setUsernameError(errorMessage);
+                        console.log(errorMessage);
                     } else if (errorMessage.toLowerCase().includes('email')) {
                         setEmailError(errorMessage);
+                        console.log(errorMessage);
                     } else {
                         setGeneralError(errorMessage);
+                        console.log(errorMessage);
                     }
                 }
             } else {
@@ -106,8 +109,6 @@ export default function Registration() {
                                 required={true}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            {/*{error && <p className="error">This email address has already been used. Try another e-mail*/}
-                            {/*    address.</p>}*/}
                             <Button
                                 buttonText="Register"
                                 type="submit"
@@ -116,7 +117,7 @@ export default function Registration() {
                             />
                         </form>
                     </CardContainer>
-                    {userNameError || emailError || generalError &&
+                    {(userNameError || emailError || generalError) &&
                         <CardContainer>
                             <CardTopBar color="primary" cardName="registration-error-message">
                                 <SmileySad size={32} /><h3>Oops! Something went wrong</h3>
@@ -125,6 +126,8 @@ export default function Registration() {
                                 {userNameError && <p className="error">{userNameError}</p>}
                                 {emailError && <p className="error">{emailError}</p>}
                                 {generalError && <p className="error">{generalError}</p>}
+                                {/*TODO: Still need to add password error with conditions.*/}
+
                             </div>
                         </CardContainer>
                     }

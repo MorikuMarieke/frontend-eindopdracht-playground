@@ -44,7 +44,6 @@ export function AuthContextProvider({ children }) {
             localStorage.setItem('token', JWT);
             const decoded = jwtDecode(JWT);
             await fetchUserData(decoded.sub, JWT, '/profile');
-            // void fetchUserData( decoded.sub, JWT, '/profile' );
         } catch (e) {
             console.error('Error signing in:', e);
             localStorage.removeItem('token');
@@ -54,10 +53,6 @@ export function AuthContextProvider({ children }) {
                status: 'done',
             });
         }
-
-
-        // link de gebruiker door naar de profielpagina
-        // navigate('/profile');
     }
 
     function signOut() {
@@ -99,7 +94,7 @@ export function AuthContextProvider({ children }) {
             if (redirectUrl) {
                 navigate(redirectUrl);
             }
-            console.log(result.data);
+            // console.log(result.data); //log to check if user data is fetched correctly.
 
         } catch (e) {
             console.error('Error fetching user data:', e);

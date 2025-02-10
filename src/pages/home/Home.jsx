@@ -45,7 +45,7 @@ export default function Home() {
                         }
                     }
                 );
-                console.log(response.data); //logs the access_token
+                // console.log(response.data); //logs the access_token
                 localStorage.setItem("spotifyToken", response.data["access_token"]);
             } catch (e) {
                 console.error(e);
@@ -67,7 +67,23 @@ export default function Home() {
             }
         }
 
-        getUser()
+        getUser();
+
+        async function getAppInfo() {
+            try {
+                const result = await axios.get("https://api.datavortex.nl/playground/info", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': 'playground:kpTCrF45XuuluvvATUSC',
+                    }
+                });
+                console.log(result.data);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        getAppInfo();
     }, []);
 
     async function handleLoginSubmit(e) {
@@ -80,7 +96,7 @@ export default function Home() {
                 username: username,
                 password: password
             });
-            console.log(result.data);
+            // console.log(result.data);
             signIn(result.data.jwt);
         } catch (e) {
             if (e.response && e.response.status === 400) {
@@ -104,11 +120,11 @@ export default function Home() {
                             <h2>Hello {isAuth ? user?.username : 'world'}!</h2>
                             {isAuth &&
                                 <Button
-                                className="sign-out-button"
-                                buttonText={loading ? "Signing out.." : "Sign out"}
-                                onClick={signOut}>
-                                <SignOut size={32} />
-                            </Button>
+                                    className="sign-out-button"
+                                    buttonText={loading ? "Signing out.." : "Sign out"}
+                                    onClick={signOut}>
+                                    <SignOut size={32}/>
+                                </Button>
                             }
                         </CardTopBar>
                         <div className="introduction">
