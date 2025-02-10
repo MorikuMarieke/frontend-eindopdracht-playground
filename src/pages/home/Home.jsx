@@ -3,7 +3,7 @@ import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {MagnifyingGlass, Funnel, CheckCircle, XCircle, SignOut} from "@phosphor-icons/react";
+import {MagnifyingGlass, Funnel, CheckCircle, XCircle, SignOut, UserCircle} from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import {useNavigate} from 'react-router-dom';
@@ -12,6 +12,7 @@ import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
+import Avatar from '../../components/avatar/Avatar.jsx';
 
 export default function Home() {
     // For sign in functionality
@@ -54,37 +55,42 @@ export default function Home() {
 
         fetchToken();
 
+        // Get app info werkt, maar is leeg in eerste instantie. Dus zolang ik dit niet vul dan valt er ook niet veel te loggen.
+        // async function getAppInfo() {
+        //     try {
+        //         const result = await axios.get(`${NOVI_PLAYGROUND_BACKEND}info`, {
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-API-Key': import.meta.env.VITE_API_KEY,
+        //                 Authorization: `Bearer ${localStorage.getItem('token')}`,
+        //             }
+        //         });
+        //         console.log("App info:",result.data);
+        //     } catch (e) {
+        //         console.error(e);
+        //     }
+        // }
+        //
+        // getAppInfo();
+    }, []);
+
+    // useEffect(() => {
         async function getUser() {
             try {
-                const result = await axios.get(`${NOVI_PLAYGROUND_BACKEND}users/${username}`, {
+                const result = await axios.get(`${NOVI_PLAYGROUND_BACKEND}users/${user.username}`, {
                     headers: {
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                console.log(result.data);
+                console.log("User", result.data);
             } catch (e) {
-                console.error("Error fetching user:", e);
+                console.error("Error getting user:", e);
             }
         }
 
-        getUser();
-
-        async function getAppInfo() {
-            try {
-                const result = await axios.get("https://api.datavortex.nl/playground/info", {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-Key': 'playground:kpTCrF45XuuluvvATUSC',
-                    }
-                });
-                console.log(result.data);
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        getAppInfo();
-    }, []);
+        // getUser();
+    // }, [user]);
 
     async function handleLoginSubmit(e) {
         e.preventDefault();
@@ -113,6 +119,9 @@ export default function Home() {
 
     return (
         <main>
+            {/*<Button*/}
+            {/*    onClick={getUser}*/}
+            {/*>Get user</Button>*/}
             <OuterContainer type="main">
                 <PageContainer>
                     <CardContainer>
@@ -132,6 +141,18 @@ export default function Home() {
                                 new music to expand their collection with.</p>
                             <p>Play around, tell us what you like, listen to the
                                 song selection and add them to your own personal library.</p>
+                            {isAuth &&
+                                    <div className="go-to-profile">
+                                        <Button
+                                            className="go-to-profile-button"
+                                            buttonText="Go to my profile"
+                                            type="button"
+                                            onClick={() => navigate("/profile")}
+                                            >
+                                            <UserCircle size={32} />
+                                        </Button>
+                                    </div>
+                            }
                         </div>
                     </CardContainer>
 
@@ -172,7 +193,6 @@ export default function Home() {
                                     required={true}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
-                                {/*{error && <p>{error}</p>}*/}
                                 {/*TODO: Check if error message works as soon as log out function is working*/}
                                 <div className="form-button-container">
                                     <Button

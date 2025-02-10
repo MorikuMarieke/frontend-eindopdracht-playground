@@ -10,7 +10,6 @@ import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {useNavigate} from 'react-router-dom';
 import {NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import axios from 'axios';
-import error from 'eslint-plugin-react/lib/util/error.js';
 
 export default function Registration() {
     // State voor het formulier
@@ -40,8 +39,8 @@ export default function Registration() {
                 password: password,
                 username: username,
             }, {
-                'Content-Type': 'application/json',
                 headers: {
+                    'Content-Type': 'application/json',
                     'X-API-Key': import.meta.env.VITE_API_KEY
                 }
             });

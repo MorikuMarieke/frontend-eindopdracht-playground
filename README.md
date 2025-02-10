@@ -19,8 +19,10 @@ Headers: {
 Stap 1. Sign Out functie maken [done]
 
 Stap 2. Andere user functionaliteiten
-- Hoe kan ik gebruiker verwijderen?
+~~- Hoe kan ik gebruiker verwijderen? --> Kan niet?~~
 - User data aanpassen (username, e-mail, password)
+  - Hier een begin aan gemaakt, conditional rendering gemaakt voor de account details card. 
+  - Het doorgeven van de data lijkt nog niet goed te gaan, hier krijg ik errors,mogelijk kan dit komen omdat je alle velden moet meegeven, maar dit is voor mij nog niet duidelijk hoe dit precies zit. Misschien kan ik dit morgen aan Nova of Sam vragen. Voor nu lijkt de put request forbidden 403. 
 - Automatische e-mail instellen, gaat dat makkelijk? Dit uitzoeken.
 
 Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met de spotify api?

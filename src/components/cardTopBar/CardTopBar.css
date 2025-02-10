@@ -29,6 +29,7 @@
 .top-bar-introduction {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .top-bar-genre-selection {

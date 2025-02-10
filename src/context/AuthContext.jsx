@@ -67,10 +67,10 @@ export function AuthContextProvider({ children }) {
         navigate('/');
     }
 
-    async function fetchUserData(id, token, redirectUrl) {
+    async function fetchUserData(username, token, redirectUrl) {
         try {
             // haal gebruikersdata op met de token en id van de gebruiker
-            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${id}`, {
+            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${username}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ export function AuthContextProvider({ children }) {
                 user: {
                     username: result.data.username,
                     email: result.data.email,
-                    id: result.data.id,
+                    // id: result.data.id,
                 },
                 status: 'done',
             }));
@@ -94,7 +94,7 @@ export function AuthContextProvider({ children }) {
             if (redirectUrl) {
                 navigate(redirectUrl);
             }
-            // console.log(result.data); //log to check if user data is fetched correctly.
+            console.log(result.data); //log to check if user data is fetched correctly.
 
         } catch (e) {
             console.error('Error fetching user data:', e);

@@ -28,6 +28,17 @@ button {
     align-items: center;
     gap: 0.5em;
     padding: 0.3em 0.5em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+}
+
+.go-to-profile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 1em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
 }
 
 /* ===== 2.2 Search Button -- Genre ===== */
@@ -82,7 +93,8 @@ button {
     padding: 0.3em 1em;
 }
 
+/* ===== 2.3 Button - Home-page-buttons ===== */
+
 .sign-out-button {
-    background-color: var(--color-secondary);
-    color: var(--color-main-white);
+
 }
