@@ -63,15 +63,18 @@
 
 /* ===== 2.4 Genre Selection Card ===== */
 
-.genre-selection {
+.category-selection {
     background-color: var(--color-primary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.search-button--genre {
-    background-color: transparent;
-    padding: 0 0.5em 0 0;
+
+
+.selected-categories-container {
+    padding: 1em;
+    row-gap: 0.5em;
+    background-color: var(--color-main-white);
 }
 
 /* ===== 2.5 Artist Selection Card ===== */

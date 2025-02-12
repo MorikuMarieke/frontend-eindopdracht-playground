@@ -27,6 +27,12 @@ Stap 2. Andere user functionaliteiten
 
 Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met de spotify api?
 - Muziek opzoeken op basis van artiest, nummer, categorie. Goed API nakijken wat mogelijk is.
+  1. Gekozen categorieën weergeven + verwijderen
+  2. localstorage uitlezen op mount (categorieën aanwezig? Dan volgende stap, niet aanwezig? Dan klik hier om categorieën te selecteren)
+  2. categorieën in de state zetten als array
+  3. mappen -> categorie-elementen weergeven op de pagina (op basis van state) 
+     4. -> als je op 1 element klikt moet je die uit de state array verwijderen
+     5. -> daarna nieuwe array in local storage
 - Eerst implementeren wat mogelijk is, dus favoriete artiest invoeren en daar muziek van luisteren, favoriete artiest en dan recommendations op basis daarvan. 
 
 Stap ?. Spotify user data koppelen

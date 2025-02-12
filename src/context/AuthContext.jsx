@@ -42,8 +42,9 @@ export function AuthContextProvider({ children }) {
     async function signIn(JWT) {
         try {
             localStorage.setItem('token', JWT);
-            const decoded = jwtDecode(JWT);
-            await fetchUserData(decoded.sub, JWT, '/profile');
+            const decodedToken = jwtDecode(JWT);
+            await fetchUserData(decodedToken.sub, JWT, '/profile');
+            console.log(decodedToken);
         } catch (e) {
             console.error('Error signing in:', e);
             localStorage.removeItem('token');
@@ -84,7 +85,6 @@ export function AuthContextProvider({ children }) {
                 user: {
                     username: result.data.username,
                     email: result.data.email,
-                    // id: result.data.id,
                 },
                 status: 'done',
             }));

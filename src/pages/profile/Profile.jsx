@@ -17,120 +17,86 @@ import {useNavigate} from 'react-router-dom';
 function Profile() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
+    const [info, setInfo] = useState('');
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [originalUser, setOriginalUser] = useState(null);
+
 
     const {isAuth, user, signOut} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
-            setUsername(user.username || '');
-            setEmail(user.email || '');
-            setPassword(user.password || '');
-            setOriginalUser({...user})
+        async function getUserData() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${NOVI_PLAYGROUND_BACKEND}users/${user.username}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsername(response.data.username);
+                setEmail(response.data.email);
+                setPassword(response.data.password);
+                setInfo(response.data.info);
+
+                // maak ook stukje state voor password en info [v]
+                console.log(response);
+            } catch (e) {
+                console.error(e);
+            }
         }
-    }, [user]);
-
-    // async function changeProfileData() {
-    //     setLoading(true);
-    //     try {
-    //         const dataToUpdate = {};
-    //
-    //         if (username !== user.username) {
-    //             dataToUpdate.username = username;
-    //         }
-    //
-    //         if (email !== user.email) {
-    //             dataToUpdate.email = email;
-    //         }
-    //
-    //         if (Object.keys(dataToUpdate).length === 0) { //No updates
-    //             return;
-    //         }
-    //
-    //         const response = await axios.put(`${NOVI_PLAYGROUND_BACKEND}users/${user.username}`,
-    //             dataToUpdate, {
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'X-API-Key': import.meta.env.VITE_API_KEY
-    //                 }
-    //             });
-    //
-    //         console.log("Profile updated successfully:", response.data);
-    //         setUser(prevState => ({ ...prevState, ...dataToUpdate })); // Update user in context
-    //
-    //         setEditMode(false); // Exit edit mode after successful update
-    //         alert("Profile updated successfully!"); //Optional alert
-    //     } catch (error) {
-    //         console.error("Error updating profile:", error);
-    //         // Handle errors (display message, etc.)
-    //         if (error.response) {
-    //             alert("Error updating profile:" + error.response.data.error); //More specific error message
-    //         } else {
-    //             alert("An error occurred while updating the profile.");
-    //         }
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
+        getUserData();
+    }, []);
 
     async function changeProfileData() {
+
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
         setLoading(true);
+
+        // 1. probeer alle info mee te sturen als put-request, met aangepast wachtwoord als string [v]
+        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je 'm had ontvangen
+
         try {
-            const formData = new FormData();
-
-            if (username !== user.username) {
-                formData.append('username', username);
-            }
-            if (email !== user.email) {
-                formData.append('email', email);
-            }
-            if (password !== user.password) {
-                formData.append('password', password);
-            }
-
+            const token = localStorage.getItem('token');
             const response = await axios.put(
                 `${NOVI_PLAYGROUND_BACKEND}users/${user.username}`,
-                formData,
                 {
+                    username: username,
+                    email: email,
+                    password: password, //volgens mij klopt het nu niet, omdat ik als ik niks invul, ik toch de oude encrypted JWT string meestuur als nieuw wachtwoord
+                    info: info,
+                }, {
                     headers: {
+                        'Accept': '/*',
+                        'Content-Type': 'application/json',
                         'X-API-Key': import.meta.env.VITE_API_KEY,
+                        'Authorization': `Bearer ${token}`,
                     },
                 }
             );
-
-            console.log("Profile updated:", response.data);
-            setUsername((prevState) => ({ ...prevState, ...response.data }));
+            // setUsername((prevState) => ({...prevState, ...response.data}));
             setEditMode(false);
-            alert("Profile updated!");
+            console.log("Profile updated:", response);
+            // als statuscode 204 dan roep e-mail package aan die email stuurt met bevestiging
         } catch (error) {
-            console.error("Error updating profile:", error);
             if (error.response) {
-                alert("Error updating profile: " + error.response.data.error);
+                console.error("Error updating profile: " + error.response.data);
             } else {
-                alert("An error occurred while updating the profile.");
+                console.error("An error occurred while updating the profile.");
             }
         } finally {
             setLoading(false);
         }
     }
 
-    async function handleSubmit(e) { // Aanroep van changeProfileData
-        e.preventDefault();
-        await changeProfileData(); // Let op: await in handleSubmit
-    }
-
     const handleCancelClick = () => {
         setEditMode(false);
-        if (originalUser) {
-            setUsername(originalUser.username || '');
-            setEmail(originalUser.email || '');
-        }
     };
 
     return (
@@ -159,8 +125,7 @@ function Profile() {
                                 type="text"
                                 id="username"
                                 className="form-input"
-                                placeholder={isAuth ? user?.username : 'Username'}
-                                required={true}
+                                placeholder="Username"
                                 onChange={(e) => setUsername(e.target.value)}
                                 value={username}
                                 disabled={!editMode}
@@ -169,20 +134,25 @@ function Profile() {
                                 type="text"
                                 id="email"
                                 className="form-input"
-                                placeholder={isAuth ? user?.email : 'username'}
-                                required={true}
+                                placeholder="Email"
                                 onChange={(e) => setEmail(e.target.value)}
+                                value={email}
                                 disabled={!editMode}
                             />
-                            <InputField
-                                type="password"
-                                id="password"
-                                className="form-input"
-                                placeholder={isAuth ? user?.password : 'username'}
-                                required={true}
-                                onChange={(e) => setPassword(e.target.value)}
-                                disabled={!editMode}
-                            />
+                            <p>Click 'Edit' to change password.</p>
+                            {editMode &&
+                                <>
+                                    <InputField
+                                        type="password"
+                                        id="password"
+                                        className="form-input"
+                                        placeholder="New Password"
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        disabled={!editMode}
+                                    />
+                                </>
+                            }
+
                             <div className="login-form-button-container">
                                 {!editMode &&
                                     <Button

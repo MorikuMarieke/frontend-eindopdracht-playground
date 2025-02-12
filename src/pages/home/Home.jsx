@@ -20,6 +20,7 @@ export default function Home() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, toggleLoading] = useState(false);
+    const [selectCategoriesMode, toggleSelectCategoriesMode] = useState(false);
 
     // For music functionalities
     const [categories, setCategories] = useState([]);
@@ -55,6 +56,35 @@ export default function Home() {
 
         fetchToken();
 
+        async function getCategories() {
+            try {
+                const response = await axios.get(`${API_BASE}browse/categories`, {
+                    params: {
+                        locale: 'en_US',  // Forces English names
+                        limit: 50,
+                        offset: 10
+                    },
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('spotifyToken'),
+                    }
+                });
+                console.log(response.data);
+                const listOfCategories = response.data.categories.items.map(category => ({
+                    id: category.id,
+                    name: category.name,
+                    // icon: category.icons.length > 0 ? category.icons[0].url : null
+                }));
+
+                console.log(listOfCategories);
+                setCategories(listOfCategories);
+
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        getCategories();
+
         // Get app info werkt, maar is leeg in eerste instantie. Dus zolang ik dit niet vul dan valt er ook niet veel te loggen.
         // async function getAppInfo() {
         //     try {
@@ -73,6 +103,8 @@ export default function Home() {
         //
         // getAppInfo();
     }, []);
+
+
 
     // useEffect(() => {
         async function getUser() {
@@ -115,13 +147,22 @@ export default function Home() {
         }
     }
 
+    const leukeDingen = localStorage.getItem('categories');
+        console.log(leukeDingen ? JSON.parse(leukeDingen) : 'Staat niks in');
+
     // TODO: Consider removing the CardContainer classnames, as I don't use them for css (yet)?
 
     return (
         <main>
-            {/*<Button*/}
-            {/*    onClick={getUser}*/}
-            {/*>Get user</Button>*/}
+            <Button
+                onClick={getUser}
+            >
+                Get user
+            </Button>
+            <Button
+                onClick={() => localStorage.setItem('categories', JSON.stringify(['metal', 'banaan']))}>
+                Doe in de localStorage Bro
+            </Button>
             <OuterContainer type="main">
                 <PageContainer>
                     <CardContainer>
@@ -212,36 +253,64 @@ export default function Home() {
                     }
 
                     {/*TODO: Consideration: only one is visible, first a selection tool for one or the other? Artist or Genre*/}
-                    <CardContainer className="genre-selection-wrapper">
+                    <CardContainer className="category-selection-wrapper">
                         <CardTopBar
-                            cardName="genre-selection" color="secondary">
+                            cardName="category-selection" color="secondary">
                             {/*TODO: when clicked the magnifying glass, the search will execute based on the input, the input will stay visible*/}
-                            <Button type="button" className="search-button--genre">
-                                <MagnifyingGlass size={32} className="search-icon-genre"/>
+                            <Button type="button" className="search-button--category">
+                                <MagnifyingGlass size={32} className="search-icon-category"/>
                             </Button>
-                            <h3>Select your favorite genres</h3>
-                            {/*TODO: When clicked a pop up screen will appear with a search bar to look for specific genre group, and to type in a specific genre and clickable buttons, when clicked, the genre is automatically are added to the list that is displayed on the home screen, and added to a momentary array, until deleted (maybe a current search array that is default empty) */}
+                            <h3>Select your favorite categories</h3>
+                            {/*TODO: When clicked a pop up screen will appear with a search bar to look for specific category group, and to type in a specific category and clickable buttons, when clicked, the category is automatically are added to the list that is displayed on the home screen, and added to a momentary array, until deleted (maybe a current search array that is default empty) */}
                             <Button
                                 type="button"
-                                className="genre-selection-button"
+                                className="category-selection-button"
                                 buttonText="More"
+                                onClick={() => navigate("/category-selection")}
                             >
                                 <Funnel size={24}/>
                             </Button>
                         </CardTopBar>
-                        <div className="genre-selection">
+                        <div className="category-selection">
                             <Button
-                                className="selected-genre"
+                                className="selected-category"
                                 buttonText="Genre1"
                                 hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                 defaultIcon={<CheckCircle className="default-icon" size={22}/>}
+                                type="button"
                             />
                             <Button
-                                className="selected-genre"
+                                className="selected-category"
                                 buttonText="Genre2"
                                 hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                 defaultIcon={<CheckCircle className="default-icon" size={22}/>}
+                                type="button"
                             />
+                            {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
+
+                        </div>
+                    </CardContainer>
+
+                    <CardContainer className="category-selection-wrapper">
+                        <CardTopBar cardName="category-selection-pop-up category-selection">
+                            <h3>Select your favorite categories</h3>
+                            <Button
+                                className="category-selection-button"
+                                buttonText="Cancel"
+                                type="button"
+                                defaultIcon={<CheckCircle className="default-icon" size={22}/>}
+                                hoveredIcon={<CheckCircle className="default-icon" size={22}/>}
+                            />
+                        </CardTopBar>
+                        <div className="selected-categories-container">
+                            {categories.map((category, index) => (
+                                <Button
+                                    className="selected-genre"
+                                    type="button"
+                                    key={category.id}
+                                />
+                            ))}
+
                             {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
                         </div>
                     </CardContainer>
@@ -252,8 +321,8 @@ export default function Home() {
                         </CardTopBar>
                         <div className="artist-selection">
                             <form>
-                                <Button type="submit" className="search-button--genre">
-                                    <MagnifyingGlass size={32} className="search-icon-genre"/>
+                                <Button type="submit" className="search-button--category">
+                                    <MagnifyingGlass size={32} className="search-icon-category"/>
                                 </Button>
                                 <InputField
                                     type="text"

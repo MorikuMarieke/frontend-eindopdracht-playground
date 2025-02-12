@@ -32,10 +32,15 @@
     align-items: center;
 }
 
-.top-bar-genre-selection {
+.top-bar-category-selection {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.top-bar-category-selection-pop-up {
+    display: flex;
+    justify-content: space-between;
 }
 
 .top-bar-my-playlists,
