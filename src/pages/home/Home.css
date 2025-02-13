@@ -11,13 +11,20 @@
 
 .introduction {
     background-color: var(--color-main-white);
-    border-radius: 1.2em;
+    border-radius: 0 0 1.2em 1.2em;
     padding: 1em;
 }
 
 .introduction p {
-    color: var(--color-secundary);
+    color: var(--color-secondary);
     margin-top: 0.5em;
+}
+
+.go-to-profile {
+    display: flex;
+    justify-content: center;
+    padding-top: 1em;
+
 }
 
 /* ===== 2.2 Login Form Card ===== */
@@ -32,7 +39,7 @@
 
 .form-button-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 /* ===== 2.3 Connect to Spotify Card ===== */
@@ -40,7 +47,7 @@
 .connect-spotify {
     display: flex;
     align-items: center;
-    color: var(--color-secundary);
+    color: var(--color-secondary);
     padding: 1em;
     background-color: var(--color-main-white);
 }
@@ -56,22 +63,25 @@
 
 /* ===== 2.4 Genre Selection Card ===== */
 
-.genre-selection {
+.category-selection {
     background-color: var(--color-primary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.search-button--genre {
-    background-color: transparent;
-    padding: 0 0.5em 0 0;
+
+
+.selected-categories-container {
+    padding: 1em;
+    row-gap: 0.5em;
+    background-color: var(--color-main-white);
 }
 
 /* ===== 2.5 Artist Selection Card ===== */
 
 .artist-selection {
     display: flex;
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
 }
@@ -89,8 +99,7 @@
 }
 
 .music-suggestions-playlist {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     border-radius: 1em;
     padding: 1em;
 }
-

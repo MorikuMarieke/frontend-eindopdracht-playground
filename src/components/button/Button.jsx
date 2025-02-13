@@ -2,15 +2,16 @@ import './Button.css';
 import {useState} from 'react';
 
 export default function Button({
-                                   type,
-                                   onClick,
-                                   className,
-                                   buttonText,
-                                   defaultIcon,
-                                   hoveredIcon,
-                                   disabled,
-                                   children
-                               }) {
+            type,
+            onClick,
+            className,
+            buttonText,
+            isSelected,
+            defaultIcon,
+            hoveredIcon,
+            disabled,
+            children
+}) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -23,7 +24,8 @@ export default function Button({
             disabled={disabled}
         >
             {buttonText}
-            {isHovered ? hoveredIcon : defaultIcon}
+            {/* Show the check icon by default if selected, otherwise nothing */}
+            {isSelected && (isHovered ? hoveredIcon : defaultIcon)}
             {children}
         </button>
     );

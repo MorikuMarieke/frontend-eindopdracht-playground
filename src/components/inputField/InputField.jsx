@@ -9,7 +9,8 @@ export default function InputField({
                         value,
                         onChange,
                         placeholder,
-                        required
+                        required,
+                        disabled
                     }) {
     return (
         <>
@@ -25,6 +26,7 @@ export default function InputField({
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}
+                disabled={disabled}
             />
         </>
     );

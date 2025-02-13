@@ -14,18 +14,41 @@ button {
 
 /* ===== 2. Specific Button Styles ===== */
 
-/* ===== 2.1 Login and Registration Button ===== */
+/* ===== 2.1 Sign in, Sign out and Registration Button ===== */
 
 .secondary-button {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     color: var(--color-main-white);
     padding: 0.3em 1.6em;
     align-self: center;
 }
 
-/* ===== 2.2 Search Button -- Genre ===== */
+.sign-out-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 0.5em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+}
 
-.genre-selection-button {
+.go-to-profile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.3em 1em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+}
+
+/* ===== 2.2 Search Button -- Category ===== */
+
+.search-button--category {
+    background-color: transparent;
+    padding: 0 0.5em 0 0;
+}
+
+.category-selection-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -34,33 +57,49 @@ button {
     padding: 0.3em 1em;
 }
 
-.search-icon-genre {
+.search-icon-category {
     color: var(--color-main-white);
 }
 
-.selected-genre {
+.button--select-categories {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em 1em;
+}
+
+/*.search-button--category */
+
+/*TODO: might need to remove these due to API limits*/
+
+.selectable-category {
     display: inline flex;
     align-items: center;
     justify-content: center;
     gap: 0.2em;
     padding: 0.3em 0.5em;
+    background-color: var(--color-main-white);
 }
 
-.selected-genre, .selected-genre {
-    margin-right: 0.5em;
+.selected-category {
+    display: inline flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    padding: 0.3em 0.5em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
 }
 
-.selected-genre .search-icon-genre {
-    margin-right: 0.5em;
-}
+/*.hovered-icon {*/
+/*    color: var(--color-primary);*/
+/*}*/
 
-.hovered-icon {
-    color: var(--color-primary);
-}
-
-.default-icon {
-    color: var(--color-secundary);
-}
+/*.default-icon {*/
+/*    color: var(--color-secondary);*/
+/*}*/
 
 /* ===== 2.3 Button - Edit my playlists ===== */
 
@@ -72,4 +111,10 @@ button {
     justify-content: center;
     gap: 0.3em;
     padding: 0.3em 1em;
+}
+
+/* ===== 2.3 Button - Home-page-buttons ===== */
+
+.sign-out-button {
+
 }

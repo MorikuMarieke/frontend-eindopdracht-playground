@@ -11,6 +11,7 @@ import Registration from './pages/registration/Registration.jsx';
 import Footer from './components/footer/Footer.jsx';
 import {Helmet} from 'react-helmet-async';
 import {AuthContext} from './context/AuthContext.jsx';
+import CategorySelection from './pages/categorySelection/CategorySelection.jsx';
 
 
 function App() {

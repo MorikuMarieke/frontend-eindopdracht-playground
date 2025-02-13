@@ -5,11 +5,13 @@ import OuterContainer from '../outerContainer/OuterContainer.jsx';
 import {NavLink} from 'react-router-dom';
 import Avatar from '../avatar/Avatar.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import {SignOut} from '@phosphor-icons/react';
+import Button from '../button/Button.jsx';
 
 function NavBar() {
-    const {isAuth} = useContext(AuthContext);
+    const {isAuth, user} = useContext(AuthContext);
     const data = useContext(AuthContext);
-    console.log(data);
+    // console.log(data);
 
     return (
         <header>
@@ -41,6 +43,9 @@ function NavBar() {
                             }
                         </ul>
                         <Avatar/>
+                        <Button type="button">
+                            <SignOut size={32} />
+                        </Button>
                     </div>
                 </nav>
             </OuterContainer>

@@ -16,7 +16,7 @@
 }
 
 .color-secondary {
-    background-color: var(--color-secundary);
+    background-color: var(--color-secondary);
     color: var(--color-main-white);
 }
 
@@ -26,15 +26,32 @@
 
 /* ===== 2. Specified Top Bar Styles ===== */
 
-.top-bar-genre-selection {
+.top-bar-introduction {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.top-bar-category-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-category-selection-pop-up {
+    display: flex;
+    justify-content: space-between;
 }
 
 .top-bar-my-playlists,
 .top-bar-playlist {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-registration-error-message {
+    display: flex;
+    gap: 0.5em;
     align-items: center;
 }

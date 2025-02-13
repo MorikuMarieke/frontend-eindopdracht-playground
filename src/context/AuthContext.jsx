@@ -17,7 +17,6 @@ export function AuthContextProvider({ children }) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-
         if (token) {
             try {
                 const decoded = jwtDecode(token);
@@ -27,14 +26,14 @@ export function AuthContextProvider({ children }) {
                 localStorage.removeItem('token'); // Verwijder corrupte token
                 toggleIsAuth({
                     isAuth: false,
-                    user: null,
+                    user: {},
                     status: 'done',
                 });
             }
         } else {
             toggleIsAuth({
                 isAuth: false,
-                user: null,
+                user: {},
                 status: 'done',
             });
         }
@@ -43,29 +42,25 @@ export function AuthContextProvider({ children }) {
     async function signIn(JWT) {
         try {
             localStorage.setItem('token', JWT);
-            const decoded = jwtDecode(JWT);
-            await fetchUserData(decoded.sub, JWT, '/profile');
-            // void fetchUserData( decoded.sub, JWT, '/profile' );
+            const decodedToken = jwtDecode(JWT);
+            await fetchUserData(decodedToken.sub, JWT, '/profile');
+            console.log(decodedToken);
         } catch (e) {
             console.error('Error signing in:', e);
             localStorage.removeItem('token');
             toggleIsAuth({
                isAuth: false,
-               user: null,
+               user: {},
                status: 'done',
             });
         }
-
-
-        // link de gebruiker door naar de profielpagina
-        // navigate('/profile');
     }
 
     function signOut() {
         localStorage.removeItem('token');
         toggleIsAuth( {
             isAuth: false,
-            user: null,
+            user: {},
             status: 'done',
         });
 
@@ -73,10 +68,10 @@ export function AuthContextProvider({ children }) {
         navigate('/');
     }
 
-    async function fetchUserData(id, token, redirectUrl) {
+    async function fetchUserData(username, token, redirectUrl) {
         try {
             // haal gebruikersdata op met de token en id van de gebruiker
-            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${id}`, {
+            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${username}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -90,7 +85,6 @@ export function AuthContextProvider({ children }) {
                 user: {
                     username: result.data.username,
                     email: result.data.email,
-                    id: result.data.id,
                 },
                 status: 'done',
             }));
@@ -100,7 +94,7 @@ export function AuthContextProvider({ children }) {
             if (redirectUrl) {
                 navigate(redirectUrl);
             }
-            console.log(result.data);
+            console.log(result.data); //log to check if user data is fetched correctly.
 
         } catch (e) {
             console.error('Error fetching user data:', e);
@@ -108,7 +102,7 @@ export function AuthContextProvider({ children }) {
             // ging er iets mis? Plaatsen we geen data in de state
             toggleIsAuth( {
                 isAuth: false,
-                user: null,
+                user: {},
                 status: 'done',
             });
         }
