@@ -266,21 +266,20 @@ export default function Home() {
                                 type="button"
                                 className="category-selection-button"
                                 buttonText="More"
-                                onClick={() => navigate("/category-selection")}
-                            >
+                            >y
                                 <Funnel size={24}/>
                             </Button>
                         </CardTopBar>
                         <div className="category-selection">
                             <Button
-                                className="selected-category"
+                                className="category-button"
                                 buttonText="Genre1"
                                 hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                 defaultIcon={<CheckCircle className="default-icon" size={22}/>}
                                 type="button"
                             />
                             <Button
-                                className="selected-category"
+                                className="category-button"
                                 buttonText="Genre2"
                                 hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                 defaultIcon={<CheckCircle className="default-icon" size={22}/>}
@@ -288,30 +287,6 @@ export default function Home() {
                             />
                             {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
 
-                        </div>
-                    </CardContainer>
-
-                    <CardContainer className="category-selection-wrapper">
-                        <CardTopBar cardName="category-selection-pop-up category-selection">
-                            <h3>Select your favorite categories</h3>
-                            <Button
-                                className="category-selection-button"
-                                buttonText="Cancel"
-                                type="button"
-                                defaultIcon={<CheckCircle className="default-icon" size={22}/>}
-                                hoveredIcon={<CheckCircle className="default-icon" size={22}/>}
-                            />
-                        </CardTopBar>
-                        <div className="selected-categories-container">
-                            {categories.map((category, index) => (
-                                <Button
-                                    className="selected-genre"
-                                    type="button"
-                                    key={category.id}
-                                />
-                            ))}
-
-                            {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
                         </div>
                     </CardContainer>
 

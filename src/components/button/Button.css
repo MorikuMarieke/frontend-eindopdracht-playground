@@ -73,7 +73,8 @@ button {
 /*.search-button--category */
 
 /*TODO: might need to remove these due to API limits*/
-.selected-category {
+
+.selectable-category {
     display: inline flex;
     align-items: center;
     justify-content: center;
@@ -82,21 +83,23 @@ button {
     background-color: var(--color-main-white);
 }
 
-.selected-category, .selected-category {
-    margin-right: 0.5em;
+.selected-category {
+    display: inline flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+    padding: 0.3em 0.5em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
 }
 
-.selected-category .search-icon-category {
-    margin-right: 0.5em;
-}
+/*.hovered-icon {*/
+/*    color: var(--color-primary);*/
+/*}*/
 
-.hovered-icon {
-    color: var(--color-primary);
-}
-
-.default-icon {
-    color: var(--color-secondary);
-}
+/*.default-icon {*/
+/*    color: var(--color-secondary);*/
+/*}*/
 
 /* ===== 2.3 Button - Edit my playlists ===== */
 
