@@ -53,6 +53,7 @@ function App() {
                         <Navigate to="/"/>
                     }
                 />
+                <Route path="/category-selection" element={<CategorySelection/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route path="/registration" element={<Registration/>}/>
             </Routes>

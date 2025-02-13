@@ -266,7 +266,9 @@ export default function Home() {
                                 type="button"
                                 className="category-selection-button"
                                 buttonText="More"
-                            >y
+                                onClick={() => navigate("/category-selection")}
+
+                            >
                                 <Funnel size={24}/>
                             </Button>
                         </CardTopBar>
