@@ -17,3 +17,15 @@
     background-color: var(--color-primary);
     border-radius: 0 0 1.2em 1.2em;
 }
+
+.category-selection {
+    background-color: var(--color-primary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.selected-categories-container {
+    padding: 1em;
+    row-gap: 0.5em;
+    background-color: var(--color-main-white);
+}

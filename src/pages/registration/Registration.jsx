@@ -34,7 +34,7 @@ export default function Registration() {
         toggleLoading(true);
 
         try {
-            await axios.post(`${NOVI_PLAYGROUND_BACKEND}users`, {
+            await axios.post(`${NOVI_PLAYGROUND_BACKEND}/users`, {
                 email: email,
                 password: password,
                 username: username,

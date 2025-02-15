@@ -9,6 +9,8 @@ import {CheckCircle, XCircle} from '@phosphor-icons/react';
 import axios from 'axios';
 import {API_BASE} from '../../constants/constants.js';
 import {useNavigate} from 'react-router-dom';
+import '../../constants/genreArray.js'
+import {genres} from '../../constants/genreArray.js'
 
 function CategorySelection() {
     const [categories, setCategories] = useState([]);
@@ -49,7 +51,7 @@ function CategorySelection() {
             try {
                 const token = localStorage.getItem("spotifyToken");
 
-                const firstResponse = await axios.get(`${API_BASE}browse/categories`, {
+                const firstResponse = await axios.get(`${API_BASE}/browse/categories`, {
                     params: {
                         locale: "en_US",
                         limit,
@@ -65,7 +67,7 @@ function CategorySelection() {
                 const requests = [];
                 for (offset = limit; offset < total; offset += limit) {
                     requests.push(
-                        axios.get(`${API_BASE}browse/categories`, {
+                        axios.get(`${API_BASE}/browse/categories`, {
                             params: {locale: "en_US", limit, offset},
                             headers: {Authorization: `Bearer ${token}`},
                         })
@@ -144,8 +146,8 @@ function CategorySelection() {
                                             buttonText={category.name}
                                             onClick={() => handleCategoryToggle(category)}
                                             isSelected={true}
-                                            defaultIcon={<CheckCircle className="default-icon" size={22} />}
-                                            hoveredIcon={<XCircle className="hovered-icon" size={22} />}
+                                            defaultIcon={<CheckCircle className="default-icon" size={22}/>}
+                                            hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                             type="button"
                                         />
                                     </li>
@@ -164,8 +166,8 @@ function CategorySelection() {
                                             buttonText={category.name}
                                             onClick={() => handleCategoryToggle(category)}
                                             isSelected={isSelected} // Pass selection state
-                                            defaultIcon={<CheckCircle className="default-icon" size={22} />}
-                                            hoveredIcon={<XCircle className="hovered-icon" size={22} />}
+                                            defaultIcon={<CheckCircle className="default-icon" size={22}/>}
+                                            hoveredIcon={<XCircle className="hovered-icon" size={22}/>}
                                             type="button"
                                         />
                                     </li>

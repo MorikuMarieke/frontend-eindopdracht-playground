@@ -12,6 +12,7 @@ import Footer from './components/footer/Footer.jsx';
 import {Helmet} from 'react-helmet-async';
 import {AuthContext} from './context/AuthContext.jsx';
 import CategorySelection from './pages/categorySelection/CategorySelection.jsx';
+import GenreSelection from './pages/genreSelection/GenreSelection.jsx';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
                     }
                 />
                 <Route path="/category-selection" element={<CategorySelection/>}/>
+                <Route path="/genre-selection" element={<GenreSelection/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route path="/registration" element={<Registration/>}/>
             </Routes>

@@ -61,20 +61,27 @@
     width: 100%;
 }
 
-/* ===== 2.4 Genre Selection Card ===== */
+/* ===== 2.4 Category Selection Card ===== */
 
-.category-selection {
-    background-color: var(--color-primary);
+.selected-categories-display {
+    display: flex;
+    flex-direction: column;
     padding: 1em;
+
+    background-color: var(--color-primary);
     border-radius: 0 0 1.2em 1.2em;
 }
 
+.selected-categories-display h3 {
+    color: var(--color-main-white);
+    margin-bottom: 1em;
+}
 
-
-.selected-categories-container {
-    padding: 1em;
-    row-gap: 0.5em;
-    background-color: var(--color-main-white);
+.selected-categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    list-style: none;
 }
 
 /* ===== 2.5 Artist Selection Card ===== */

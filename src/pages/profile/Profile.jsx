@@ -31,7 +31,7 @@ function Profile() {
         async function getUserData() {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${NOVI_PLAYGROUND_BACKEND}users/${user.username}`, {
+                const response = await axios.get(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ function Profile() {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(
-                `${NOVI_PLAYGROUND_BACKEND}users/${user.username}`,
+                `${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`,
                 {
                     username: username,
                     email: email,
