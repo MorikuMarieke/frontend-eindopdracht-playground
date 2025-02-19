@@ -88,14 +88,18 @@
 
 .artist-selection {
     display: flex;
+    flex-direction: column;
     background-color: var(--color-secondary);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
+    gap: 1em;
 }
 
 .artist-selection form {
     display: flex;
 }
+
+
 
 /* ===== 2.6 Music Suggestions Card ===== */
 
