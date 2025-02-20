@@ -1,0 +1,27 @@
+
+.playlist-container {
+    background-color: var(--color-primary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.playlist-background {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    background-color: var(--color-radio-player-bg);
+    border-radius: 0.8em;
+    padding: 0.5em;
+}
+
+.artist-page-image-container {
+    padding: 1em;
+    background-color: var(--color-main-white);
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.artist-info-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em
+}

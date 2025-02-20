@@ -3,18 +3,16 @@ import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {CheckCircle, Funnel, MagnifyingGlass, SignOut, UserCircle, XCircle} from "@phosphor-icons/react";
+import {CheckCircle, Funnel, MagnifyingGlass, SignOut, UserCircle, XCircle, ArrowFatRight} from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import {genres} from '../../constants/genreArray.js';
-import ArtistInfoCard from '../../components/artistInfoCard/ArtistInfoCard.jsx';
-import log from 'eslint-plugin-react/lib/util/log.js';
 
 export default function Home() {
     // For sign in functionality
@@ -457,14 +455,22 @@ export default function Home() {
                             />
                         </form>
                         {artistDetails && artistDetails.name && artistDetails.popularity && artistDetails.followers?.total && (
-                            <ArtistInfoCard
-                                artistName={artistDetails.name}
-                                artistId={artistDetails.id}
-                                popularity={artistDetails.popularity}
-                                followers={artistDetails.followers?.total}
-                                imgSrc={artistDetails.images[0].url}
-                                imgAlt={`${artistDetails.name} image`}
-                            />
+                            <div>
+                                <article className="artist-details-home-page">
+
+                                    <div className="artist-img-wrapper">
+                                        <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                    </div>
+                                    {/*<p>Followers: {artistDetails.followers.total}</p>*/}
+                                    {/*<p>Popularity: {artistDetails.popularity}</p>*/}
+                                    <Link to={`/artist/${artistDetails.id}`}>
+                                        <div className="artist-info-link">
+                                            <h3>Go to {artistDetails.name} artist page</h3>
+                                            <ArrowFatRight size={24}/>
+                                        </div>
+                                    </Link>
+                                </article>
+                            </div>
                         )}
                     </div>
 

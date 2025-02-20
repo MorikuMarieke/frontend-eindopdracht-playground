@@ -9,7 +9,8 @@ export default function RadioPlayer({src}) {
         width="100%"
         height="80px"
         frameBorder="0"
-        allow="encrypted-media">
+        allow="encrypted-media"
+    >
     </iframe>
     );
 };

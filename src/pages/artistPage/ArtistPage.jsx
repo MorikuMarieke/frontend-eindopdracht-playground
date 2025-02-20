@@ -96,6 +96,8 @@ function ArtistPage() {
         fetchArtistTopTracks();
 
     }, [token, id]);
+
+
     //
     // const buildPlaylistUrl = () => {
     //     const trackUris = artistTopTracks.slice(0, 10).map(track => track.uri);  // Get URIs for top 10 tracks
@@ -107,51 +109,52 @@ function ArtistPage() {
             <OuterContainer type="artist-info">
                 <PageContainer className="page-artist-info">
                     {artistDetails && artistDetails.name && artistDetails.popularity && artistDetails.followers?.total && (
-                        <CardContainer className="artist-info-page-card">
-                            <CardTopBar
-                                cardName="artist-info"
-                                color="secondary"
-                            >
-                                <h3>{artistDetails.name}</h3>
-                            </CardTopBar>
-                            <ArtistInfoCard
-                                artistId={artistDetails.id}
-                                followers={artistDetails.followers?.total}
-                                popularity={artistDetails.popularity}
-                                imgSrc={artistDetails.images[0].url}
-                                imgAlt={`${artistDetails.name} image`}
-                            />
-                        </CardContainer>
+                        <>
+                            <CardContainer className="artist-info-page-card">
+                                <CardTopBar
+                                    cardName="artist-info"
+                                    color="secondary"
+                                >
+                                    <h3>{artistDetails.name}</h3>
+                                </CardTopBar>
+                                <div className="artist-page-image-container">
+                                    <div className="artist-img-wrapper">
+                                        <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                    </div>
+                                </div>
+                            </CardContainer>
+                            <CardContainer>
+                                <CardTopBar color="primary">
+                                    <h3>Info</h3>
+                                </CardTopBar>
+                                <div className="artist-info-card">
+                                    <div className="artist-info-box">
+                                        <h3>Follower total</h3>
+                                        <p>{artistDetails.followers.total}</p>
+                                    </div>
+                                    <div className="artist-info-box">
+                                        <h3>Popularity score</h3>
+                                        <p>{artistDetails.popularity}/100</p>
+                                    </div>
+                                </div>
+                            </CardContainer>
+                        </>
                     )}
-                    {/*{artistTopTracks &&*/}
-                    {/*<CardContainer className="top-tracks">*/}
-                    {/*    <CardTopBar*/}
-                    {/*        cardName="top-tracks"*/}
-                    {/*        color="primary"*/}
-                    {/*    >*/}
-                    {/*        <h3>Top tracks</h3>*/}
-                    {/*        /!*<div className="playlist">*!/*/}
-                    {/*        /!*    {artistTopTracks.length > 0 && (*!/*/}
-                    {/*        /!*        <RadioPlayer*!/*/}
-                    {/*        /!*            src={playlistUrl}*!/*/}
-                    {/*        /!*        />*!/*/}
-                    {/*        /!*    )}*!/*/}
-
-                    {/*        /!*</div>*!/*/}
-                    {/*    </CardTopBar>*/}
-                    {/*</CardContainer>*/}
-                    {/*}*/}
-
-                    {/*<RadioPlayer*/}
-                    {/*    test={'https://open.spotify.com/embed/track/spotify:track:1rf4SX7dduNbrNnOmupLzi'}*/}
-
-                    {/*    />*/}
-                    {playlistUrl && playlistUrl.map((track) => {
-                        return (
-                        <RadioPlayer
-                        src={`https://open.spotify.com/embed/track/${track}`}
-                        />)
-                    })}
+                    <CardContainer>
+                        <CardTopBar cardName="top-tracks" color="secondary">
+                            <h3>{artistDetails.name} top tracks</h3>
+                        </CardTopBar>
+                        <div className="playlist-container">
+                            <div className="playlist-background">
+                            {playlistUrl && playlistUrl.map((track) => {
+                                return (
+                                    <RadioPlayer
+                                        src={`https://open.spotify.com/embed/track/${track}?utm_source=generator&theme=0`}
+                                    />)
+                            })}
+                            </div>
+                        </div>
+                    </CardContainer>
                 </PageContainer>
             </OuterContainer>
         </main>
