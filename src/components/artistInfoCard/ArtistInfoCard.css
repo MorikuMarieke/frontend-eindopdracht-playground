@@ -1,0 +1,17 @@
+.artist-info-card {
+    background-color: var(--color-main-white);
+    /*border-radius: 0 0 1.2em 1.2em;*/
+    padding: 1em;
+}
+
+.artist-img-wrapper {
+    width: 100%;
+}
+
+.artist-img-wrapper img {
+    width: 100%;
+}
+
+.artist-info-card-home {
+    border-radius: 1.2em;
+}

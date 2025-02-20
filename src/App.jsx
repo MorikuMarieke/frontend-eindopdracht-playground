@@ -9,9 +9,11 @@ import Playlist from './pages/playlist/Playlist.jsx';
 import ErrorPage from './pages/errorPage/ErrorPage.jsx';
 import Registration from './pages/registration/Registration.jsx';
 import Footer from './components/footer/Footer.jsx';
+import CategorySelection from './pages/categorySelection/CategorySelection.jsx';
 import {Helmet} from 'react-helmet-async';
 import {AuthContext} from './context/AuthContext.jsx';
-import CategorySelection from './pages/categorySelection/CategorySelection.jsx';
+import GenreSelection from './pages/genreSelection/GenreSelection.jsx';
+import ArtistPage from './pages/artistPage/ArtistPage.jsx';
 
 
 function App() {
@@ -53,8 +55,12 @@ function App() {
                         <Navigate to="/"/>
                     }
                 />
+                <Route path="/category-selection" element={<CategorySelection/>}/>
+                <Route path="/genre-selection" element={<GenreSelection/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route path="/registration" element={<Registration/>}/>
+                <Route path="/artist/:id" element={<ArtistPage/>} />
+
             </Routes>
             <Footer/>
         </>

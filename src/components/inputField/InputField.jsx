@@ -10,7 +10,8 @@ export default function InputField({
                         onChange,
                         placeholder,
                         required,
-                        disabled
+                        disabled,
+                        onKeyDown
                     }) {
     return (
         <>
@@ -27,6 +28,7 @@ export default function InputField({
                 placeholder={placeholder}
                 required={required}
                 disabled={disabled}
+                onKeyDown={onKeyDown}
             />
         </>
     );

@@ -71,7 +71,7 @@ export function AuthContextProvider({ children }) {
     async function fetchUserData(username, token, redirectUrl) {
         try {
             // haal gebruikersdata op met de token en id van de gebruiker
-            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}users/${username}`, {
+            const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}/users/${username}`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
