@@ -36,3 +36,7 @@
     row-gap: 0.5em;
     background-color: var(--color-main-white);
 }
+
+.selectable-genres-container h3 {
+    color: var(--color-main-white);
+}

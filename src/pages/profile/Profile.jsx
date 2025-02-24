@@ -9,7 +9,7 @@ import {Pencil, SignOut} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import {NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
+import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
@@ -21,6 +21,9 @@ function Profile() {
     const [info, setInfo] = useState('');
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
+
+    const [accessToken, setAccessToken] = useState(localStorage.getItem('access_token'));
+    const [profileData, setProfileData] = useState(null);
 
 
     const {isAuth, user, signOut} = useContext(AuthContext);
@@ -43,24 +46,134 @@ function Profile() {
                 setInfo(response.data.info);
 
                 // maak ook stukje state voor password en info [v]
-                console.log(response);
+                // console.log(response);
             } catch (e) {
                 console.error(e);
             }
         }
+
         getUserData();
     }, []);
 
-    async function changeProfileData() {
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const authorizationCode = queryParams.get('code');
 
+        if (authorizationCode) {
+            // Exchange the authorization code for access token
+            exchangeCodeForAccessToken(authorizationCode);
+        } else if (accessToken) {
+            // Fetch Spotify user profile if access token is available
+            getUserProfile();
+        }
+    }, [accessToken]);
+
+    // Redirect to Spotify authentication page
+    const redirectToSpotifyAuth = () => {
+        const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+        const redirectUri = 'http://localhost:5173/profile';
+        const scope = 'user-top-read user-library-read playlist-modify-public';
+        const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}`;
+
+        window.location.href = authUrl;
+    };
+
+    // Exchange authorization code for access token and store tokens
+    const exchangeCodeForAccessToken = async (authorizationCode) => {
+        const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+        const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+        const redirectUri = 'http://localhost:5173/profile';
+
+        try {
+            const response = await axios.post(
+                'https://accounts.spotify.com/api/token',
+                new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    code: authorizationCode,
+                    redirect_uri: redirectUri,
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                }),
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            );
+
+            const {access_token, refresh_token} = response.data;
+
+            // Store tokens in localStorage
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', refresh_token);
+
+            setAccessToken(access_token); // Update state with the access token
+
+            // Optionally, navigate to another page or update UI
+            navigate('/profile');
+        } catch (error) {
+            console.error('Error exchanging authorization code for token:', error);
+        }
+    };
+
+
+    const getTopTracks = async (authorizationCode) => {
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get(`${API_BASE}/me/top/tracks`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+                limit: 10,
+            }
+        });
+        console.log(response.data);
     }
+
+    getTopTracks()
+    //
+    // const getTopArtists = async (authorizationCode) => {
+    //     const token = localStorage.getItem('access_token');
+    //     const response = await axios.get(`https://api.spotify.com/v1/me/top/tracks`, {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //             limit: 10,
+    //         }
+    //     });
+    //     console.log(response.data)
+    // }
+    //
+    // getTopArtists();
+
+    // Fetch user profile from Spotify using the access token
+    const getUserProfile = async () => {
+        const token = localStorage.getItem('access_token');
+
+        if (!token) {
+            console.error('No access token found.');
+            return;
+        }
+
+        try {
+            const response = await axios.get('https://api.spotify.com/v1/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setProfileData(response.data);
+        } catch (error) {
+            console.error('Error fetching user profile', error);
+        }
+    };
 
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
         // 1. probeer alle info mee te sturen als put-request, met aangepast wachtwoord als string [v]
-        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je 'm had ontvangen
+        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je
+        // 'm had ontvangen
 
         try {
             const token = localStorage.getItem('token');
@@ -69,7 +182,8 @@ function Profile() {
                 {
                     username: username,
                     email: email,
-                    password: password, //volgens mij klopt het nu niet, omdat ik als ik niks invul, ik toch de oude encrypted JWT string meestuur als nieuw wachtwoord
+                    password: password, //volgens mij klopt het nu niet, omdat ik als ik niks invul, ik toch de oude
+                                        // encrypted JWT string meestuur als nieuw wachtwoord
                     info: info,
                 }, {
                     headers: {
@@ -212,6 +326,38 @@ function Profile() {
                         </div>
                         <p>Connect your Spotify account to your profile and import your playlists directly to
                             Spotify</p>
+                        <Button
+                            buttonText="Connect spotify"
+                            type="button"
+
+                        />
+                    </CardContainer>
+                    <CardContainer
+                        className="connect-spotify"
+                    >
+                        {!accessToken && (
+                            <div>
+                                <p>Connect your Spotify account to view your profile data.</p>
+                                <button onClick={redirectToSpotifyAuth}>Connect with Spotify</button>
+                            </div>
+                        )}
+
+                        {/* If the user is authenticated */}
+                        {accessToken && profileData ? (
+                            <div>
+                                <h2>Spotify profile: {profileData.display_name}</h2>
+                                <img src={profileData.images[0]?.url} alt="User Avatar"/>
+                                <p>Email: {profileData.email}</p>
+                                <p>Followers: {profileData.followers.total}</p>
+                                <Button
+                                    type="button"
+                                    buttonText="Spotify account log out"
+                                    onClick={() => localStorage.removeItem('access_token')}
+                                />
+                            </div>
+                        ) : (
+                            <p>Loading profile...</p>
+                        )}
                     </CardContainer>
                 </PageContainer>
             </OuterContainer>

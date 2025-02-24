@@ -17,6 +17,8 @@ function Playlist() {
 
     const navigate = useNavigate();
 
+    console.log(playlist)
+
     useEffect(() => {
         async function fetchToken() {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
@@ -95,6 +97,7 @@ function Playlist() {
                                 <div className="playlist-description">
                                     <h3>Playlist description</h3>
                                     <p>{playlist.description}</p>
+
                                 </div>
                                 }
                                 <div className="playlist-background">

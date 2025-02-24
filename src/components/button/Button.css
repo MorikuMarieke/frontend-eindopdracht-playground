@@ -41,14 +41,13 @@ button {
     color: var(--color-main-white);
 }
 
-/* ===== 2.2 Search Button -- Category ===== */
+/* ===== 2.2 Search Button -- Genre ===== */
 
-.search-button--category {
+.search-button--genre {
     background-color: transparent;
     padding: 0 0.5em 0 0;
 }
 
-.category-selection-button,
 .genre-selection-button,
 .genre-search-button {
     display: flex;
@@ -59,7 +58,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.button--select-categories {
+.button--select-genres {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -68,11 +67,6 @@ button {
     padding: 0.3em 1em;
 }
 
-/*.search-button--category/genre */
-
-/*TODO: might need to remove these due to API limits*/
-
-.selectable-category,
 .selectable-genre{
     display: inline flex;
     align-items: center;
@@ -82,7 +76,6 @@ button {
     background-color: var(--color-main-white);
 }
 
-.selected-category,
 .selected-genre {
     display: inline flex;
     align-items: center;
@@ -113,7 +106,6 @@ button {
     height: 100%;
     border-radius: 0.4em;
 }
-
 
 /* ===== 2.3 Button - Edit my playlists ===== */
 

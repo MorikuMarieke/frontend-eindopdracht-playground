@@ -31,10 +31,6 @@ export default function Home() {
     const [artistId, setArtistId] = useState('');
     const [artistDetails, setArtistDetails] = useState([]);
 
-    // Currently useless state but I don't want to kill it off just yet because I might want to make something with it.
-    const [categories, setCategories] = useState([]);
-    const [selectedCategories, setSelectedCategories] = useState([]);
-
     const navigate = useNavigate();
 
     // Context
@@ -62,18 +58,6 @@ export default function Home() {
         }
 
         fetchToken();
-
-        function getSelectedCategoriesFromStorage() {
-            const storedData = localStorage.getItem("selectedCategories");
-
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                console.log("Stored Categories from parsedData:", parsedData);
-                setSelectedCategories(parsedData);
-            }
-        }
-
-        getSelectedCategoriesFromStorage();
 
         function getSelectedGenresFromStorage() {
             const storedData = localStorage.getItem("selectedGenres");
@@ -149,29 +133,6 @@ export default function Home() {
         }
     }
 
-    // // Commented out because I'm not using the category selection
-    // async function fetchPlaylistsByCategory(genre) {
-    //     try {
-    //         const response = await axios.get(`${API_BASE}/search`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
-    //             }, params: {
-    //                 q: genre,  // Genre as a keyword
-    //                 type: 'playlist',  // Searching for playlists
-    //                 limit: 50,  // Limit the number of results
-    //             },
-    //         });
-    //         console.log(response.data.playlists.items);  // Log the playlists
-    //         // You can set the playlists state if needed
-    //         // setPlaylists(response.data.playlists.items);
-    //     } catch (e) {
-    //         console.error('Error fetching playlists by genre', e.response || e);
-    //     }
-    // }
-
-    // async function handlePlaylistByCategoryClick() {
-    //     setSelectedCategories(localStorage.getItem())
-    // }
 
     async function fetchArtistsByGenre(genreString) {
 
@@ -194,9 +155,6 @@ export default function Home() {
         }
     }
 
-    async function handlePlaylistByCategoryClick() {
-        setSelectedCategories(localStorage.getItem())
-    }
 
     async function handleArtistSearchByGenreClick() {
         if (selectedGenres.length === 0) {
@@ -414,7 +372,7 @@ export default function Home() {
                         >
                             <Button
                                 type="submit"
-                                className="search-button--category">
+                                className="search-button--genre">
                                 <MagnifyingGlass size={32} className="search-icon"/>
                             </Button>
                             <InputField
@@ -519,23 +477,3 @@ export default function Home() {
         </OuterContainer>
     </main>)
 }
-
-
-// {/*TODO: Consideration: only one is visible, first a selection tool for one or the other? Artist or Genre*/}
-// <CardContainer className="category-selection-wrapper">
-//     <CardTopBar
-//         cardName="category-selection" color="secondary">
-//         {/*TODO: when clicked the magnifying glass, the search will execute based on the input, the input will stay
-// visible*/} <Button className="search-button--category" type="button" onClick={() =>
-// fetchPlaylistsByCategory("discover")} > <MagnifyingGlass size={32} className="search-icon-category"/> </Button>
-// <h3>Select your favorite categories</h3> {/*TODO: When clicked a pop up screen will appear with a search bar to look
-// for specific category group, and to type in a specific category and clickable buttons, when clicked, the category is
-// automatically are added to the list that is displayed on the home screen, and added to a momentary array, until
-// deleted (maybe a current search array that is default empty) */} <Button type="button"
-// className="category-selection-button" buttonText="Select" onClick={() => navigate("/category-selection")}  > <Funnel
-// size={24}/> </Button> </CardTopBar> <div className="selected-categories-display"> {selectedCategories ? <h3>You have
-// selected the following {(selectedCategories?.length === 1) ? "category" : "categories"}</h3> : <h3>No selected
-// categories yet</h3>} {(selectedCategories.length > 0) && <ul className="selected-categories-list">
-// {selectedCategories.map((category) => (<li key={category.id}> <Button className="selected-category"
-// buttonText={category.name} type="button" /> </li>))} </ul>} </div> {/*TODO: add a button element that when clicked
-// it will clear the whole selection.*/} </CardContainer>
