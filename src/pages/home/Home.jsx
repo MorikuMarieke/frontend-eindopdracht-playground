@@ -20,23 +20,23 @@ export default function Home() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, toggleLoading] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    // const [playlists, setPlaylists] = useState([]);
+
+    // For search by genre
+    const [playlistsByGenre, setPlaylistsByGenre] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [playlistSearchDone, togglePlaylistSearchDone] = useState(false);
+
+    // For search by artist name
     const [artistName, setArtistName] = useState('');
     const [artistId, setArtistId] = useState('');
-    const [artistDetails, setArtistDetails] = useState([])
+    const [artistDetails, setArtistDetails] = useState([]);
 
-    // For music functionalities
-    const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
 
     // Context
     const {isAuth, signIn, signOut, user} = useContext(AuthContext);
 
     useEffect(() => {
-        // console.log("genres:", genres);
-
         async function fetchToken() {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
             const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
@@ -44,9 +44,7 @@ export default function Home() {
             const authString = btoa(`${clientId}:${clientSecret}`);
 
             try {
-                const response = await axios.post('https://accounts.spotify.com/api/token', new URLSearchParams({grant_type: 'client_credentials'}), // Correctly
-                    // formatted form
-                    // data
+                const response = await axios.post('https://accounts.spotify.com/api/token', new URLSearchParams({grant_type: 'client_credentials'}),
                     {
                         headers: {
                             'Authorization': `Basic ${authString}`, 'Content-Type': 'application/x-www-form-urlencoded'
@@ -61,25 +59,12 @@ export default function Home() {
 
         fetchToken();
 
-        function getSelectedCategoriesFromStorage() {
-            const storedData = localStorage.getItem("selectedCategories");
-
-            if (storedData) {
-                const parsedData = JSON.parse(storedData);
-                console.log("Stored Categories from parsedData:", parsedData);  // Check if it's as expected
-                setSelectedCategories(parsedData);
-            }
-        }
-
-        getSelectedCategoriesFromStorage();
-
         function getSelectedGenresFromStorage() {
             const storedData = localStorage.getItem("selectedGenres");
 
             if (storedData) {
                 try {
                     const parsedData = JSON.parse(storedData);
-                    // console.log("Stored genres from parsedData:", parsedData);  // Check if it's as expected
                     setSelectedGenres(parsedData);
                 } catch (e) {
                     console.error("Error parsing selectedGenres from LocalStorage:", e);
@@ -89,13 +74,29 @@ export default function Home() {
 
         getSelectedGenresFromStorage();
 
+        function retrievePlaylistsFromStorage() {
+            const savedPlaylists = localStorage.getItem('genrePlaylistSelection');
+
+            if (savedPlaylists) {
+                const parsedData = JSON.parse(savedPlaylists)
+                setPlaylistsByGenre(parsedData);
+                console.log("Saved playlists:", playlistsByGenre)
+                togglePlaylistSearchDone(true);
+            } else {
+                togglePlaylistSearchDone(false);
+            }
+        }
+
+        retrievePlaylistsFromStorage();
+
     }, []);
 
     useEffect(() => {
         if (artistId) {
-            getArtistInfo(artistId);  // Fetch artist info when artistId is updated
+            getArtistInfo(artistId);
         }
-    }, [artistId]);  // Runs every time artistId changes
+    }, [artistId]);
+
 
     // async function getUser() {
     //     try {
@@ -120,7 +121,6 @@ export default function Home() {
             const result = await axios.post(`${NOVI_PLAYGROUND_BACKEND}/users/authenticate`, {
                 username: username, password: password
             });
-            // console.log(result.data);
             signIn(result.data.jwt);
         } catch (e) {
             if (e.response && e.response.status === 400) {
@@ -133,24 +133,6 @@ export default function Home() {
         }
     }
 
-    async function fetchPlaylistsByCategory(genre) {
-        try {
-            const response = await axios.get(`${API_BASE}/search`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
-                }, params: {
-                    q: genre,  // Genre as a keyword
-                    type: 'playlist',  // Searching for playlists
-                    limit: 50,  // Limit the number of results
-                },
-            });
-            console.log(response.data.playlists.items);  // Log the playlists
-            // You can set the playlists state if needed
-            // setPlaylists(response.data.playlists.items);
-        } catch (e) {
-            console.error('Error fetching playlists by genre', e.response || e);
-        }
-    }
 
     async function fetchArtistsByGenre(genreString) {
 
@@ -173,9 +155,6 @@ export default function Home() {
         }
     }
 
-    async function handlePlaylistByCategoryClick() {
-        setSelectedCategories(localStorage.getItem())
-    }
 
     async function handleArtistSearchByGenreClick() {
         if (selectedGenres.length === 0) {
@@ -186,9 +165,65 @@ export default function Home() {
         const genreString = selectedGenres.map(genre => genre.name).join(" ");
         console.log("Searching artists with genres:", genreString)
         await fetchArtistsByGenre(genreString);
-        // setSelectedGenres(localStorage.getItem("selectedGenres"));
-
     }
+
+
+    useEffect(() => {
+
+        async function fetchPlaylistsByGenre() {
+            if (!selectedGenres.length) {
+                console.log("No genres selected");
+                return;
+            }
+
+            console.log(selectedGenres)
+            togglePlaylistSearchDone(false);
+
+            const genreString = selectedGenres.map(genre => genre.name).join(" ");
+            console.log("Searching playlists with genres:", genreString)
+
+            try {
+                const response = await axios.get(`${API_BASE}/search`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
+                    }, params: {
+                        q: `${encodeURIComponent(genreString)}`,
+                        type: "playlist", limit: 50,
+                    },
+                });
+
+                if (!response.data.playlists || !response.data.playlists.items) return [];
+
+                const validPlaylists = response.data.playlists.items.filter(playlist => playlist !== null);
+
+                const sortedPlayLists = validPlaylists.sort((a, b) => {
+                    const queryLowerCase = genreString.toLowerCase();
+
+                    const aNameMatch = a.name.toLowerCase().includes(queryLowerCase) ? 2 : 0;
+                    const bNameMatch = b.name.toLowerCase().includes(queryLowerCase) ? 2 : 0;
+
+                    const aDescMatch = a.description?.toLowerCase().includes(queryLowerCase) ? 1 : 0;
+                    const bDescMatch = b.description?.toLowerCase().includes(queryLowerCase) ? 1 : 0;
+
+                    return (bNameMatch + bDescMatch) - (aNameMatch + aDescMatch); // Prioritize name matches first
+                });
+
+
+                console.log("Filtered and sorted playlists:", sortedPlayLists);
+                setPlaylistsByGenre(sortedPlayLists);
+                localStorage.setItem('genrePlaylistSelection', JSON.stringify(sortedPlayLists));
+
+            } catch (e) {
+                console.error("Error fetching playlists", e.response || e);
+                togglePlaylistSearchDone(true);
+            } finally {
+                togglePlaylistSearchDone(true);
+            }
+        }
+
+        fetchPlaylistsByGenre()
+    }, [selectedGenres])
+
 
     // const leukeDingen = localStorage.getItem('categories');
     //     console.log(leukeDingen ? JSON.parse(leukeDingen) : 'Staat niks in');
@@ -205,23 +240,6 @@ export default function Home() {
             console.log(response.data);
         } catch (e) {
             console.error('Error fetching playlists by genre', e.response || e);
-        }
-    }
-
-    // Example function by Nova
-
-    async function searchItem() {
-        try {
-            const response = await axios.get(`${API_BASE}/search`, {
-                params: {
-                    q: 'bob marley', type: 'artist',
-                }, headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('spotifyToken'),
-                }
-            });
-            console.log(response.data);
-        } catch (e) {
-            console.error(e);
         }
     }
 
@@ -258,11 +276,6 @@ export default function Home() {
 
 
     return (<main>
-        {/*<Button*/}
-        {/*    onClick={() => searchItem()}*/}
-        {/*>*/}
-        {/*    Get item*/}
-        {/*</Button>*/}
         {/*<Button*/}
         {/*    onClick={() => localStorage.setItem('categories', JSON.stringify(['metal', 'banaan']))}>*/}
         {/*    Doe in de localStorage Bro*/}
@@ -348,89 +361,6 @@ export default function Home() {
                     </form>
                 </CardContainer>}
 
-
-                {/*TODO: Consideration: only one is visible, first a selection tool for one or the other? Artist or Genre*/}
-                <CardContainer className="category-selection-wrapper">
-                    <CardTopBar
-                        cardName="category-selection" color="secondary">
-                        {/*TODO: when clicked the magnifying glass, the search will execute based on the input, the input will stay visible*/}
-                        <Button
-                            className="search-button--category"
-                            type="button"
-                            onClick={() => fetchPlaylistsByCategory("discover")}
-                        >
-                            <MagnifyingGlass size={32} className="search-icon-category"/>
-                        </Button>
-                        <h3>Select your favorite categories</h3>
-                        {/*TODO: When clicked a pop up screen will appear with a search bar to look for specific category group, and to type in a specific category and clickable buttons, when clicked, the category is automatically are added to the list that is displayed on the home screen, and added to a momentary array, until deleted (maybe a current search array that is default empty) */}
-                        <Button
-                            type="button"
-                            className="category-selection-button"
-                            buttonText="Select"
-                            onClick={() => navigate("/category-selection")}
-
-                        >
-                            <Funnel size={24}/>
-                        </Button>
-                    </CardTopBar>
-                    <div className="selected-categories-display">
-                        {selectedCategories ? <h3>You have selected the
-                                following {(selectedCategories?.length === 1) ? "category" : "categories"}</h3> :
-                            <h3>No selected categories yet</h3>}
-                        {(selectedCategories.length > 0) && <ul className="selected-categories-list">
-                            {selectedCategories.map((category) => (<li key={category.id}>
-                                <Button
-                                    className="selected-category"
-                                    buttonText={category.name}
-                                    type="button"
-                                />
-                            </li>))}
-                        </ul>}
-                    </div>
-                    {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
-                </CardContainer>
-
-                <CardContainer className="category-selection-wrapper">
-                    <CardTopBar
-                        cardName="category-selection" color="secondary">
-                        {/*TODO: when clicked the magnifying glass, the search will execute based on the input, the input will stay visible*/}
-                        <Button
-                            className="search-button--category"
-                            type="button"
-                            onClick={() => handleArtistSearchByGenreClick()}
-                        >
-                            <MagnifyingGlass size={32} className="search-icon-category"/>
-                        </Button>
-                        <h3>Select your favorite genres</h3>
-                        {/*TODO: When clicked a pop up screen will appear with a search bar to look for specific category group, and to type in a specific category and clickable buttons, when clicked, the category is automatically are added to the list that is displayed on the home screen, and added to a momentary array, until deleted (maybe a current search array that is default empty) */}
-                        <Button
-                            type="button"
-                            className="category-selection-button"
-                            buttonText="Select"
-                            onClick={() => navigate("/genre-selection")}
-
-                        >
-                            <Funnel size={24}/>
-                        </Button>
-                    </CardTopBar>
-                    <div className="selected-categories-display">
-                        {selectedGenres ? <h3>You have selected the
-                                following {(selectedGenres?.length === 1) ? "genre" : "genres"}</h3> :
-                            <h3>No selected categories yet</h3>}
-                        {(selectedGenres.length > 0) && <ul className="selected-categories-list">
-                            {selectedGenres.map((genre) => (<li key={genre.id}>
-                                <Button
-                                    className="selected-category"
-                                    buttonText={genre.name}
-                                    type="button"
-                                />
-                            </li>))}
-                        </ul>}
-                    </div>
-                    {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
-                </CardContainer>
-
-
                 <CardContainer className="artist-selection-wrapper">
                     <CardTopBar cardName="artist-selection" color="light">
                         <h3>What is the name of your favorite artist?</h3>
@@ -441,8 +371,8 @@ export default function Home() {
                         >
                             <Button
                                 type="submit"
-                                className="search-button--category">
-                                <MagnifyingGlass size={32} className="search-icon-category"/>
+                                className="search-button--genre">
+                                <MagnifyingGlass size={32} className="search-icon"/>
                             </Button>
                             <InputField
                                 type="text"
@@ -454,15 +384,13 @@ export default function Home() {
                                 onChange={(e) => setArtistName(e.target.value)}
                             />
                         </form>
-                        {artistDetails && artistDetails.name && artistDetails.popularity && artistDetails.followers?.total && (
+                        {artistDetails && artistDetails.name && (
                             <div>
                                 <article className="artist-details-home-page">
 
                                     <div className="artist-img-wrapper">
                                         <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
                                     </div>
-                                    {/*<p>Followers: {artistDetails.followers.total}</p>*/}
-                                    {/*<p>Popularity: {artistDetails.popularity}</p>*/}
                                     <Link to={`/artist/${artistDetails.id}`}>
                                         <div className="artist-info-link">
                                             <h3>Go to {artistDetails.name} artist page</h3>
@@ -473,26 +401,78 @@ export default function Home() {
                             </div>
                         )}
                     </div>
-
                 </CardContainer>
 
-
-                {/*TODO: Visible after giving input through Genre or Artist*/}
-                <CardContainer className="music-suggestions-wrapper">
-                    <CardTopBar cardName="music-suggestions" color="primary">
-                        <h3>Music suggestions based on your picks</h3>
+                <CardContainer className="genre-selection-wrapper">
+                    <CardTopBar
+                        cardName="genre-selection" color="secondary">
+                        <h3>Select your favorite genres to find a playlist that you might like</h3>
+                        <Button
+                            type="button"
+                            className="genre-selection-button"
+                            buttonText="Select"
+                            onClick={() => navigate("/genre-selection")}
+                        >
+                            <Funnel size={24}/>
+                        </Button>
                     </CardTopBar>
-                    <div className="music-suggestions">
-                        <div className="music-suggestions-playlist">
-                            <p>List of music suggestions will be generated here with clickable links</p>
-                        </div>
+                    <div className="selected-genres-display">
+                        {selectedGenres.length > 0 ?
+                            <h3>You have selected the
+                                following {(selectedGenres.length === 1) ? "genre" : "genres"}</h3>
+                            :
+                            <h3>No selected genres yet</h3>}
+                        {(selectedGenres.length > 0) &&
+                            <ul className="selected-genres-list">
+                                {selectedGenres.map((genre) => (<li className="selected-genre-list-item" key={genre.id}>
+                                    <h3>{genre.name}</h3>
+                                </li>))}
+                            </ul>}
                     </div>
+                    {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
                 </CardContainer>
+
+                {selectedGenres.length > 0 &&
+                    playlistSearchDone && (
+                        playlistsByGenre.length > 0 ? (
+                            <CardContainer>
+                                <CardTopBar color="secondary">
+                                    <h3>You might want to check out these playlists!</h3>
+                                </CardTopBar>
+                                <ul className="playlist-list-container">
+                                    {playlistsByGenre.slice(0, 10).map((playlist) => (
+                                        <Link to={`playlist/${playlist.id}`} key={playlist.id}>
+                                            <li>
+
+                                                <Button
+                                                    className="playlist-list-item"
+                                                    type="button"
+                                                    buttonText={playlist.name}
+
+                                                >
+                                                    <div className="playlist-img-wrapper">
+                                                        <img className="playlist-img" src={playlist.images[0].url}
+                                                             alt="playlist-image"/>
+                                                    </div>
+                                                </Button>
+                                            </li>
+                                        </Link>
+                                    ))}
+                                </ul>
+                            </CardContainer>
+                        ) : (
+                            <CardContainer>
+                                <CardTopBar color="secondary">
+                                    <h3>Sorry!</h3>
+                                </CardTopBar>
+                                <div className="playlist-list-container">
+                                    <p>We couldn't find any playlist that fits the search query you entered.</p>
+                                </div>
+                            </CardContainer>
+                        )
+                    )
+                }
             </PageContainer>
         </OuterContainer>
     </main>)
 }
-
-
-
-

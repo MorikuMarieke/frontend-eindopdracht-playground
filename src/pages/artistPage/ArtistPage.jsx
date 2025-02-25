@@ -8,21 +8,16 @@ import {useNavigate, useParams} from 'react-router-dom';
 import '../../constants/genreArray.js'
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
-import ArtistInfoCard from '../../components/artistInfoCard/ArtistInfoCard.jsx';
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
-import log from 'eslint-plugin-react/lib/util/log.js';
 
 function ArtistPage() {
     const {id} = useParams();
     const [artistDetails, setArtistDetails] = useState({});
     const [artistTopTracks, setArtistTopTracks] = useState([]);
-    // const [playlistUrl, setPlaylistUrl] = useState('');
-    const [token, setToken] = useState(null);  // Track the token state
-    const [playlistUrl, setPlaylistUrl] = useState('');
+    const [token, setToken] = useState(null);
 
     const navigate = useNavigate();
 
-    // Step 1: Fetch token
     useEffect(() => {
         async function fetchToken() {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
@@ -50,15 +45,14 @@ function ArtistPage() {
 
         const storedToken = localStorage.getItem("spotifyToken");
         if (storedToken) {
-            setToken(storedToken);  // Set token if it's already in localStorage
+            setToken(storedToken);
         } else {
-            fetchToken();  // Otherwise, fetch the token
+            fetchToken();
         }
     }, []);
 
-    // Step 2: Fetch artist details once the token is available
     useEffect(() => {
-        if (!token) return;  // Wait for token to be available
+        if (!token) return;
 
         async function fetchArtist() {
             try {
@@ -81,12 +75,8 @@ function ArtistPage() {
                         Authorization: 'Bearer ' + token,
                     },
                 });
-                setArtistTopTracks(response.data.tracks);
-                const trackUris = response.data.tracks.slice(0, 10).map(track => track.id);
-                console.log(trackUris)// Get URIs for top 10 tracks
-                // setPlaylistUrl( `https://open.spotify.com/embed/track/${trackUris.join(',')}`);
                 console.log(response.data.tracks);
-                setPlaylistUrl(trackUris)
+                setArtistTopTracks(response.data.tracks);
             } catch (e) {
                 console.error(e);
             }
@@ -97,12 +87,6 @@ function ArtistPage() {
 
     }, [token, id]);
 
-
-    //
-    // const buildPlaylistUrl = () => {
-    //     const trackUris = artistTopTracks.slice(0, 10).map(track => track.uri);  // Get URIs for top 10 tracks
-    //     setPlaylistUrl( `https://open.spotify.com/embed/track/${trackUris.join(',')}`);
-    // };
 
     return (
         <main>
@@ -142,17 +126,18 @@ function ArtistPage() {
                     )}
                     <CardContainer>
                         <CardTopBar cardName="top-tracks" color="secondary">
-                            <h3>{artistDetails.name} top tracks</h3>
+                            <h3>{artistDetails.name}'s top tracks</h3>
                         </CardTopBar>
                         <div className="playlist-container">
-                            <div className="playlist-background">
-                            {playlistUrl && playlistUrl.map((track) => {
-                                return (
-                                    <RadioPlayer
-                                        src={`https://open.spotify.com/embed/track/${track}?utm_source=generator&theme=0`}
-                                    />)
-                            })}
-                            </div>
+                            <ul className="playlist-background" >
+                                {artistTopTracks && artistTopTracks.map((track) => {
+                                    return (
+                                        <li className="top-track-list-item" key={track.id}>
+                                            <RadioPlayer src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`} />
+                                        </li>
+                                    )
+                                })}
+                            </ul>
                         </div>
                     </CardContainer>
                 </PageContainer>

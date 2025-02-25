@@ -6,11 +6,12 @@
 
 input {
     font-family: inherit;
-    padding: 0.3em 1.2em 0.3em 1.2em ;
+    padding: 0.3em 1.2em 0.3em 1.2em;
     outline: none;
     border: none;
     border-radius: 1em;
 }
+
 /*TODO: check autofill options CSS*/
 /*.form-input:-webkit-autofill:active {*/
 /*    color: red !important;*/
@@ -36,4 +37,13 @@ input {
     font-weight: bold;
     color: var(--color-main-white);
     margin-left: 0.8em;
+}
+
+.genre-search-query, .genre-search-query::placeholder {
+    background-color: var(--color-secondary);
+    font-family: "Jura", serif;
+    text-transform: uppercase;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--color-main-white);
 }

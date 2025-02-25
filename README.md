@@ -21,11 +21,7 @@ Stap 1. Sign Out functie maken [done]
 Stap 2. Andere user functionaliteiten
 ~~- Hoe kan ik gebruiker verwijderen? --> Kan niet?~~
 
-- User data aanpassen (username, e-mail, password)
-    - Hier een begin aan gemaakt, conditional rendering gemaakt voor de account details card.
-    - Het doorgeven van de data lijkt nog niet goed te gaan, hier krijg ik errors,mogelijk kan dit komen omdat je alle
-      velden moet meegeven, maar dit is voor mij nog niet duidelijk hoe dit precies zit. Misschien kan ik dit morgen aan
-      Nova of Sam vragen. Voor nu lijkt de put request forbidden 403. [done]
+- User data aanpassen (username, e-mail, password) [done]
 - Automatische e-mail instellen, gaat dat makkelijk? Dit uitzoeken.
 
 Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met de spotify api?
@@ -41,6 +37,8 @@ Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met
 2. Artiest zoeken op basis van naam invoer, informatie weergeven, link naar pagina met muziek, of dit in component
    verwerken dat je artist info weergeeft met de eerste 5 populaire tracks van deze artiest. Of doorlinken naar een
    andere pagina met meer info.
+    - Artist page voorzien van een knop om snel terug naar home te linken. 
+    - Indien mogelijk het invoer-veld voorzien van naam-suggesties. 
 
 3.
 
@@ -61,4 +59,6 @@ IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
 
 - Eerst implementeren wat mogelijk is, dus favoriete artiest invoeren en daar muziek van luisteren, favoriete artiest en
   dan recommendations op basis daarvan. 
+
+- Het lijkt erop alsof je als je ingelogd bent in spotify web, dat deze informatie dan ook toepasselijk is voor de spotify componenten (zoals de web player, alleen preview mogelijk niet ingelogd, hele liedje af te luisteren met login)
 

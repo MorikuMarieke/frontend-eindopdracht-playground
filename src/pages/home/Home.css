@@ -61,27 +61,56 @@
     width: 100%;
 }
 
-/* ===== 2.4 Category Selection Card ===== */
+/* ===== 2.4 Genre & Category Selection Card ===== */
 
-.selected-categories-display {
+.selected-categories-display,
+.selected-genres-display {
     display: flex;
     flex-direction: column;
+    gap: 1em;
     padding: 1em;
-
     background-color: var(--color-primary);
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.selected-categories-display h3 {
+.selected-categories-display h3,
+.selected-genres-display h3 {
     color: var(--color-main-white);
-    margin-bottom: 1em;
 }
 
-.selected-categories-list {
+.selected-categories-list,
+.selected-genres-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
     list-style: none;
+}
+
+.selected-genre-list-item {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+    padding: 0.3em 0.8em;
+    border-radius: 1em;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+/* ===== 2.4.1 Playlist list ===== */
+
+.playlist-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    background-color: var(--color-primary);
+    padding: 1em;
+    list-style: none;
+    border-radius: 0 0 1.2em 1.2em;
 }
 
 /* ===== 2.5 Artist Selection Card ===== */
@@ -104,7 +133,7 @@
 .artist-info-link {
     display: inline-flex; /* Makes the container fit its content */
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 1em;
     margin-top: 1em;
     background-color: var(--color-main-white);
@@ -124,12 +153,19 @@
 
 .artist-img-wrapper img {
     width: 100%;
-    border-radius: 1.2em;
+    border-radius: 0.8em;
 }
 
 .artist-info-card-home {
     border-radius: 1.2em;
 }
+
+.artist-details-home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 
 /* ===== 2.7 Music Suggestions Card ===== */
 

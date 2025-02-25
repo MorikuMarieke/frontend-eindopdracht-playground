@@ -1,0 +1,42 @@
+.selected-genres-container {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: 0.5em 0.5em;
+    padding: 1em;
+    background-color: var(--color-main-white);
+    /*border-radius: 0 0 1.2em 1.2em;*/
+}
+
+.selectable-genres-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    background-color: var(--color-primary);
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.selectable-genres-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: 0.5em 0.5em;
+
+}
+
+.category-selection {
+    background-color: var(--color-primary);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.selected-categories-container {
+    padding: 1em;
+    row-gap: 0.5em;
+    background-color: var(--color-main-white);
+}
+
+.selectable-genres-container h3 {
+    color: var(--color-main-white);
+}

@@ -1,5 +1,26 @@
+.playlist-container {
+    background-color: var(--color-main-white);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
 .playlist-card {
     background-color: var(--color-secondary);
     border-radius: 1em;
     padding: 1em;
 }
+
+.playlist-description {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0.8em;
+}
+
+.playlist-description p {
+    color: var(--color-secondary);
+}
+

@@ -9,7 +9,7 @@ import {Pencil, SignOut} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import {NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
+import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
@@ -23,44 +23,21 @@ function Profile() {
     const [editMode, setEditMode] = useState(false);
 
 
+
+
     const {isAuth, user, signOut} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        async function getUserData() {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                setUsername(response.data.username);
-                setEmail(response.data.email);
-                setPassword(response.data.password);
-                setInfo(response.data.info);
 
-                // maak ook stukje state voor password en info [v]
-                console.log(response);
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        getUserData();
-    }, []);
-
-    async function changeProfileData() {
-
-    }
 
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
-        // 1. probeer alle info mee te sturen als put-request, met aangepast wachtwoord als string [v]
-        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je 'm had ontvangen
+        // 1. probeer alle info mee te sturen als put-request,a met aangepast wachtwoord als string [v]
+        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je
+        // 'm had ontvangen
 
         try {
             const token = localStorage.getItem('token');
@@ -69,7 +46,8 @@ function Profile() {
                 {
                     username: username,
                     email: email,
-                    password: password, //volgens mij klopt het nu niet, omdat ik als ik niks invul, ik toch de oude encrypted JWT string meestuur als nieuw wachtwoord
+                    password: password, //volgens mij klopt het nu niet, omdat ik als ik niks invul, ik toch de oude
+                                        // encrypted JWT string meestuur als nieuw wachtwoord
                     info: info,
                 }, {
                     headers: {
@@ -95,9 +73,12 @@ function Profile() {
         }
     }
 
-    const handleCancelClick = () => {
+    function handleCancelClick() {
         setEditMode(false);
-    };
+    }
+
+
+
 
     return (
         <main>
@@ -212,7 +193,13 @@ function Profile() {
                         </div>
                         <p>Connect your Spotify account to your profile and import your playlists directly to
                             Spotify</p>
+                        <Button
+                            buttonText="Connect spotify"
+                            type="button"
+
+                        />
                     </CardContainer>
+
                 </PageContainer>
             </OuterContainer>
         </main>

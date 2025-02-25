@@ -1,4 +1,17 @@
 
+
+.artist-page-image-container {
+    padding: 1em;
+    background-color: var(--color-main-white);
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.artist-info-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em
+}
+
 .playlist-container {
     background-color: var(--color-primary);
     padding: 1em;
@@ -14,14 +27,6 @@
     padding: 0.5em;
 }
 
-.artist-page-image-container {
-    padding: 1em;
-    background-color: var(--color-main-white);
-    border-radius: 0 0 1.2em 1.2em;
-}
-
-.artist-info-box {
-    display: flex;
-    justify-content: space-between;
-    gap: 1em
+.top-track-list-item {
+    list-style: none;
 }

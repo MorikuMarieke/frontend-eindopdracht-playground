@@ -11,7 +11,8 @@ export default function InputField({
                         placeholder,
                         required,
                         disabled,
-                        onKeyDown
+                        onKeyDown,
+                        maxLength
                     }) {
     return (
         <>
@@ -29,6 +30,7 @@ export default function InputField({
                 required={required}
                 disabled={disabled}
                 onKeyDown={onKeyDown}
+                maxLength={maxLength}
             />
         </>
     );

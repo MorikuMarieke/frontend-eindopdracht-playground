@@ -41,14 +41,15 @@ button {
     color: var(--color-main-white);
 }
 
-/* ===== 2.2 Search Button -- Category ===== */
+/* ===== 2.2 Search Button -- Genre ===== */
 
-.search-button--category {
+.search-button--genre {
     background-color: transparent;
     padding: 0 0.5em 0 0;
 }
 
-.category-selection-button {
+.genre-selection-button,
+.genre-search-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -57,11 +58,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.search-icon-category {
-    color: var(--color-main-white);
-}
-
-.button--select-categories {
+.button--select-genres {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -70,11 +67,7 @@ button {
     padding: 0.3em 1em;
 }
 
-/*.search-button--category */
-
-/*TODO: might need to remove these due to API limits*/
-
-.selectable-category {
+.selectable-genre{
     display: inline flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +76,7 @@ button {
     background-color: var(--color-main-white);
 }
 
-.selected-category {
+.selected-genre {
     display: inline flex;
     align-items: center;
     justify-content: center;
@@ -93,20 +86,33 @@ button {
     color: var(--color-main-white);
 }
 
-/*.hovered-icon {*/
-/*    color: var(--color-primary);*/
-/*}*/
+.playlist-list-item {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    gap: 1em;
+    width: 100%;
+    background-color: var(--color-main-white);
+    padding: 0.5em;
+    text-align: left;
+    border-radius: 0.8em;
+}
 
-/*.default-icon {*/
-/*    color: var(--color-secondary);*/
-/*}*/
+.playlist-img-wrapper {
+    height: 80px;
+}
+
+.playlist-img {
+    height: 100%;
+    border-radius: 0.4em;
+}
 
 /* ===== 2.3 Button - Edit my playlists ===== */
 
-.button--edit-my-playlists,
-.button--edit-playlist{
+.playlist-button {
     display: flex;
     flex-direction: row-reverse;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     gap: 0.3em;
@@ -115,6 +121,6 @@ button {
 
 /* ===== 2.3 Button - Home-page-buttons ===== */
 
-.sign-out-button {
-
+.search-icon {
+    color: var(--color-main-white);
 }
