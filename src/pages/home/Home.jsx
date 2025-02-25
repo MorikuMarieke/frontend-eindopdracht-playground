@@ -169,16 +169,19 @@ export default function Home() {
 
 
     useEffect(() => {
-        const genreString = selectedGenres.map(genre => genre.name).join(" ");
-        console.log("Searching playlists with genres:", genreString)
-        // const fetchedPlaylists = await fetchPlaylistsByGenre(genreString);
-        console.log(selectedGenres)
 
         async function fetchPlaylistsByGenre() {
-            togglePlaylistSearchDone(false);
-            console.log("Searching, playlistSearchDone:", playlistSearchDone);
+            if (!selectedGenres.length) {
+                console.log("No genres selected");
+                return;
+            }
 
-            console.log(genreString);
+            console.log(selectedGenres)
+            togglePlaylistSearchDone(false);
+
+            const genreString = selectedGenres.map(genre => genre.name).join(" ");
+            console.log("Searching playlists with genres:", genreString)
+
             try {
                 const response = await axios.get(`${API_BASE}/search`, {
                     headers: {
@@ -188,7 +191,6 @@ export default function Home() {
                         type: "playlist", limit: 50,
                     },
                 });
-                console.log(response.data);
 
                 if (!response.data.playlists || !response.data.playlists.items) return [];
 
@@ -208,17 +210,14 @@ export default function Home() {
 
 
                 console.log("Filtered and sorted playlists:", sortedPlayLists);
-                togglePlaylistSearchDone(true);
-                // return sortedPlayLists;
-
                 setPlaylistsByGenre(sortedPlayLists);
-                // console.log(fetchedPlaylists);
                 localStorage.setItem('genrePlaylistSelection', JSON.stringify(sortedPlayLists));
 
             } catch (e) {
                 console.error("Error fetching playlists", e.response || e);
                 togglePlaylistSearchDone(true);
-                return [];
+            } finally {
+                togglePlaylistSearchDone(true);
             }
         }
 
