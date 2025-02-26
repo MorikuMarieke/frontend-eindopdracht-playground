@@ -322,7 +322,8 @@ export default function Home() {
                         <h3>Log in to your account to save your playlists</h3>
                     </CardTopBar>
                     <form className="form" onSubmit={handleLoginSubmit}>
-                        {/*TODO: I want to create logic where you can log in with username or e-mail*/}
+                        {/*TODO: If it's a preselected name, you cannot change the name, why? It does work on reload. Letters are small when unclickable.*/}
+                        {/*TODO: Error message to display if name is wrong*/}
 
                         <InputField
                             type="text"

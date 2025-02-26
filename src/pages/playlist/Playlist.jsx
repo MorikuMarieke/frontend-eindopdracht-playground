@@ -68,8 +68,6 @@ function Playlist() {
                 console.error("Error fetching artist details:", error);
             }
         }
-
-
         fetchPlaylist();
 
     }, [token, id]);

@@ -12,6 +12,7 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import isTokenValid from '../../helpers/isTokenValid.js';
 
 
 function Profile() {
@@ -22,14 +23,17 @@ function Profile() {
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
 
-    const [UserAccessToken, setUserAccessToken] = useState(localStorage.getItem('access_token'));
-    const [profileData, setProfileData] = useState(null);
+    const [spotifyAccessToken, setSpotifyAccessToken] = useState(localStorage.getItem('spotify_access_token'));
+    const [spotifyProfileData, setSpotifyProfileData] = useState(null);
     const [topTracks, setTopTracks] = useState([]);
     const [topArtist, setTopArtist] = useState([]);
 
     const {isAuth, user, signOut} = useContext(AuthContext);
 
     const navigate = useNavigate();
+    const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+    const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+    const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
     useEffect(() => {
         async function getUserData() {
@@ -62,17 +66,35 @@ function Profile() {
         const authorizationCode = queryParams.get('code');
 
         if (authorizationCode) {
-            // Exchange the authorization code for access token
+            // If there's an authorization code, exchange it for an access token
             exchangeCodeForAccessToken(authorizationCode);
-        } else if (UserAccessToken) {
-            // Fetch Spotify user profile if access token is available
-            getUserProfile();
+        } else {
+            // Check for tokens in localStorage only if no code is in the URL
+            const accessToken = localStorage.getItem('spotify_access_token');
+            const refreshToken = localStorage.getItem('spotify_refresh_token');
+
+            if (accessToken) {
+                // Access token found, proceed with normal flow
+                getUserSpotifyProfile();
+            } else if (refreshToken) {
+                // No access token but refresh token found, try to refresh
+                checkAndRefreshToken(refreshToken);
+            } else {
+                // Neither token found, no redirect yet, just show a login message
+                console.log("Please log in to Spotify.");
+                // Optionally show a UI element prompting the user to log in
+            }
         }
+    }, []); // This effect is focused on authentication and token management
 
+    // TODO: Right now it works, but only on refresh.
+
+    // Get top tracks if spotify accesstoken is updated.
+    useEffect(() => {
         async function getTopTracks() {
-            if (!UserAccessToken) return;
+            if (!spotifyAccessToken) return;
 
-            const token = localStorage.getItem('access_token');
+            const token = localStorage.getItem('spotify_access_token');
             try {
                 const response = await axios.get(`${API_BASE}/me/top/tracks`, {
                     headers: {
@@ -90,12 +112,10 @@ function Profile() {
             }
         }
         getTopTracks();
-
-    }, [UserAccessToken]);
+    }, [spotifyAccessToken]);
 
 // Redirect to Spotify authentication page
     const redirectToSpotifyAuth = () => {
-        const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
         const redirectUri = 'http://localhost:5173/profile';
         const scope = 'user-top-read user-library-read playlist-modify-public';
         const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scope}`;
@@ -105,13 +125,11 @@ function Profile() {
 
 // Exchange authorization code for access token and store tokens
     const exchangeCodeForAccessToken = async (authorizationCode) => {
-        const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-        const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
         const redirectUri = 'http://localhost:5173/profile';
 
         try {
             const response = await axios.post(
-                'https://accounts.spotify.com/api/token',
+                `${SPOTIFY_TOKEN_URL}`,
                 new URLSearchParams({
                     grant_type: 'authorization_code',
                     code: authorizationCode,
@@ -129,25 +147,109 @@ function Profile() {
             const {access_token, refresh_token} = response.data;
 
             // Store tokens in localStorage
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
+            localStorage.setItem('spotify_access_token', access_token);
+            localStorage.setItem('spotify_refresh_token', refresh_token);
 
-            setUserAccessToken(access_token); // Update state with the access token
+            setSpotifyAccessToken(access_token); // Update state with the access token
 
-            // Optionally, navigate to another page or update UI
+            getUserSpotifyProfile();
+
             navigate('/profile');
         } catch (error) {
             console.error('Error exchanging authorization code for token:', error);
         }
     };
 
+    const refreshSpotifyToken = async () => {
+        const refreshToken = localStorage.getItem("spotify_refresh_token");
+
+        if (!refreshToken) {
+            console.error("No refresh token available.");
+            return null;
+        }
+
+        try {
+            const response = await axios.post(
+                `${SPOTIFY_TOKEN_URL}`,
+                new URLSearchParams({
+                    grant_type: "refresh_token",
+                    refresh_token: refreshToken,
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                }),
+                {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                }
+            );
+
+            const { spotify_access_token, spotify_refresh_token: newRefreshToken } = response.data;
+
+            // Store new access token
+            localStorage.setItem("spotify_access_token", spotify_access_token);
+
+            // If a new refresh token is provided, update it
+            if (newRefreshToken) {
+                localStorage.setItem("spotify_refresh_token", newRefreshToken);
+            }
+
+            console.log("Spotify token refreshed successfully.");
+            return spotify_access_token;
+        } catch (error) {
+            console.error("Failed to refresh Spotify token:", error);
+        }
+    };
+
+    async function checkAndRefreshToken() {
+        const accessToken = localStorage.getItem('spotify_access_token');
+        const refreshToken = localStorage.getItem('spotify_refresh_token');
+
+        if (!accessToken || !refreshToken) {
+            console.error("No access or refresh token available.");
+            return;
+        }
+
+        // If the access token is expired, refresh it.
+        if (!isTokenValid(accessToken)) {
+            console.log("Spotify access token expired, refreshing...");
+            const newAccessToken = await refreshSpotifyToken();
+            if (newAccessToken) {
+                setSpotifyAccessToken(newAccessToken);
+                localStorage.setItem("spotify_access_token", newAccessToken);
+            }
+        }
+    }
+    // checkAndRefreshToken();
+
+    const getUserSpotifyProfile = async () => {
+        const token = localStorage.getItem('spotify_access_token');
+
+        if (!token) {
+            console.error('No access token found.');
+            return;
+        }
+
+        try {
+            const response = await axios.get('https://api.spotify.com/v1/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setSpotifyProfileData(response.data);
+            console.log("User details:", response.data)
+        } catch (error) {
+            console.error('Error fetching user profile', error);
+        }
+    };
 
 
 
 // const getTopTracks = async (authorizationCode) => {
 //
 //
-//     const token = localStorage.getItem('access_token');
+//     const token = localStorage.getItem('spotify_access_token');
 //     const response = await axios.get(`${API_BASE}/me/top/tracks`, {
 //         headers: {
 //             "Content-Type": "application/json",
@@ -160,7 +262,7 @@ function Profile() {
 // getTopTracks()
 //
 // const getTopArtists = async (authorizationCode) => {
-//     const token = localStorage.getItem('access_token');
+//     const token = localStorage.getItem('spotify_access_token');
 //     const response = await axios.get(`https://api.spotify.com/v1/me/top/tracks`, {
 //         headers: {
 //             "Content-Type": "application/json",
@@ -175,31 +277,12 @@ function Profile() {
 
 // Fetch user profile from Spotify using the access token
 
-    const getUserProfile = async () => {
-        const token = localStorage.getItem('access_token');
 
-        if (!token) {
-            console.error('No access token found.');
-            return;
-        }
-
-        try {
-            const response = await axios.get('https://api.spotify.com/v1/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            setProfileData(response.data);
-        } catch (error) {
-            console.error('Error fetching user profile', error);
-        }
-    };
 
     function handleSpotifyLogout() {
-        localStorage.removeItem('access_token');
-        setUserAccessToken(null);
-        setProfileData(null);
+        localStorage.removeItem('spotify_access_token');
+        setSpotifyAccessToken(null);
+        setSpotifyProfileData(null);
         window.location.reload();
     }
 
@@ -359,27 +442,16 @@ function Profile() {
                     </CardContainer>
 
                     {/*TODO: This section appears when spotify account is not yet connected*/}
-                    <CardContainer className="connect-spotify">
-                        <div className="spotify-img-wrapper">
-                            <img src={spotifyLogo} alt="spotify-logo"/>
-                        </div>
-                        <p>Connect your Spotify account to your profile and import your playlists directly to
-                            Spotify</p>
-                        <Button
-                            buttonText="Connect spotify"
-                            type="button"
 
-                        />
-                    </CardContainer>
                     <CardContainer
                         className="connect-spotify"
                     >
                         {/* If the user is authenticated */}
-                        {UserAccessToken && profileData ? (
+                        {spotifyAccessToken && spotifyProfileData ? (
                             <div>
-                                <h2>Spotify profile: {profileData.display_name}</h2>
-                                <img src={profileData.images[0]?.url} alt="User Avatar"/>
-                                <p>Followers: {profileData.followers.total}</p>
+                                <h2>Spotify profile {spotifyProfileData.display_name}</h2>
+                                {spotifyProfileData.images > 0 && <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
+                                <p>Followers: {spotifyProfileData.followers.total}</p>
                                 <Button
                                     type="button"
                                     buttonText="Spotify account log out"
@@ -388,8 +460,16 @@ function Profile() {
                             </div>
                         ) : (
                             <div>
-                                <p>Connect your Spotify account to view your profile data.</p>
-                                <button onClick={redirectToSpotifyAuth}>Connect with Spotify</button>
+                                <div className="spotify-img-wrapper">
+                                    <img src={spotifyLogo} alt="spotify-logo"/>
+                                </div>
+                                <p>Connect your Spotify account to your profile and import your playlists directly to
+                                    Spotify</p>
+                                <Button
+                                    buttonText="Connect spotify"
+                                    type="button"
+                                    onClick={redirectToSpotifyAuth}
+                                />
                             </div>
                         )}
                     </CardContainer>

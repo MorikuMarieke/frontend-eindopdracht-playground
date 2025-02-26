@@ -12,6 +12,10 @@ export function AuthContextProvider({ children }) {
         user: {},
         status: 'pending',
     });
+    const [spotifyProfileData, setSpotifyProfileData] = useState(null);
+    const [spotifyLoggedIn, setSpotifyLoggedIn] = useState(false);
+
+    // TODO: Need to work spotify login into context so user doesn't need to re-login to spotify on every login.
 
     const navigate = useNavigate();
 
