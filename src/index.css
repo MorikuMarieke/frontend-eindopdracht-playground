@@ -65,6 +65,10 @@ h3 {
     font-size: 1em;
 }
 
+h4 {
+    font-size: 1.2em;
+}
+
 a, a:visited {
     text-decoration: none;
     color: var(--color-tertiary);

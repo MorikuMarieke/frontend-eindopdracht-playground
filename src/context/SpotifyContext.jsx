@@ -9,7 +9,7 @@ import {AuthContext} from './AuthContext.jsx';
 export const SpotifyContext = createContext({});
 
 export function SpotifyContextProvider({children}) {
-    const [spotifyAccessToken, setSpotifyAccessToken] = useState(localStorage.getItem('access_token'));
+    const [spotifyAccessToken, setSpotifyAccessToken] = useState(localStorage.getItem('access_token') || null);
     const [spotifyProfileData, setSpotifyProfileData] = useState(JSON.parse(localStorage.getItem('spotify_profile')) || null);
 
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export function SpotifyContextProvider({children}) {
 
     const exchangeCodeForAccessToken = async (authorizationCode) => {
         const redirectUri = 'http://localhost:5173/profile';
-
+        console.log("Authorization code", authorizationCode)
         try {
             const response = await axios.post(
                 `${SPOTIFY_TOKEN_URL}`,
@@ -48,8 +48,13 @@ export function SpotifyContextProvider({children}) {
                     client_id: clientId,
                     client_secret: clientSecret,
                 }),
-                {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                }
             );
+            console.log(response.data)
 
             const {access_token, refresh_token} = response.data;
             localStorage.setItem('access_token', access_token);
@@ -59,13 +64,16 @@ export function SpotifyContextProvider({children}) {
             await getSpotifyUserProfile();
             navigate('/profile');
         } catch (error) {
-            console.error('Error exchanging authorization code for token:', error);
+            if (error.response) {
+                console.error('Spotify API Error:', error.response.status, error.response.data);
+            } else {
+                console.error('Unknown Error:', error);
+            }
         }
     };
 
     const getSpotifyUserProfile = async () => {
         const token = localStorage.getItem('access_token');
-
         if (!token) return;
 
         try {
@@ -101,6 +109,7 @@ export function SpotifyContextProvider({children}) {
 
             if (newRefreshToken) localStorage.setItem("refresh_token", newRefreshToken);
             setSpotifyAccessToken(access_token);
+            await getSpotifyUserProfile();
 
             return access_token;
         } catch (error) {
@@ -136,7 +145,6 @@ export function SpotifyContextProvider({children}) {
         spotifyProfileData,
         redirectToSpotifyAuth,
         handleSpotifyLogout,
-
     };
 
     return (

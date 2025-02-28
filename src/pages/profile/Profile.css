@@ -52,3 +52,128 @@
     align-items: center;
     padding: 0.5em;
 }
+
+.user-top-track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    background-color: var(--color-secondary);
+    color: white;
+    border-radius: 0 0 1.2em 1.2em;
+    padding: 1em;
+    list-style: none;
+}
+
+.user-advice-tracks {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.user-advice-tracks .pointer-icon {
+    flex: 0 0 auto;
+}
+
+.user-top-track-list-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #1E1E1E;
+    border-radius: 0.8em;
+}
+
+.user-top-track-item {
+    display: flex;
+}
+
+.user-top-track-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    flex: 0 1 60%;
+    gap: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.8em 0 0 0.8em;
+}
+
+.user-top-track-name:hover {
+    color: var(--color-secondary);
+}
+.item-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-main-white);
+    color: var(--color-tertiary);
+    flex: 0 0 auto;
+    width: 3em;
+    height: 3em;
+    border-radius: 0.5em;
+}
+
+.artist-page-link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.user-top-track-name h4 {
+    cursor: pointer;
+    text-align: right;
+}
+
+.user-top-track-name h2 {
+    font-size: 1.7rem;
+}
+
+.user-top-track-artists {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-main-white);
+    color: var(--color-tertiary);
+    flex: 0 0 40%;
+    border-radius: 0 0.8em 0.8em 0;
+    padding: 0.2em;
+}
+
+.user-top-track-artists p {
+    text-align: center;
+}
+
+.spotify-player-user-profile {
+    padding: 0.3em;
+}
+
+.user-top-artists-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    background-color: var(--color-primary);
+    border-radius: 0 0 1.2em 1.2em;
+    list-style: none;
+    padding: 1em;
+}
+
+.top-artist-card {
+    display: flex;
+    gap: 1em;
+    padding: 0.5em;
+    background-color: var(--color-main-white);
+    border-radius: 0.8em;
+}
+
+.top-artist-card:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+}
+
+.top-artist-img-wrapper {
+    width: 3em;
+    height: 3em;
+    overflow: hidden;
+    border-radius: 0.5em;
+}
+
+.top-artist-img-wrapper img {
+    width: 100%;
+}
