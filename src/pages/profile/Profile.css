@@ -22,3 +22,156 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.spotify-user-info {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    border-radius: 0 0 1.2em 1.2em;
+    padding: 1em;
+}
+
+.spotify-img-wrapper-profile {
+    display: flex;
+    justify-content: center;
+    width: 2.5em;
+}
+
+.spotify-img-wrapper-profile img {
+    width: 100%;
+}
+
+.spotify-log-out-button {
+    display: flex;
+    flex: 0 0 150px;
+    /*flex-direction: row-reverse;*/
+    background-color: var(--color-main-white);
+    justify-content: space-between;
+    gap: 1em;
+    align-items: center;
+    padding: 0.5em;
+}
+
+.user-top-track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    background-color: var(--color-secondary);
+    color: white;
+    border-radius: 0 0 1.2em 1.2em;
+    padding: 1em;
+    list-style: none;
+}
+
+.user-advice-tracks {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.user-advice-tracks .pointer-icon {
+    flex: 0 0 auto;
+}
+
+.user-top-track-list-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #1E1E1E;
+    border-radius: 0.8em;
+}
+
+.user-top-track-item {
+    display: flex;
+}
+
+.user-top-track-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-primary);
+    flex: 0 1 60%;
+    gap: 0.5em;
+    padding: 0.5em;
+    border-radius: 0.8em 0 0 0.8em;
+}
+
+.user-top-track-name:hover {
+    color: var(--color-secondary);
+}
+
+.artist-page-link:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.user-top-track-name h4 {
+    text-align: right;
+}
+
+.user-top-track-name h2 {
+    font-size: 1.7rem;
+}
+
+.user-top-track-artists {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-main-white);
+    color: var(--color-tertiary);
+    flex: 0 0 40%;
+    border-radius: 0 0.8em 0.8em 0;
+    padding: 0.2em;
+}
+
+.user-top-track-artists p {
+    text-align: center;
+}
+
+.spotify-player-user-profile {
+    padding: 0.3em;
+}
+
+.user-top-artists-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    background-color: var(--color-secondary);
+    border-radius: 0 0 1.2em 1.2em;
+    list-style: none;
+    padding: 1em;
+}
+
+.top-artist-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    box-sizing: border-box;
+    border: 0.2em transparent solid;
+    padding: 0.3em;
+    background-color: var(--color-main-white);
+    border-radius: 0.8em;
+}
+
+.top-artist-card:hover {
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+    border: 0.2em solid var(--color-main-white);
+}
+
+.top-artist-card:hover h4 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.top-artist-img-wrapper {
+    width: 3em;
+    height: 3em;
+    overflow: hidden;
+    border-radius: 0.5em;
+}
+
+.top-artist-img-wrapper img {
+    width: 100%;
+}

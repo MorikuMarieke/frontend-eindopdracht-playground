@@ -36,11 +36,21 @@
     .page-container {
         column-count: 1;
     }
+
+    .page-playlist-overview {
+        column-count: 1;
+        width: 100%;
+    }
 }
 
 /*------For Tablets------*/
 @media screen and  (min-width: 768px) and (max-width: 1024px) {
     .page-container {
         column-count: 1;
+    }
+
+    .page-playlist-overview {
+        column-count: 1;
+        width: 100%;
     }
 }

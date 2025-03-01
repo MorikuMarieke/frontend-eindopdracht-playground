@@ -293,10 +293,8 @@ export default function Home() {
                         </Button>}
                     </CardTopBar>
                     <div className="introduction">
-                        <p>Welcome to PLAYGROUND! I have created this page for people that are always looking for
-                            new music to expand their collection with.</p>
-                        <p>Play around, tell us what you like, listen to the
-                            song selection and add them to your own personal library.</p>
+                        <p>Welcome to PLAYGROUND! This page was created for those that are always eager to find new music!</p>
+                        <p>Play around, tell us what you like, listen to the song selection and add them to your own personal library.</p>
                         {isAuth && <div className="go-to-profile">
                             <Button
                                 className="go-to-profile-button"
@@ -322,7 +320,8 @@ export default function Home() {
                         <h3>Log in to your account to save your playlists</h3>
                     </CardTopBar>
                     <form className="form" onSubmit={handleLoginSubmit}>
-                        {/*TODO: I want to create logic where you can log in with username or e-mail*/}
+                        {/*TODO: If it's a preselected name, you cannot change the name, why? It does work on reload. Letters are small when unclickable.*/}
+                        {/*TODO: Error message to display if name is wrong*/}
 
                         <InputField
                             type="text"
@@ -441,7 +440,7 @@ export default function Home() {
                                 </CardTopBar>
                                 <ul className="playlist-list-container">
                                     {playlistsByGenre.slice(0, 10).map((playlist) => (
-                                        <Link to={`playlist/${playlist.id}`} key={playlist.id}>
+                                        <Link to={`/playlist/${playlist.id}`}>
                                             <li>
 
                                                 <Button
