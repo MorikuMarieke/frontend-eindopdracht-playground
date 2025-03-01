@@ -293,10 +293,8 @@ export default function Home() {
                         </Button>}
                     </CardTopBar>
                     <div className="introduction">
-                        <p>Welcome to PLAYGROUND! I have created this page for people that are always looking for
-                            new music to expand their collection with.</p>
-                        <p>Play around, tell us what you like, listen to the
-                            song selection and add them to your own personal library.</p>
+                        <p>Welcome to PLAYGROUND! This page was created for those that are always eager to find new music!</p>
+                        <p>Play around, tell us what you like, listen to the song selection and add them to your own personal library.</p>
                         {isAuth && <div className="go-to-profile">
                             <Button
                                 className="go-to-profile-button"

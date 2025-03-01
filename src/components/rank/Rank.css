@@ -1,0 +1,28 @@
+.item-rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 3em;
+    height: 3em;
+    border-radius: 0.5em;
+}
+
+.rank-color-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+}
+
+.rank-color-light {
+    background-color: var(--color-main-white);
+    color: var(--color-tertiary);
+}
+
+.rank-color-primary {
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+}
+
+.item-rank h5 {
+    font-size: 1.6em;
+}

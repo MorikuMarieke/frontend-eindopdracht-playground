@@ -52,7 +52,8 @@ body {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
     font-family: 'Jura', 'Verdana', serif;
     text-transform: uppercase;
 }
@@ -72,4 +73,5 @@ h4 {
 a, a:visited {
     text-decoration: none;
     color: var(--color-tertiary);
+    cursor: pointer;
 }

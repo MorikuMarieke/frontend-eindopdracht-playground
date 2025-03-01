@@ -14,6 +14,7 @@ import axios from 'axios';
 import {Link, useNavigate} from 'react-router-dom';
 import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
+import Rank from '../../components/rank/Rank.jsx';
 
 
 function Profile() {
@@ -24,14 +25,12 @@ function Profile() {
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
 
-    // const [spotifyAccessToken, setSpotifyAccessToken] = useState(localStorage.getItem('spotify_access_token'));
-    // const [spotifyProfileData, setSpotifyProfileData] = useState(null);
+
     const [topTracks, setTopTracks] = useState([]);
     const [topArtists, setTopArtists] = useState([]);
-    const [selectedTrackId, setSelectedTrackId] = useState(null)
+    const [selectedTrackId, setSelectedTrackId] = useState(null);
 
-
-    const {isAuth, user, signOut} = useContext(AuthContext);
+    const {isAuth, user, signOut, favoritePlaylists, removeFavoritePlaylist} = useContext(AuthContext);
     const {
         spotifyAccessToken, spotifyProfileData, redirectToSpotifyAuth, handleSpotifyLogout,
     } = useContext(SpotifyContext);
@@ -308,9 +307,7 @@ function Profile() {
                             <li className="user-top-track-list-item" key={track.id}>
                                 <div className="user-top-track-item">
                                     <div className="user-top-track-name" onClick={() => handleTrackClick(track.id)}>
-                                        <div className="item-rank">
-                                            <h2>#{index + 1}</h2>
-                                        </div>
+                                        <Rank color="light" index={index} />
                                         <h4>{track.name}</h4>
                                     </div>
                                     <div className="user-top-track-artists">
@@ -329,7 +326,9 @@ function Profile() {
                                 {selectedTrackId === track.id && (
                                     <div className="spotify-player-user-profile">
                                         <RadioPlayer
-                                            src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}/>
+                                            src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
+                                            height="80"
+                                        />
                                     </div>
                                 )}
                             </li>))}
@@ -337,11 +336,11 @@ function Profile() {
                 </CardContainer>}
                 {topArtists.length > 0 &&
                     <CardContainer>
-                        <CardTopBar color="secondary">
+                        <CardTopBar color="primary">
                             <h3>Your 10 top artists</h3>
                         </CardTopBar>
                         <ul className="user-top-artists-list">
-                            {topArtists && topArtists.map((artist) => (
+                            {topArtists && topArtists.map((artist, index) => (
                                 <li key={artist.id}>
                                     <Link to={`/artist/${artist.id}`}>
                                         <article className="top-artist-card">
@@ -351,6 +350,7 @@ function Profile() {
                                                 </div>
                                             </div>
                                             <h4>{artist.name}</h4>
+                                            <Rank color="primary" index={index} />
                                         </article>
                                     </Link>
                                 </li>

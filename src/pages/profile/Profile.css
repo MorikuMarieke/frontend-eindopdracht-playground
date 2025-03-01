@@ -99,17 +99,6 @@
 .user-top-track-name:hover {
     color: var(--color-secondary);
 }
-.item-rank {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-main-white);
-    color: var(--color-tertiary);
-    flex: 0 0 auto;
-    width: 3em;
-    height: 3em;
-    border-radius: 0.5em;
-}
 
 .artist-page-link:hover {
     color: var(--color-primary);
@@ -117,7 +106,6 @@
 }
 
 .user-top-track-name h4 {
-    cursor: pointer;
     text-align: right;
 }
 
@@ -148,7 +136,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    background-color: var(--color-primary);
+    background-color: var(--color-secondary);
     border-radius: 0 0 1.2em 1.2em;
     list-style: none;
     padding: 1em;
@@ -156,8 +144,12 @@
 
 .top-artist-card {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 1em;
-    padding: 0.5em;
+    box-sizing: border-box;
+    border: 0.2em transparent solid;
+    padding: 0.3em;
     background-color: var(--color-main-white);
     border-radius: 0.8em;
 }
@@ -165,6 +157,12 @@
 .top-artist-card:hover {
     background-color: var(--color-secondary);
     color: var(--color-main-white);
+    border: 0.2em solid var(--color-main-white);
+}
+
+.top-artist-card:hover h4 {
+    font-size: 2em;
+    font-weight: bold;
 }
 
 .top-artist-img-wrapper {

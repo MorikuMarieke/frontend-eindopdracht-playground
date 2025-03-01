@@ -12,6 +12,7 @@ export function AuthContextProvider({ children }) {
         user: {},
         status: 'pending',
     });
+    const [favoritePlaylists, setFavoritePlaylists] = useState(JSON.parse(localStorage.getItem("favoritePlaylists"))?.filter(Boolean) || []);
 
     const navigate = useNavigate();
 
@@ -23,7 +24,7 @@ export function AuthContextProvider({ children }) {
                 void fetchUserData(decoded.sub, token);
             } catch (e) {
                 console.error('Error with decoding token:', e);
-                localStorage.removeItem('token'); // Verwijder corrupte token
+                localStorage.removeItem('token');
                 toggleIsAuth({
                     isAuth: false,
                     user: {},
@@ -78,7 +79,6 @@ export function AuthContextProvider({ children }) {
                 },
             });
 
-            // zet de gegevens in de state
             toggleIsAuth(prevState => ({
                 ...prevState,
                 isAuth: true,
@@ -89,17 +89,14 @@ export function AuthContextProvider({ children }) {
                 status: 'done',
             }));
 
-            // als er een redirect URL is meegegeven (bij het mount-effect doen we dit niet) linken we hiernnaartoe door
-            // als we de history.push in de login-functie zouden zetten, linken we al door voor de gebuiker is opgehaald!
             if (redirectUrl) {
                 navigate(redirectUrl);
             }
-            console.log(result.data); //log to check if user data is fetched correctly.
+            console.log(result.data);
 
         } catch (e) {
             console.error('Error fetching user data:', e);
             localStorage.removeItem('token');
-            // ging er iets mis? Plaatsen we geen data in de state
             toggleIsAuth( {
                 isAuth: false,
                 user: {},
@@ -108,11 +105,34 @@ export function AuthContextProvider({ children }) {
         }
     }
 
+    const addFavoritePlaylist = (playlistId) => {
+        setFavoritePlaylists((prevFavorites) => {
+            if (!prevFavorites.includes(playlistId)) {
+                const updatedFavorites = [...prevFavorites, playlistId].filter(Boolean);
+                localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
+                console.log(updatedFavorites)
+                return updatedFavorites;
+            }
+            return prevFavorites;
+        });
+    };
+
+    const removeFavoritePlaylist = (playlistId) => {
+        setFavoritePlaylists((prevFavorites) => {
+            const updatedFavorites = prevFavorites.filter((id) => id !== playlistId);
+            localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
+            return updatedFavorites;
+        });
+    };
+
     const contextData = {
         isAuth: isAuth.isAuth,
         user: isAuth.user,
         signIn,
         signOut,
+        favoritePlaylists,
+        addFavoritePlaylist,
+        removeFavoritePlaylist,
     };
 
     return (

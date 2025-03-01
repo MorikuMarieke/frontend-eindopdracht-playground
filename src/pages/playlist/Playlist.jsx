@@ -1,23 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './Playlist.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import Button from '../../components/button/Button.jsx';
-import {ArrowArcLeft} from '@phosphor-icons/react';
+import {ArrowArcLeft, Radio} from '@phosphor-icons/react';
 import axios from 'axios';
 import {API_BASE} from '../../constants/constants.js';
 import {useNavigate, useParams} from 'react-router-dom';
+import {AuthContext} from '../../context/AuthContext.jsx';
+import log from 'eslint-plugin-react/lib/util/log.js';
+import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
 
 function Playlist() {
     const {id} = useParams();
     const [token, setToken] = useState(null);
     const [playlist, setPlaylist] = useState([]);
 
+    const { addFavoritePlaylist, removeFavoritePlaylist } = useContext(AuthContext);
+
     const navigate = useNavigate();
 
-    console.log(playlist)
 
     useEffect(() => {
         async function fetchToken() {
@@ -98,17 +102,14 @@ function Playlist() {
 
                                 </div>
                                 }
+                                <Button
+                                    className="light-button"
+                                    buttonText="Add to favorites"
+                                    onClick={() => addFavoritePlaylist(playlist.id)}
+                                />
+
                                 <div className="playlist-background">
-                                    <iframe
-                                        src={`https://open.spotify.com/embed/playlist/${playlist.id}?utm_source=generator&theme=0`}
-                                        width="100%"
-                                        height="800"
-                                        frameBorder="0"
-                                        allow="encrypted-media"
-                                        allowTransparency="true"
-                                        title="Spotify Playlist"
-                                    >
-                                    </iframe>
+                                    <RadioPlayer src={`https://open.spotify.com/embed/playlist/${playlist.id}?utm_source=generator&theme=0`} height="800" />
                                 </div>
                             </div>
                         </CardContainer>
@@ -117,6 +118,8 @@ function Playlist() {
             </main>
             {/*Insert logic for displaying the created playlist. */}
         </>
+
+    //     TODO: Working currently on creating add playlist to favorite feature, there are still issues.
     )
 }
 
