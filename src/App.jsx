@@ -46,18 +46,11 @@ function App() {
                         <Navigate to="/"/>
                     }
                 />
-                {/*<Route*/}
-                {/*    path="/user-playlist"*/}
-                {/*    element={isAuth === true ?*/}
-                {/*        <UserPlaylist/>*/}
-                {/*        :*/}
-                {/*        <Navigate to="/"/>*/}
-                {/*    }*/}
-                {/*/>*/}
                 <Route path="/genre-selection" element={<GenreSelection/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route path="/registration" element={<Registration/>}/>
                 <Route path="/artist/:id" element={<ArtistPage/>} />
+                <Route path="/playlist/:id" element={<Playlist/>} />
                 <Route path="/playlist/:id" element={<Playlist/>} />
             </Routes>
             <Footer/>

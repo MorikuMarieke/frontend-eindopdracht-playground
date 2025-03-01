@@ -440,7 +440,7 @@ export default function Home() {
                                 </CardTopBar>
                                 <ul className="playlist-list-container">
                                     {playlistsByGenre.slice(0, 10).map((playlist) => (
-                                        <Link to={`playlist/${playlist.id}`} key={playlist.id}>
+                                        <Link to={`/playlist/${playlist.id}`}>
                                             <li>
 
                                                 <Button

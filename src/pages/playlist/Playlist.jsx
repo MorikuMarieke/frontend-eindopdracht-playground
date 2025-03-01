@@ -10,7 +10,8 @@ import axios from 'axios';
 import {API_BASE} from '../../constants/constants.js';
 import {useNavigate, useParams} from 'react-router-dom';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import log from 'eslint-plugin-react/lib/util/log.js';
+import DOMPurify from "dompurify";
+
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
 
 function Playlist() {
@@ -42,7 +43,7 @@ function Playlist() {
                     }
                 );
                 localStorage.setItem("spotifyToken", response.data.access_token);
-                setToken(response.data.access_token);  // Update token state
+                setToken(response.data.access_token);
             } catch (e) {
                 console.error("Error fetching token:", e);
             }
@@ -76,6 +77,8 @@ function Playlist() {
 
     }, [token, id]);
 
+    console.log("DOMPurify:", DOMPurify)
+
     return (
         <>
             <main>
@@ -98,8 +101,7 @@ function Playlist() {
                                 {playlist && playlist.description &&
                                 <div className="playlist-description">
                                     <h3>Playlist description</h3>
-                                    <p>{playlist.description}</p>
-
+                                    <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(playlist.description)}}/>
                                 </div>
                                 }
                                 <Button
@@ -116,7 +118,6 @@ function Playlist() {
                     </PageContainer>
                 </OuterContainer>
             </main>
-            {/*Insert logic for displaying the created playlist. */}
         </>
 
     //     TODO: Working currently on creating add playlist to favorite feature, there are still issues.

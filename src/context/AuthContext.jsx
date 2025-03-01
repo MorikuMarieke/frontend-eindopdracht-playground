@@ -12,7 +12,7 @@ export function AuthContextProvider({ children }) {
         user: {},
         status: 'pending',
     });
-    const [favoritePlaylists, setFavoritePlaylists] = useState(JSON.parse(localStorage.getItem("favoritePlaylists"))?.filter(Boolean) || []);
+
 
     const navigate = useNavigate();
 
@@ -105,34 +105,14 @@ export function AuthContextProvider({ children }) {
         }
     }
 
-    const addFavoritePlaylist = (playlistId) => {
-        setFavoritePlaylists((prevFavorites) => {
-            if (!prevFavorites.includes(playlistId)) {
-                const updatedFavorites = [...prevFavorites, playlistId].filter(Boolean);
-                localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
-                console.log(updatedFavorites)
-                return updatedFavorites;
-            }
-            return prevFavorites;
-        });
-    };
 
-    const removeFavoritePlaylist = (playlistId) => {
-        setFavoritePlaylists((prevFavorites) => {
-            const updatedFavorites = prevFavorites.filter((id) => id !== playlistId);
-            localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
-            return updatedFavorites;
-        });
-    };
 
     const contextData = {
         isAuth: isAuth.isAuth,
         user: isAuth.user,
         signIn,
         signOut,
-        favoritePlaylists,
-        addFavoritePlaylist,
-        removeFavoritePlaylist,
+
     };
 
     return (

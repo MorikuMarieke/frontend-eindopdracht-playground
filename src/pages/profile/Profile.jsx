@@ -257,8 +257,6 @@ function Profile() {
                 <CardContainer
                     className="connect-spotify-profile"
                 >
-                    {/* If the user is authenticated */}
-                    {console.log("Spotify profile data", spotifyProfileData)}
                     {spotifyAccessToken && spotifyProfileData ? (<>
                         <CardTopBar color="secondary">
                             <h3>Spotify profile</h3>
@@ -293,47 +291,49 @@ function Profile() {
                         />
                     </div>)}
                 </CardContainer>
-                {topTracks.length > 0 && <CardContainer>
-                    <CardTopBar color="light">
-                        <h3>Your 10 top tracks</h3>
-                    </CardTopBar>
-                    <ul className="user-top-track-list">
-                        <div className="user-advice-tracks">
-                            <HandPointing size={40} className="pointer-icon"/>
-                            <p>Click on the <em>song name</em> to listen to the track, or click on the <em>artist
-                                name</em> to check out their page!</p>
-                        </div>
-                        {topTracks && topTracks.map((track, index) => (
-                            <li className="user-top-track-list-item" key={track.id}>
-                                <div className="user-top-track-item">
-                                    <div className="user-top-track-name" onClick={() => handleTrackClick(track.id)}>
-                                        <Rank color="light" index={index} />
-                                        <h4>{track.name}</h4>
-                                    </div>
-                                    <div className="user-top-track-artists">
-                                        <p>
-                                        {track.artists.map((artist, index) => (
-                                                <span key={artist.id}>
+
+                {topTracks.length > 0 &&
+                    <CardContainer>
+                        <CardTopBar color="light">
+                            <h3>Your 10 top tracks</h3>
+                        </CardTopBar>
+                        <ul className="user-top-track-list">
+                            <div className="user-advice-tracks">
+                                <HandPointing size={40} className="pointer-icon"/>
+                                <p>Click on the <em>song name</em> to listen to the track, or click on the <em>artist
+                                    name</em> to check out their page!</p>
+                            </div>
+                            {topTracks && topTracks.map((track, index) => (
+                                <li className="user-top-track-list-item" key={track.id}>
+                                    <div className="user-top-track-item">
+                                        <div className="user-top-track-name" onClick={() => handleTrackClick(track.id)}>
+                                            <Rank color="light" index={index}/>
+                                            <h4>{track.name}</h4>
+                                        </div>
+                                        <div className="user-top-track-artists">
+                                            <p>
+                                                {track.artists.map((artist, index) => (
+                                                    <span key={artist.id}>
                                                     <Link to={`/artist/${artist.id}`} className="artist-page-link">
                                                         {artist.name}
                                                     </Link>
-                                                    {index < track.artists.length - 1 && ", "}
+                                                        {index < track.artists.length - 1 && ", "}
                                                 </span>))}
-                                        </p>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                {/* Render Spotify Player */}
-                                {selectedTrackId === track.id && (
-                                    <div className="spotify-player-user-profile">
-                                        <RadioPlayer
-                                            src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
-                                            height="80"
-                                        />
-                                    </div>
-                                )}
-                            </li>))}
-                    </ul>
-                </CardContainer>}
+                                    {selectedTrackId === track.id && (
+                                        <div className="spotify-player-user-profile">
+                                            <RadioPlayer
+                                                src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
+                                                height="80"
+                                            />
+                                        </div>
+                                    )}
+                                </li>))}
+                        </ul>
+                    </CardContainer>
+                }
                 {topArtists.length > 0 &&
                     <CardContainer>
                         <CardTopBar color="primary">
@@ -350,7 +350,7 @@ function Profile() {
                                                 </div>
                                             </div>
                                             <h4>{artist.name}</h4>
-                                            <Rank color="primary" index={index} />
+                                            <Rank color="primary" index={index}/>
                                         </article>
                                     </Link>
                                 </li>
