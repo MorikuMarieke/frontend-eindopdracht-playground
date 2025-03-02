@@ -3,7 +3,16 @@ import './Home.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {CheckCircle, Funnel, MagnifyingGlass, SignOut, UserCircle, XCircle, ArrowFatRight} from "@phosphor-icons/react";
+import {
+    CheckCircle,
+    Funnel,
+    MagnifyingGlass,
+    SignOut,
+    UserCircle,
+    XCircle,
+    ArrowFatRight,
+    Trash
+} from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import {Link, useNavigate} from 'react-router-dom';
@@ -40,7 +49,6 @@ export default function Home() {
         async function fetchToken() {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
             const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-
             const authString = btoa(`${clientId}:${clientSecret}`);
 
             try {
@@ -58,7 +66,9 @@ export default function Home() {
         }
 
         fetchToken();
+    }, []);
 
+    useEffect(() => {
         function getSelectedGenresFromStorage() {
             const storedData = localStorage.getItem("selectedGenres");
 
@@ -73,7 +83,9 @@ export default function Home() {
         }
 
         getSelectedGenresFromStorage();
+    }, []);
 
+    useEffect(() => {
         function retrievePlaylistsFromStorage() {
             const savedPlaylists = localStorage.getItem('genrePlaylistSelection');
 
@@ -88,7 +100,6 @@ export default function Home() {
         }
 
         retrievePlaylistsFromStorage();
-
     }, []);
 
     useEffect(() => {
@@ -96,21 +107,6 @@ export default function Home() {
             getArtistInfo(artistId);
         }
     }, [artistId]);
-
-
-    // async function getUser() {
-    //     try {
-    //         const result = await axios.get(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `Bearer ${localStorage.getItem('token')}`,
-    //             },
-    //         });
-    //         console.log("User", result.data);
-    //     } catch (e) {
-    //         console.error("Error getting user:", e);
-    //     }
-    // }
 
     async function handleLoginSubmit(e) {
         e.preventDefault();
@@ -122,54 +118,28 @@ export default function Home() {
                 username: username, password: password
             });
             signIn(result.data.jwt);
-        } catch (e) {
-            if (e.response && e.response.status === 400) {
-                setError("User not found:");
+        } catch (err) {
+            console.error(err.response)
+            // Check if the error response exists
+            if (err.response) {
+                // For example, if the API returns 404 for a non-existent user
+                if (err.response.status === 400 && err.response.data === 'User not found') {
+                    setError('User not found');
+                } else if (err.response.status === 401 && err.response.data === 'Invalid username/password') {
+                    setError('Wrong password');
+                } else {
+                    setError('Something went wrong. Please try again later.');
+                }
             } else {
-                setError("Something went wrong. Please try again later.")
+                setError('Something went wrong. Please try again later.');
             }
         } finally {
             toggleLoading(false);
         }
     }
 
-
-    async function fetchArtistsByGenre(genreString) {
-
-        console.log(genreString);
-        try {
-            const response = await axios.get(`${API_BASE}/search`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
-                }, params: {
-                    q: `genre:${encodeURIComponent(genreString)}`, type: "artist", limit: 50,
-                },
-            });
-            console.log(response.data);
-            // console.log(response.data.artists.name);
-
-            const filteredArtists = response.data.artists.items.filter(artist => artist.genres.some(genre => genre.toLowerCase().includes(genreString.toLowerCase())));
-            console.log(filteredArtists);
-        } catch (e) {
-            console.error("Error fetching artists", e.response || e);
-        }
-    }
-
-
-    async function handleArtistSearchByGenreClick() {
-        if (selectedGenres.length === 0) {
-            console.warn("No genres selected!");
-            return;
-        }
-
-        const genreString = selectedGenres.map(genre => genre.name).join(" ");
-        console.log("Searching artists with genres:", genreString)
-        await fetchArtistsByGenre(genreString);
-    }
-
-
+    // Functions related to searching playlists by selected genres.
     useEffect(() => {
-
         async function fetchPlaylistsByGenre() {
             if (!selectedGenres.length) {
                 console.log("No genres selected");
@@ -220,13 +190,14 @@ export default function Home() {
                 togglePlaylistSearchDone(true);
             }
         }
-
         fetchPlaylistsByGenre()
-    }, [selectedGenres])
+    }, [selectedGenres]);
 
-
-    // const leukeDingen = localStorage.getItem('categories');
-    //     console.log(leukeDingen ? JSON.parse(leukeDingen) : 'Staat niks in');
+    function deleteSelectedGenres() {
+        localStorage.removeItem("selectedGenres");
+        setPlaylistsByGenre([]);
+        setSelectedGenres([]);
+    }
 
     // TODO: Consider removing the CardContainer classnames, as I don't use them for css (yet)?
 
@@ -244,7 +215,6 @@ export default function Home() {
     }
 
     // Functions related to searching an artist by name
-
     async function searchArtist(artistName) {
         try {
             const response = await axios.get(`${API_BASE}/search`, {
@@ -268,171 +238,186 @@ export default function Home() {
         }
     }
 
-
     async function handleArtistSubmit(e) {
         e.preventDefault();
         await searchArtist(artistName);
     }
 
-
-    return (<main>
-        {/*<Button*/}
-        {/*    onClick={() => localStorage.setItem('categories', JSON.stringify(['metal', 'banaan']))}>*/}
-        {/*    Doe in de localStorage Bro*/}
-        {/*</Button>*/}
-        <OuterContainer type="main">
-            <PageContainer>
-                <CardContainer>
-                    <CardTopBar cardName="introduction" color="primary">
-                        <h2>Hello {isAuth ? user?.username : 'world'}!</h2>
-                        {isAuth && <Button
-                            className="sign-out-button"
-                            buttonText={loading ? "Signing out.." : "Sign out"}
-                            onClick={signOut}>
-                            <SignOut size={32}/>
-                        </Button>}
-                    </CardTopBar>
-                    <div className="introduction">
-                        <p>Welcome to PLAYGROUND! This page was created for those that are always eager to find new music!</p>
-                        <p>Play around, tell us what you like, listen to the song selection and add them to your own personal library.</p>
-                        {isAuth && <div className="go-to-profile">
-                            <Button
-                                className="go-to-profile-button"
-                                buttonText="Go to my profile"
-                                type="button"
-                                onClick={() => navigate("/profile")}
-                            >
-                                <UserCircle size={32}/>
-                            </Button>
-                        </div>}
-                    </div>
-                </CardContainer>
-
-                {/*TODO: This section appears when user is logged in*/}
-                {isAuth ? <CardContainer className="connect-spotify">
-                    <div className="spotify-img-wrapper">
-                        <img src={spotifyLogo} alt="spotify-logo"/>
-                    </div>
-                    <p>Connect your Spotify account to your profile and import your playlists directly to
-                        Spotify</p>
-                </CardContainer> : <CardContainer className="login-account">
-                    <CardTopBar color="secondary">
-                        <h3>Log in to your account to save your playlists</h3>
-                    </CardTopBar>
-                    <form className="form" onSubmit={handleLoginSubmit}>
-                        {/*TODO: If it's a preselected name, you cannot change the name, why? It does work on reload. Letters are small when unclickable.*/}
-                        {/*TODO: Error message to display if name is wrong*/}
-
-                        <InputField
-                            type="text"
-                            id="username-field"
-                            name="username"
-                            value={username}
-                            className="form-input"
-                            placeholder="Name"
-                            required={true}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <InputField
-                            type="password"
-                            id="password-field"
-                            name="password"
-                            value={password}
-                            className="form-input"
-                            placeholder="Password"
-                            required={true}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        {/*TODO: Check if error message works as soon as log out function is working*/}
-                        <div className="form-button-container">
-                            <Button
-                                buttonText="Log in"
-                                type="submit"
-                                className="secondary-button"
-                            />
-                            <Button
-                                buttonText="Register"
-                                type="button"
-                                className="secondary-button"
-                                onClick={() => navigate("/registration")}
-                            />
+    return (
+        <main>
+            <OuterContainer type="main">
+                <PageContainer>
+                    <CardContainer>
+                        <CardTopBar cardName="introduction" color="primary">
+                            <h2>Hello {isAuth ? user?.username : 'world'}!</h2>
+                            {isAuth && <Button
+                                className="sign-out-button"
+                                buttonText={loading ? "Signing out.." : "Sign out"}
+                                onClick={signOut}>
+                                <SignOut size={32}/>
+                            </Button>}
+                        </CardTopBar>
+                        <div className="introduction">
+                            <p>Welcome to PLAYGROUND! This page was created for those that are always eager to find new
+                                music!</p>
+                            <p>Play around, tell us what you like, listen to the song selection and add them to your own
+                                personal library.</p>
+                            {isAuth && <div className="go-to-profile">
+                                <Button
+                                    className="go-to-profile-button"
+                                    buttonText="Go to my profile"
+                                    type="button"
+                                    onClick={() => navigate("/profile")}
+                                >
+                                    <UserCircle size={32}/>
+                                </Button>
+                            </div>}
                         </div>
-                    </form>
-                </CardContainer>}
+                    </CardContainer>
 
-                <CardContainer className="artist-selection-wrapper">
-                    <CardTopBar cardName="artist-selection" color="light">
-                        <h3>What is the name of your favorite artist?</h3>
-                    </CardTopBar>
-                    <div className="artist-selection">
-                        <form
-                            onSubmit={handleArtistSubmit}
-                        >
-                            <Button
-                                type="submit"
-                                className="search-icon-button">
-                                <MagnifyingGlass size={32} className="search-icon"/>
-                            </Button>
-                            <InputField
-                                type="text"
-                                id="artistName"
-                                value={artistName}
-                                className="artist-selection-input"
-                                placeholder="Artist Name"
-                                required={true}
-                                onChange={(e) => setArtistName(e.target.value)}
-                            />
-                        </form>
-                        {artistDetails && artistDetails.name && (
-                            <div>
-                                <article className="artist-details-home-page">
-
-                                    <div className="artist-img-wrapper">
-                                        <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
-                                    </div>
-                                    <Link to={`/artist/${artistDetails.id}`}>
-                                        <div className="artist-info-link">
-                                            <h3>Go to {artistDetails.name} artist page</h3>
-                                            <ArrowFatRight size={24}/>
-                                        </div>
-                                    </Link>
-                                </article>
+                    {/*TODO: This section appears when user is logged in*/}
+                    {isAuth ?
+                        <CardContainer className="connect-spotify">
+                            <div className="spotify-img-wrapper">
+                                <img src={spotifyLogo} alt="spotify-logo"/>
                             </div>
-                        )}
-                    </div>
-                </CardContainer>
+                            <p>Connect your Spotify account to your profile and import your playlists directly to
+                                Spotify</p>
+                        </CardContainer>
+                        :
+                        <CardContainer>
+                            <CardTopBar color="secondary">
+                                <h3>Log in to your account to save your playlists</h3>
+                            </CardTopBar>
+                            <form className="form" onSubmit={handleLoginSubmit}>
+                                {/*TODO: Error message to display if name is wrong*/}
 
-                <CardContainer className="genre-selection-wrapper">
-                    <CardTopBar
-                        cardName="genre-selection" color="secondary">
-                        <h3>Select your favorite genres to find a playlist that you might like</h3>
-                        <Button
-                            type="button"
-                            className="genre-selection-button"
-                            buttonText="Select"
-                            onClick={() => navigate("/genre-selection")}
-                        >
-                            <Funnel size={24}/>
-                        </Button>
-                    </CardTopBar>
-                    <div className="selected-genres-display">
-                        {selectedGenres.length > 0 ?
-                            <h3>You have selected the
-                                following {(selectedGenres.length === 1) ? "genre" : "genres"}</h3>
-                            :
-                            <h3>No selected genres yet</h3>}
-                        {(selectedGenres.length > 0) &&
-                            <ul className="selected-genres-list">
-                                {selectedGenres.map((genre) => (<li className="selected-genre-list-item" key={genre.id}>
-                                    <h3>{genre.name}</h3>
-                                </li>))}
-                            </ul>}
-                    </div>
-                    {/*TODO: add a button element that when clicked it will clear the whole selection.*/}
-                </CardContainer>
+                                <InputField
+                                    type="text"
+                                    id="username-field"
+                                    name="username"
+                                    value={username}
+                                    className="form-input"
+                                    placeholder="Name"
+                                    required={true}
+                                    onChange={(e) => {
+                                        setUsername(e.target.value);
+                                        setError('');
+                                    }}
+                                />
+                                <InputField
+                                    type="password"
+                                    id="password-field"
+                                    name="password"
+                                    value={password}
+                                    className="form-input"
+                                    placeholder="Password"
+                                    required={true}
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        setError('');
+                                    }}
+                                />
+                                {error && <p className="error-message">{error}</p>}
+                                {/*TODO: Check if error message works as soon as log out function is working*/}
+                                <div className="form-button-container">
+                                    <Button
+                                        buttonText="Log in"
+                                        type="submit"
+                                        className="secondary-button"
+                                    />
+                                    <Button
+                                        buttonText="Register"
+                                        type="button"
+                                        className="secondary-button"
+                                        onClick={() => navigate("/registration")}
+                                    />
+                                </div>
+                            </form>
+                        </CardContainer>}
 
-                {selectedGenres.length > 0 &&
-                    playlistSearchDone && (
+                    <CardContainer>
+                        <CardTopBar cardName="artist-selection" color="light">
+                            <h3>What is the name of your favorite artist?</h3>
+                        </CardTopBar>
+                        <div className="artist-selection">
+                            <form
+                                onSubmit={handleArtistSubmit}
+                            >
+                                <Button
+                                    type="submit"
+                                    className="search-icon-button">
+                                    <MagnifyingGlass size={32} className="search-icon"/>
+                                </Button>
+                                <InputField
+                                    type="text"
+                                    id="artistName"
+                                    value={artistName}
+                                    className="artist-selection-input"
+                                    placeholder="Artist Name"
+                                    required={true}
+                                    onChange={(e) => setArtistName(e.target.value)}
+                                />
+                            </form>
+                            {artistDetails && artistDetails.name && (
+                                <div>
+                                    <article className="artist-details-home-page">
+
+                                        <div className="artist-img-wrapper">
+                                            <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                        </div>
+                                        <Link to={`/artist/${artistDetails.id}`}>
+                                            <div className="artist-info-link">
+                                                <h3>Go to {artistDetails.name} artist page</h3>
+                                                <ArrowFatRight size={24}/>
+                                            </div>
+                                        </Link>
+                                    </article>
+                                </div>
+                            )}
+                        </div>
+                    </CardContainer>
+
+                    <CardContainer>
+                        <CardTopBar
+                            cardName="genre-selection" color="secondary">
+                            <h3>Select your favorite genres to find a playlist that you might like</h3>
+                            <Button
+                                type="button"
+                                className="genre-selection-button"
+                                buttonText="Select"
+                                onClick={() => navigate("/genre-selection")}
+                            >
+                                <Funnel size={24}/>
+                            </Button>
+                        </CardTopBar>
+                        <div className="selected-genres-display">
+                            {selectedGenres.length > 0 ?
+                                <h3>You have selected the
+                                    following {(selectedGenres.length === 1) ? "genre" : "genres"}</h3>
+                                :
+                                <h3>No selected genres yet</h3>}
+
+                            {(selectedGenres.length > 0) &&
+                                <ul className="selected-genres-list">
+                                    {selectedGenres.map((genre) => (
+                                        <li className="selected-genre-list-item" key={genre.id}>
+                                            <h3>{genre.name}</h3>
+                                        </li>))}
+                                </ul>}
+                            {selectedGenres.length > 0 &&
+                                <Button
+                                    className="delete-selected-genres-button"
+                                    type="button"
+                                    buttonText="Clear selection"
+                                    onClick={deleteSelectedGenres}
+                                >
+                                    <Trash size={24}/>
+                                </Button>}
+                        </div>
+                    </CardContainer>
+
+                    {selectedGenres.length > 0 && playlistSearchDone && (
                         playlistsByGenre.length > 0 ? (
                             <CardContainer>
                                 <CardTopBar color="secondary">
@@ -469,9 +454,8 @@ export default function Home() {
                                 </div>
                             </CardContainer>
                         )
-                    )
-                }
-            </PageContainer>
-        </OuterContainer>
-    </main>)
+                    )}
+                </PageContainer>
+            </OuterContainer>
+        </main>)
 }

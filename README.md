@@ -43,7 +43,7 @@ Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met
 
 Stap 4. Music player component maken. Zo schrijven dat het een variabele ID verwacht en te gebruiken is met map methode. [done] was alleen mogelijk met iframe
 
-Stap 5. Mogelijk maken om tracks toe te voegen aan een eigen gemaakte playlist voor ingelogde gebruikers. [niet mogelijk] kan alleen playlists opslaan.
+Stap 5. Mogelijk maken om tracks toe te voegen aan een zelfgemaakte playlist voor ingelogde gebruikers. [niet mogelijk] kan alleen playlists opslaan.
 
 Stap 6. Spotify user data koppelen [done]
 
@@ -70,3 +70,9 @@ Notities voor 2-3-25:
 - next button voor playlists vanuit genres.
 - general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen.
 - if time: aria labels
+- TODO: If it's a preselected name(from password manager), you cannot change the name, why? It does work on reload. Letters are small when unclickable.
+- playlist only saveable when you have an account! (how to fix, make ternary on isauth for this feature)
+- geldig e-mail adres regels bij registratie en aanpassen van e-mail adres
+- veilig wachtwoord eisen instellen bij aanpassen van wachtwoord en registreren
+- artist page playlists ophalen waar artist in gefeatured is dmv artiest naam als zoekterm.
+- fetchplaylists naar context verplaatsen omdat ik het op 2 paginas gebruik.

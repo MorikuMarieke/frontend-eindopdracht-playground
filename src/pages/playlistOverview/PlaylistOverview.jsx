@@ -13,6 +13,7 @@ import {Link} from 'react-router-dom';
 
 function PlaylistOverview() {
     const [playlistFullData, setPlaylistFullData] = useState([]);
+    const [editMode, toggleEditmode] = useState(false);
 
     const {favoritePlaylists, removeFavoritePlaylist, clearFavoritePlaylists} = useContext(AuthContext);
 
@@ -84,9 +85,11 @@ function PlaylistOverview() {
                                     type="button"
                                     className="button--edit-my-playlists"
                                     buttonText="Edit"
+                                    onClick={() => toggleEditmode(true)}
                                 >
                                     <Pencil size={24}/>
                                 </Button>
+                            {/*    TODO: started working on finalizing look of this page and implementing editmode.*/}
                             </CardTopBar>
                             {playlistFullData && playlistFullData.length > 0 ?
                                 <ul className="playlist-overview-card-wrapper">

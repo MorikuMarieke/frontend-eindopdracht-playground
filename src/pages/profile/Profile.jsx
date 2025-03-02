@@ -5,7 +5,7 @@ import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import Button from '../../components/button/Button.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {HandPointing, Pencil, SignOut, Star} from '@phosphor-icons/react';
+import {HandPointing, House, Pencil, SignOut, Star} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
@@ -29,8 +29,9 @@ function Profile() {
     const [topTracks, setTopTracks] = useState([]);
     const [topArtists, setTopArtists] = useState([]);
     const [selectedTrackId, setSelectedTrackId] = useState(null);
+    const [playlistFullData, setPlaylistFullData] = useState([])
 
-    const {isAuth, user, signOut, favoritePlaylists, removeFavoritePlaylist} = useContext(AuthContext);
+    const {isAuth, user, signOut, favoritePlaylists} = useContext(AuthContext);
     const {
         spotifyAccessToken, spotifyProfileData, redirectToSpotifyAuth, handleSpotifyLogout,
     } = useContext(SpotifyContext);
@@ -57,10 +58,8 @@ function Profile() {
         }
 
         getUserData();
-
     }, []);
 
-    // Get top tracks if spotify accesstoken is updated.
     useEffect(() => {
         async function getTopTracks() {
             if (!spotifyAccessToken) return;
@@ -84,7 +83,6 @@ function Profile() {
         getTopTracks();
     }, [spotifyAccessToken]);
 
-    // Get top tracks if spotify accesstoken is updated.
     useEffect(() => {
         async function getTopArtists() {
             if (!spotifyAccessToken) return;
@@ -104,7 +102,6 @@ function Profile() {
                 console.error(e)
             }
         }
-
         getTopArtists();
     }, [spotifyAccessToken]);
 
@@ -116,16 +113,12 @@ function Profile() {
         e.preventDefault();
         setLoading(true);
 
-        // 1. probeer alle info mee te sturen als put-request,a met aangepast wachtwoord als string [v]
-        // 2. Kijk of het nu ook lykt als je e-mail wil veranderen en dan het encrypted wachtwoord meestuurt zoals je
-        // 'm had ontvangen
-
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
-                username: username, email: email, password: password, //volgens mij klopt het nu niet, omdat ik als ik
-                                                                      // niks invul, ik toch de oude encrypted JWT
-                                                                      // string meestuur als nieuw wachtwoord
+                username: username,
+                email: email,
+                password: password,
                 info: info,
             }, {
                 headers: {
@@ -153,209 +146,282 @@ function Profile() {
         setEditMode(false);
     }
 
+    useEffect(() => {
+        const fetchPlaylists = async () => {
+            const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
 
-    return (<main>
-        <OuterContainer type="main">
-            <PageContainer>
-                <CardContainer className="profile-greeting">
-                    <h2>Hello {isAuth ? user?.username : ''}!</h2>
-                    <Button
-                        className="sign-out-button"
-                        buttonText={loading ? "Signing out.." : "Sign out"}
-                        onClick={signOut}
-                    >
-                        <SignOut size={32}/>
-                    </Button>
-                </CardContainer>
+            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
 
-                <CardContainer className="account-details-wrapper">
-                    <CardTopBar cardName="registration-form" color="secondary">
-                        <h3>Account details</h3>
-                    </CardTopBar>
-                    <form className="form" onSubmit={handleSubmit}>
-                        {/*TODO: I want to create logic where you can log in with username or e-mail*/}
-                        <InputField
-                            type="text"
-                            id="username"
-                            className="form-input"
-                            placeholder="Username"
-                            onChange={(e) => setUsername(e.target.value)}
-                            value={username}
-                            disabled={!editMode}
-                        />
-                        <InputField
-                            type="text"
-                            id="email"
-                            className="form-input"
-                            placeholder="Email"
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            disabled={!editMode}
-                        />
-                        <p>Click 'Edit' to change password.</p>
-                        {editMode && <>
+            if (storedPlaylistIds.length === 0) {
+                setPlaylistFullData([]);
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem("access_token");
+                if (!token) {
+                    console.error("No Spotify access token found.");
+                    return;
+                }
+
+                // Fetch playlist data
+                const playlistRequests = storedPlaylistIds.map(id => {
+                    console.log(`Fetching playlist ID: ${id}`);
+                    return axios.get(`${API_BASE}/playlists/${id}`, {
+                        headers: {Authorization: `Bearer ${token}`},
+                    });
+                });
+
+                const playlistResponses = await Promise.allSettled(playlistRequests);
+                console.log("Playlist Responses:", playlistResponses);
+
+                const validPlaylists = playlistResponses
+                    .filter(res => res.status === "fulfilled") // Only use successful responses
+                    .map(res => res.value.data);
+                console.log("valid playlists:", validPlaylists)
+
+                setPlaylistFullData(validPlaylists);
+
+                // Update localStorage to remove invalid playlists
+                const validIds = validPlaylists.map(p => p.id);
+                localStorage.setItem("favoritePlaylists", JSON.stringify(validIds));
+
+            } catch (error) {
+                console.error("Error fetching playlists:", error);
+            }
+        };
+
+        fetchPlaylists();
+    }, [favoritePlaylists]);
+    // TODO: saved playlists lijstje, edit to change password is UGLYYYY
+
+    return (
+        <main>
+            <OuterContainer type="main">
+                <PageContainer>
+                    <CardContainer className="profile-greeting">
+                        <h2>Hello {isAuth ? user?.username : ''}!</h2>
+                        <div className="profile-greeting-message">
+                            <h3>Welcome to your profile page!</h3>
+                            <Button
+                                className="sign-out-button"
+                                buttonText={loading ? "Signing out.." : "Sign out"}
+                                onClick={signOut}
+                            >
+                                <SignOut size={32}/>
+                            </Button>
+                        </div>
+                    </CardContainer>
+
+                    <CardContainer className="account-details-wrapper">
+                        <CardTopBar cardName="registration-form" color="secondary">
+                            <h3>Account details</h3>
+                        </CardTopBar>
+                        <form className="form" onSubmit={handleSubmit}>
+                            {/*TODO: I want to create logic where you can log in with username or e-mail*/}
                             <InputField
-                                type="password"
-                                id="password"
+                                type="text"
+                                id="username"
                                 className="form-input"
-                                placeholder="New Password"
-                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Username"
+                                onChange={(e) => setUsername(e.target.value)}
+                                value={username}
                                 disabled={!editMode}
                             />
-                        </>}
-
-                        <div className="login-form-button-container">
-                            {!editMode && <Button
-                                buttonText="Edit"
-                                type="button"
-                                className="secondary-button"
-                                onClick={() => setEditMode(true)}
-                            />}
+                            <InputField
+                                type="text"
+                                id="email"
+                                className="form-input"
+                                placeholder="Email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                disabled={!editMode}
+                            />
+                            <p>Click 'Edit' to change password.</p>
                             {editMode && <>
-                                <Button
-                                    buttonText="Cancel"
-                                    type="button"
-                                    className="secondary-button"
-                                    onClick={handleCancelClick}
-                                    disabled={loading}
-                                />
-                                <Button
-                                    buttonText="Save"
-                                    type="submit"
-                                    className="secondary-button"
-                                    onClick={() => !editMode && setEditMode(false)}
-                                    disabled={loading}
+                                <InputField
+                                    type="password"
+                                    id="password"
+                                    className="form-input"
+                                    placeholder="New Password"
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    disabled={!editMode}
                                 />
                             </>}
 
-                            {/*TODO button logic that if it says EDIT, when you click it, the fields above become adaptable, then the buttons: SAVE appears, when SAVE is clicked, the information that was entered will be changed to the profile data. */}
-                        </div>
-                    </form>
-                </CardContainer>
-                {/*TODO: Logic for displaying all playlist names and descriptions?*/}
-                <CardContainer className="card--my-playlists-wrapper">
-                    <CardTopBar cardName="my-playlists" color="primary">
-                        <div className="link-to-my-playlists">
-                            <Star size={30} weight="fill"/>
-                            <h3> Go to my saved playlists</h3>
-                        </div>
-                        {/*TODO: When clicked, you go to page: my playlists where you can edit the playlists*/}
-                    </CardTopBar>
-                    <div className="card--my-playlists">
-                        <div className="my-playlists">
-                            <p>List of playlists will be displayed here with clickable links</p>
-                        </div>
-                    </div>
-                </CardContainer>
-
-                {/*TODO: This section appears when spotify account is not yet connected*/}
-                <CardContainer
-                    className="connect-spotify-profile"
-                >
-                    {spotifyAccessToken && spotifyProfileData ? (<>
-                        <CardTopBar color="secondary">
-                            <h3>Spotify profile</h3>
-                        </CardTopBar>
-                        <div className="spotify-user-info">
-                            <div>
-                                <p>Username: {spotifyProfileData.display_name}</p>
-                                {spotifyProfileData.images > 0 &&
-                                    <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
-                                <p>Followers: {spotifyProfileData.followers.total}</p>
+                            <div className="login-form-button-container">
+                                {!editMode && <Button
+                                    buttonText="Edit"
+                                    type="button"
+                                    className="secondary-button"
+                                    onClick={() => setEditMode(true)}
+                                />}
+                                {editMode && <>
+                                    <Button
+                                        buttonText="Cancel"
+                                        type="button"
+                                        className="secondary-button"
+                                        onClick={handleCancelClick}
+                                        disabled={loading}
+                                    />
+                                    <Button
+                                        buttonText="Save"
+                                        type="submit"
+                                        className="secondary-button"
+                                        onClick={() => !editMode && setEditMode(false)}
+                                        disabled={loading}
+                                    />
+                                </>}
                             </div>
-                            <Button
-                                type="button"
-                                className="spotify-log-out-button"
-                                buttonText="Log out"
-                                onClick={handleSpotifyLogout}
-                            >
-                                <div className="spotify-img-wrapper-profile">
-                                    <img src={spotifyLogo} alt="spotify-logo"/>
+                        </form>
+                    </CardContainer>
+
+                    {/*TODO: This section appears when spotify account is not yet connected*/}
+                    <CardContainer
+                        className="connect-spotify-profile"
+                    >
+                        {spotifyAccessToken && spotifyProfileData ?
+                            <>
+                            <CardTopBar color="secondary">
+                                <h3>Spotify profile</h3>
+                            </CardTopBar>
+                            <div className="spotify-user-info">
+                                <div>
+                                    <p>Username: {spotifyProfileData.display_name}</p>
+                                    {spotifyProfileData.images > 0 &&
+                                        <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
+                                    <p>Followers: {spotifyProfileData.followers.total}</p>
                                 </div>
-                            </Button>
-                        </div>
-                    </>) : (<div className="spotify-user-info">
-                        <div className="spotify-img-wrapper-profile">
-                            <img src={spotifyLogo} alt="spotify-logo"/>
-                        </div>
-                        <p>Connect your Spotify account to see your current top tracks and top artists.</p>
-                        <Button
-                            buttonText="Connect spotify"
-                            type="button"
-                            onClick={redirectToSpotifyAuth}
-                        />
-                    </div>)}
-                </CardContainer>
-
-                {topTracks.length > 0 &&
-                    <CardContainer>
-                        <CardTopBar color="light">
-                            <h3>Your 10 top tracks</h3>
-                        </CardTopBar>
-                        <ul className="user-top-track-list">
-                            <div className="user-advice-tracks">
-                                <HandPointing size={40} className="pointer-icon"/>
-                                <p>Click on the <em>song name</em> to listen to the track, or click on the <em>artist
-                                    name</em> to check out their page!</p>
+                                <Button
+                                    type="button"
+                                    className="spotify-log-out-button"
+                                    buttonText="Log out"
+                                    onClick={handleSpotifyLogout}
+                                >
+                                    <div className="spotify-img-wrapper-profile">
+                                        <img src={spotifyLogo} alt="spotify-logo"/>
+                                    </div>
+                                </Button>
                             </div>
-                            {topTracks && topTracks.map((track, index) => (
-                                <li className="user-top-track-list-item" key={track.id}>
-                                    <div className="user-top-track-item">
-                                        <div className="user-top-track-name" onClick={() => handleTrackClick(track.id)}>
-                                            <Rank color="light" index={index}/>
-                                            <h4>{track.name}</h4>
-                                        </div>
-                                        <div className="user-top-track-artists">
-                                            <p>
-                                                {track.artists.map((artist, index) => (
-                                                    <span key={artist.id}>
+                        </> :
+                            <section className="log-in-spotify">
+                            <p>Connect your Spotify account to see your current top tracks and top artists.</p>
+                                <Button
+                                    className="connect-spotify-button"
+                                    buttonText="Connect spotify"
+                                    type="button"
+                                    onClick={redirectToSpotifyAuth}
+                                >
+                                    <div className="spotify-img-wrapper-profile">
+                                        <img src={spotifyLogo} alt="spotify-logo"/>
+                                    </div>
+                                </Button>
+                            </section>
+                        }
+                    </CardContainer>
+
+                    {/*TODO: Logic for displaying all playlist names and descriptions?*/}
+                    <CardContainer className="card--my-playlists-wrapper">
+                        <Link to={`/playlist-overview`}>
+                            <CardTopBar cardName="my-playlists" color="primary">
+                                <div className="link-to-my-playlists">
+                                    <Star size={30} weight="fill"/>
+                                    <h3> Go to my saved playlists</h3>
+                                </div>
+                            </CardTopBar>
+                        </Link>
+                        <div className="card--my-playlists">
+                            <ul className="my-playlists">
+                            {playlistFullData && playlistFullData.length > 0 ?
+                                playlistFullData.map((playlist) => (
+                                    <li key={playlist.id}>{playlist.name}</li>
+                                )) : <>
+                                <p>You have not saved any playlists yet. Go to the home-page to check out playlists.</p>
+                                    <Button
+                                        type="button"
+                                        className="light-button to-home-page"
+                                        buttonText="Go to home-page"
+                                    >
+                                        <House size={24}/>
+                                    </Button>
+                                </>
+                            }
+                            </ul>
+                        </div>
+                    </CardContainer>
+
+                    {topTracks.length > 0 &&
+                        <CardContainer>
+                            <CardTopBar color="light">
+                                <h3>Your 10 top tracks on Spotify</h3>
+                            </CardTopBar>
+                            <ul className="user-top-track-list">
+                                <div className="user-advice-tracks">
+                                    <HandPointing size={40} className="pointer-icon"/>
+                                    <p>Click on the <em>song name</em> to listen to the track, or click on the <em>artist
+                                        name</em> to check out their page!</p>
+                                </div>
+                                {topTracks && topTracks.map((track, index) => (
+                                    <li className="user-top-track-list-item" key={track.id}>
+                                        <div className="user-top-track-item">
+                                            <Button
+                                                className="user-top-track-name"
+                                                type="button"
+                                                onClick={() => handleTrackClick(track.id)}>
+                                                <Rank color="light" index={index}/>
+                                                <h4>{track.name}</h4>
+                                            </Button>
+                                            <div className="user-top-track-artists">
+                                                <p>
+                                                    {track.artists.map((artist, index) => (
+                                                        <span key={artist.id}>
                                                     <Link to={`/artist/${artist.id}`} className="artist-page-link">
                                                         {artist.name}
                                                     </Link>
-                                                        {index < track.artists.length - 1 && ", "}
+                                                            {index < track.artists.length - 1 && ", "}
                                                 </span>))}
-                                            </p>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {selectedTrackId === track.id && (
-                                        <div className="spotify-player-user-profile">
-                                            <RadioPlayer
-                                                src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
-                                                height="80"
-                                            />
-                                        </div>
-                                    )}
-                                </li>))}
-                        </ul>
-                    </CardContainer>
-                }
-                {topArtists.length > 0 &&
-                    <CardContainer>
-                        <CardTopBar color="primary">
-                            <h3>Your 10 top artists</h3>
-                        </CardTopBar>
-                        <ul className="user-top-artists-list">
-                            {topArtists && topArtists.map((artist, index) => (
-                                <li key={artist.id}>
-                                    <Link to={`/artist/${artist.id}`}>
-                                        <article className="top-artist-card">
-                                            <div>
+                                        {selectedTrackId === track.id && (
+                                            <div className="spotify-player-user-profile">
+                                                <RadioPlayer
+                                                    src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
+                                                    height="80"
+                                                />
+                                            </div>
+                                        )}
+                                    </li>))}
+                            </ul>
+                        </CardContainer>
+                    }
+
+                    {topArtists.length > 0 &&
+                        <CardContainer>
+                            <CardTopBar color="primary">
+                                <h3>Your 10 top artists on Spotify</h3>
+                            </CardTopBar>
+                            <ul className="user-top-artists-list">
+                                {topArtists && topArtists.map((artist, index) => (
+                                    <li key={artist.id}>
+                                        <Link to={`/artist/${artist.id}`}>
+                                            <article className="top-artist-card">
                                                 <div className="top-artist-img-wrapper">
                                                     <img src={artist.images[0].url} alt={`${artist.name}-image`}/>
                                                 </div>
-                                            </div>
-                                            <h4>{artist.name}</h4>
-                                            <Rank color="primary" index={index}/>
-                                        </article>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </CardContainer>
-                }
-            </PageContainer>
-        </OuterContainer>
-    </main>)
+                                                <h4>{artist.name}</h4>
+                                                <Rank color="primary" index={index}/>
+                                            </article>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </CardContainer>
+
+                    }
+                </PageContainer>
+            </OuterContainer>
+        </main>)
 }
 
 export default Profile;

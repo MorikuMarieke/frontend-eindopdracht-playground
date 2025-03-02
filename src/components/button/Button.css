@@ -25,7 +25,24 @@ button {
 }
 
 .light-button {
+    background-color: var(--color-main-white);
+    padding: 0.3em 1.6em;
+}
 
+.to-home-page {
+    display: inline-flex;
+    align-items: center;
+    justify-items: center;
+    gap: 0.5em;
+}
+
+.connect-spotify-button {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.3em;
+    background-color: transparent;
+    padding: 0.3em;
 }
 
 .sign-out-button {
@@ -54,7 +71,8 @@ button {
 }
 
 .genre-selection-button,
-.genre-search-button {
+.genre-search-button,
+.delete-selected-genres-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -72,7 +90,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.selectable-genre{
+.selectable-genre {
     display: inline flex;
     align-items: center;
     justify-content: center;

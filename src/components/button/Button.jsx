@@ -26,7 +26,6 @@ export default function Button({
             style={style}
         >
             {buttonText}
-            {/* Show the check icon by default if selected, otherwise nothing */}
             {isSelected && (isHovered ? hoveredIcon : defaultIcon)}
             {children}
         </button>

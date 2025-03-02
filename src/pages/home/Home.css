@@ -76,6 +76,13 @@
     color: var(--color-main-white);
 }
 
+.delete-selected-genres-button {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    margin-top: 1em;
+}
+
 .selected-genres-list {
     display: flex;
     flex-wrap: wrap;
@@ -152,7 +159,7 @@
 /* ===== 2.6 Artist Info Card ===== */
 
 .artist-info-link {
-    display: inline-flex; /* Makes the container fit its content */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 1em;
