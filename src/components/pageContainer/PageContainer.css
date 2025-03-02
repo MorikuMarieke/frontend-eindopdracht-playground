@@ -24,7 +24,7 @@
 
 .page-playlist-overview {
     column-count: 1;
-    width: 60%;
+    width: 70%;
 }
 
 .page-playlist {
@@ -41,6 +41,11 @@
         column-count: 1;
         width: 100%;
     }
+
+    .page-playlist {
+        column-count: 1;
+        width: 100%;
+    }
 }
 
 /*------For Tablets------*/
@@ -50,6 +55,11 @@
     }
 
     .page-playlist-overview {
+        column-count: 1;
+        width: 100%;
+    }
+
+    .page-playlist {
         column-count: 1;
         width: 100%;
     }
