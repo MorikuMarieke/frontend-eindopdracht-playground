@@ -12,6 +12,12 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
+.link-to-my-playlists {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
 .my-playlists {
     background-color: var(--color-secondary);
     border-radius: 1em;
@@ -161,7 +167,7 @@
 }
 
 .top-artist-card:hover h4 {
-    font-size: 2em;
+    font-size: 1.6em;
     font-weight: bold;
 }
 

@@ -66,54 +66,60 @@ function PlaylistOverview() {
 
     return (
         <>
-        <main>
-            <OuterContainer>
-                <PageContainer className="page-playlist-overview">
-                    <CardContainer className="my-playlists-wrapper">
-                        <CardTopBar cardName="my-playlists" color="primary">
-                            <h3>My saved playlists</h3>
-                            <Button
-                                type="button"
-                                buttonText="Clear all"
-                                onClick={clearFavoritePlaylists}
-                            >
-                                <Trash size={24}/>
-                            </Button>
-                            <Button
-                                type="button"
-                                className="button--edit-my-playlists"
-                                buttonText="Edit"
-                            >
-                                <Pencil size={24}/>
-                            </Button>
-                        </CardTopBar>
-                        <ul className="playlist-overview-card-wrapper">
-                            {playlistFullData && playlistFullData.length > 0 && playlistFullData.map((playlist) => (
-                                    <li className="playlist-favorites-list-item" key={playlist.id}>
-                                        <div className="playlist-favorites-img-wrapper">
-                                            <img src={playlist.images[0].url} alt="playlist-image"/>
-                                        </div>
-                                        <Link to={`/playlist/${playlist.id}`} key={playlist.id}>
-                                            <h3>{playlist.name}</h3>
-                                        </Link>
-                                        <Button
-                                            buttonText="Remove"
-                                            type="button"
-                                            onClick={() => removeFavoritePlaylist(playlist.id)}
-                                        >
-                                            <HeartBreak size={24}/>
-                                        </Button>
-                                    </li>
+            <main>
+                <OuterContainer>
+                    <PageContainer className="page-playlist-overview">
+                        <CardContainer className="my-playlists-wrapper">
+                            <CardTopBar cardName="my-playlists" color="primary">
+                                <h3>My saved playlists</h3>
+                                <Button
+                                    type="button"
+                                    className="remove-playlist-button"
+                                    buttonText="Clear all"
+                                    onClick={clearFavoritePlaylists}
+                                >
+                                    <Trash size={24}/>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="button--edit-my-playlists"
+                                    buttonText="Edit"
+                                >
+                                    <Pencil size={24}/>
+                                </Button>
+                            </CardTopBar>
+                            {playlistFullData && playlistFullData.length > 0 ?
+                                <ul className="playlist-overview-card-wrapper">
+                                    {playlistFullData.length > 0 && playlistFullData.map((playlist) => (
+                                            <li className="playlist-favorites-list-item" key={playlist.id}>
+                                                <div className="playlist-favorites-img-wrapper">
+                                                    <img src={playlist.images[0].url} alt="playlist-image"/>
+                                                </div>
+                                                <Link to={`/playlist/${playlist.id}`} key={playlist.id}>
+                                                    <h3>{playlist.name}</h3>
+                                                </Link>
+                                                <Button
+                                                    type="button"
+                                                    onClick={() => removeFavoritePlaylist(playlist.id)}
+                                                >
+                                                    <Trash size={24} />
+                                                </Button>
+                                            </li>
 
-                                )
-                            )}
-                    </ul>
-                </CardContainer>
-            </PageContainer>
-        </OuterContainer>
-        </main>
-</>
-)
+                                        )
+                                    )}
+                                </ul>
+                                :
+                                <div className="playlist-overview-card-wrapper">
+                                    <h3>Wow, such empty.</h3>
+                                </div>
+                            }
+                        </CardContainer>
+                    </PageContainer>
+                </OuterContainer>
+            </main>
+        </>
+    )
 }
 
 export default PlaylistOverview;

@@ -67,4 +67,6 @@ Notities voor 2-3-25:
 - finalizen look voor playlist overview pagina
 - edit mode toepassen voor playlist overview. 
 - error state moet overal nog geïmplementeerd worden. 
-- 
+- next button voor playlists vanuit genres.
+- general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen.
+- if time: aria labels

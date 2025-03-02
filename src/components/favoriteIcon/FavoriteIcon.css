@@ -1,0 +1,33 @@
+.favorite-icon {
+    position: relative;
+    background-color: transparent;
+    /*width: 24px;  !* Adjust size as needed *!*/
+    /*height: 24px;*/
+}
+
+.heart-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* When the item is a favorite, the fill gets a color */
+.heart-fill.favorite {
+    color: var(--color-secondary); /* your primary color */
+}
+
+/* When not favorited, the fill is transparent */
+.heart-fill.not-favorite {
+    color: transparent;
+}
+
+.heart-outline {
+    color: var(--color-main-white);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

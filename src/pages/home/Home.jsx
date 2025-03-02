@@ -370,7 +370,7 @@ export default function Home() {
                         >
                             <Button
                                 type="submit"
-                                className="search-button--genre">
+                                className="search-icon-button">
                                 <MagnifyingGlass size={32} className="search-icon"/>
                             </Button>
                             <InputField

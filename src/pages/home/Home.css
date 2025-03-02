@@ -63,7 +63,6 @@
 
 /* ===== 2.4 Genre & Category Selection Card ===== */
 
-.selected-categories-display,
 .selected-genres-display {
     display: flex;
     flex-direction: column;
@@ -73,12 +72,10 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.selected-categories-display h3,
 .selected-genres-display h3 {
     color: var(--color-main-white);
 }
 
-.selected-categories-list,
 .selected-genres-list {
     display: flex;
     flex-wrap: wrap;
@@ -111,6 +108,30 @@
     padding: 1em;
     list-style: none;
     border-radius: 0 0 1.2em 1.2em;
+}
+
+.playlist-list-item {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    gap: 1em;
+    width: 100%;
+    background-color: var(--color-main-white);
+    padding: 0.5em;
+    text-align: left;
+    border-radius: 0.8em;
+}
+
+.playlist-img-wrapper {
+    height: 4em;
+    width: 4em;
+}
+
+.playlist-img {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 0.4em;
 }
 
 /* ===== 2.5 Artist Selection Card ===== */
@@ -164,19 +185,4 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-
-/* ===== 2.7 Music Suggestions Card ===== */
-
-.music-suggestions {
-    background-color: var(--color-main-white);
-    padding: 1em;
-    border-radius: 0 0 1.2em 1.2em;
-}
-
-.music-suggestions-playlist {
-    background-color: var(--color-secondary);
-    border-radius: 1em;
-    padding: 1em;
 }

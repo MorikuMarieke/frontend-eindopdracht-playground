@@ -5,7 +5,7 @@ import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import Button from '../../components/button/Button.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {HandPointing, Pencil, SignOut} from '@phosphor-icons/react';
+import {HandPointing, Pencil, SignOut, Star} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
@@ -168,7 +168,6 @@ function Profile() {
                     </Button>
                 </CardContainer>
 
-                {/*TODO: This section still needs work, I want to create a log in form with only 2 fields, and a 'register' button that links to the registration page*/}
                 <CardContainer className="account-details-wrapper">
                     <CardTopBar cardName="registration-form" color="secondary">
                         <h3>Account details</h3>
@@ -236,15 +235,11 @@ function Profile() {
                 {/*TODO: Logic for displaying all playlist names and descriptions?*/}
                 <CardContainer className="card--my-playlists-wrapper">
                     <CardTopBar cardName="my-playlists" color="primary">
-                        <h3>My playlists</h3>
+                        <div className="link-to-my-playlists">
+                            <Star size={30} weight="fill"/>
+                            <h3> Go to my saved playlists</h3>
+                        </div>
                         {/*TODO: When clicked, you go to page: my playlists where you can edit the playlists*/}
-                        <Button
-                            type="button"
-                            className="button--edit-my-playlists"
-                            buttonText="Edit"
-                        >
-                            <Pencil size={24}/>
-                        </Button>
                     </CardTopBar>
                     <div className="card--my-playlists">
                         <div className="my-playlists">

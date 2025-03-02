@@ -1,7 +1,7 @@
 .playlist-overview-card-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.5em;
     background-color: var(--color-main-white);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
@@ -11,13 +11,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1em;
     background-color: var(--color-secondary);
     list-style: none;
     border-radius: 1em;
     padding: 0.5em;
 }
 
+.playlist-favorites-list-item:hover {
+    background-color: var(--color-primary);
+}
+
+.playlist-favorites-list-item h3 {
+    color: var(--color-main-white);
+
+}
+
 .playlist-favorites-img-wrapper {
+    flex: 0 0 auto;
     width: 4em;
     height: 4em;
     border-radius: 0.5em;
@@ -27,3 +38,4 @@
 .playlist-favorites-img-wrapper img {
     height: 100%;
 }
+

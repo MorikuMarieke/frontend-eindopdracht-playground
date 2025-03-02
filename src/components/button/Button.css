@@ -48,7 +48,7 @@ button {
 
 /* ===== 2.2 Search Button -- Genre ===== */
 
-.search-button--genre {
+.search-icon-button {
     background-color: transparent;
     padding: 0 0.5em 0 0;
 }
@@ -63,7 +63,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.button--select-genres {
+.select-genres-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -89,27 +89,6 @@ button {
     padding: 0.3em 0.5em;
     background-color: var(--color-secondary);
     color: var(--color-main-white);
-}
-
-.playlist-list-item {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: left;
-    gap: 1em;
-    width: 100%;
-    background-color: var(--color-main-white);
-    padding: 0.5em;
-    text-align: left;
-    border-radius: 0.8em;
-}
-
-.playlist-img-wrapper {
-    height: 80px;
-}
-
-.playlist-img {
-    height: 100%;
-    border-radius: 0.4em;
 }
 
 /* ===== 2.3 Button - Edit my playlists ===== */

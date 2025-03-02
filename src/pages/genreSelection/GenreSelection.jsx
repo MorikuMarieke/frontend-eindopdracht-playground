@@ -67,7 +67,7 @@ function GenreSelection() {
                             <h3>Genres to select</h3>
                             <Button
                                 type="button"
-                                className="button--select-genres"
+                                className="select-genres-button"
                                 buttonText="Done"
                                 onClick={handleFinishSelectionClick}
                             >

@@ -5,7 +5,7 @@ import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import Button from '../../components/button/Button.jsx';
-import {ArrowArcLeft, Radio} from '@phosphor-icons/react';
+import {ArrowArcLeft, Heart, Radio, Trash} from '@phosphor-icons/react';
 import axios from 'axios';
 import {API_BASE} from '../../constants/constants.js';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -13,13 +13,14 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 import DOMPurify from "dompurify";
 
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
+import FavoriteIcon from '../../components/favoriteIcon/FavoriteIcon.jsx';
 
 function Playlist() {
     const {id} = useParams();
     const [token, setToken] = useState(null);
     const [playlist, setPlaylist] = useState([]);
 
-    const { addFavoritePlaylist, removeFavoritePlaylist } = useContext(AuthContext);
+    const {addFavoritePlaylist, removeFavoritePlaylist, favoritePlaylists} = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -73,6 +74,7 @@ function Playlist() {
                 console.error("Error fetching artist details:", error);
             }
         }
+
         fetchPlaylist();
 
     }, [token, id]);
@@ -91,7 +93,7 @@ function Playlist() {
                                 <Button
                                     type="button"
                                     className="playlist-button"
-                                    buttonText="Go back"
+                                    buttonText="Home"
                                     onClick={() => navigate("/")}
                                 >
                                     <ArrowArcLeft size={24}/>
@@ -99,19 +101,40 @@ function Playlist() {
                             </CardTopBar>
                             <div className="playlist-container">
                                 {playlist && playlist.description &&
-                                <div className="playlist-description">
-                                    <h3>Playlist description</h3>
-                                    <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(playlist.description)}}/>
-                                </div>
+                                    <div className="playlist-description">
+                                        <h3>Playlist description</h3>
+                                        <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(playlist.description)}}/>
+                                    </div>
                                 }
-                                <Button
-                                    className="light-button"
-                                    buttonText="Add to favorites"
-                                    onClick={() => addFavoritePlaylist(playlist.id)}
+                                {/*{favoritePlaylists && favoritePlaylists.includes(playlist.id) ?*/}
+                                {/*    <Button*/}
+                                {/*        className="light-button"*/}
+                                {/*        buttonText="Remove from favorites"*/}
+                                {/*        onClick={() => removeFavoritePlaylist(playlist.id)}*/}
+                                {/*    >*/}
+                                {/*        <Trash size={24}/>*/}
+                                {/*    </Button>*/}
+                                {/*    :*/}
+                                {/*    <Button*/}
+                                {/*        className="light-button"*/}
+                                {/*        buttonText="Add to favorites"*/}
+                                {/*        onClick={() => addFavoritePlaylist(playlist.id)}*/}
+                                {/*    >*/}
+                                {/*        <Heart size={24} weight="fill"/>*/}
+                                {/*    </Button>*/}
+                                {/*}*/}
+                                <div className="favorite-container">
+                                <FavoriteIcon
+                                    playlistId={playlist.id}
+                                    size={42}
                                 />
+                                    {!favoritePlaylists.includes(playlist.id) && <h3>Save to favorites</h3>}
+                                </div>
 
                                 <div className="playlist-background">
-                                    <RadioPlayer src={`https://open.spotify.com/embed/playlist/${playlist.id}?utm_source=generator&theme=0`} height="800" />
+                                    <RadioPlayer
+                                        src={`https://open.spotify.com/embed/playlist/${playlist.id}?utm_source=generator&theme=0`}
+                                        height="800"/>
                                 </div>
                             </div>
                         </CardContainer>
@@ -120,7 +143,7 @@ function Playlist() {
             </main>
         </>
 
-    //     TODO: Working currently on creating add playlist to favorite feature, there are still issues.
+        //     TODO: Working currently on creating add playlist to favorite feature, there are still issues.
     )
 }
 
