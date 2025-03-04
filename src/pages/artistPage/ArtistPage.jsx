@@ -133,7 +133,7 @@ function ArtistPage() {
                                 {artistTopTracks && artistTopTracks.map((track) => {
                                     return (
                                         <li className="top-track-list-item" key={track.id}>
-                                            <RadioPlayer src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`} />
+                                            <RadioPlayer src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`} height={80}/>
                                         </li>
                                     )
                                 })}

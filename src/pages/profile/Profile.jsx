@@ -276,80 +276,6 @@ function Profile() {
                         </form>
                     </CardContainer>
 
-                    {/*TODO: This section appears when spotify account is not yet connected*/}
-                    <CardContainer
-                        className="connect-spotify-profile"
-                    >
-                        {spotifyAccessToken && spotifyProfileData ?
-                            <>
-                            <CardTopBar color="secondary">
-                                <h3>Spotify profile</h3>
-                            </CardTopBar>
-                            <div className="spotify-user-info">
-                                <div>
-                                    <p>Username: {spotifyProfileData.display_name}</p>
-                                    {spotifyProfileData.images > 0 &&
-                                        <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
-                                    <p>Followers: {spotifyProfileData.followers.total}</p>
-                                </div>
-                                <Button
-                                    type="button"
-                                    className="spotify-log-out-button"
-                                    buttonText="Log out"
-                                    onClick={handleSpotifyLogout}
-                                >
-                                    <div className="spotify-img-wrapper-profile">
-                                        <img src={spotifyLogo} alt="spotify-logo"/>
-                                    </div>
-                                </Button>
-                            </div>
-                        </> :
-                            <section className="log-in-spotify">
-                            <p>Connect your Spotify account to see your current top tracks and top artists.</p>
-                                <Button
-                                    className="connect-spotify-button"
-                                    buttonText="Connect spotify"
-                                    type="button"
-                                    onClick={redirectToSpotifyAuth}
-                                >
-                                    <div className="spotify-img-wrapper-profile">
-                                        <img src={spotifyLogo} alt="spotify-logo"/>
-                                    </div>
-                                </Button>
-                            </section>
-                        }
-                    </CardContainer>
-
-                    {/*TODO: Logic for displaying all playlist names and descriptions?*/}
-                    <CardContainer className="card--my-playlists-wrapper">
-                        <Link to={`/playlist-overview`}>
-                            <CardTopBar cardName="my-playlists" color="primary">
-                                <div className="link-to-my-playlists">
-                                    <Star size={30} weight="fill"/>
-                                    <h3> Go to my saved playlists</h3>
-                                </div>
-                            </CardTopBar>
-                        </Link>
-                        <div className="card--my-playlists">
-                            <ul className="my-playlists">
-                            {playlistFullData && playlistFullData.length > 0 ?
-                                playlistFullData.map((playlist) => (
-                                    <li key={playlist.id}>{playlist.name}</li>
-                                )) : <>
-                                <p>You have not saved any playlists yet. Go to the home-page to check out playlists.</p>
-                                    <Button
-                                        type="button"
-                                        className="light-button to-home-page"
-                                        buttonText="Go to home-page"
-                                    >
-                                        <House size={24}/>
-                                    </Button>
-                                </>
-                            }
-                            </ul>
-                        </div>
-                    </CardContainer>
-
                     {topTracks.length > 0 &&
                         <CardContainer>
                             <CardTopBar color="light">
@@ -419,6 +345,80 @@ function Profile() {
                         </CardContainer>
 
                     }
+
+                    {/*TODO: This section appears when spotify account is not yet connected*/}
+                    <CardContainer
+                        className="connect-spotify-profile"
+                    >
+                        {spotifyAccessToken && spotifyProfileData ?
+                            <>
+                                <CardTopBar color="secondary">
+                                    <h3>Spotify profile</h3>
+                                </CardTopBar>
+                                <div className="spotify-user-info">
+                                    <div>
+                                        <p>Username: {spotifyProfileData.display_name}</p>
+                                        {spotifyProfileData.images > 0 &&
+                                            <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
+                                        <p>Followers: {spotifyProfileData.followers.total}</p>
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        className="spotify-log-out-button"
+                                        buttonText="Log out"
+                                        onClick={handleSpotifyLogout}
+                                    >
+                                        <div className="spotify-img-wrapper-profile">
+                                            <img src={spotifyLogo} alt="spotify-logo"/>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </> :
+                            <section className="log-in-spotify">
+                                <p>Connect your Spotify account to see your current top tracks and top artists.</p>
+                                <Button
+                                    className="connect-spotify-button"
+                                    buttonText="Connect spotify"
+                                    type="button"
+                                    onClick={redirectToSpotifyAuth}
+                                >
+                                    <div className="spotify-img-wrapper-profile">
+                                        <img src={spotifyLogo} alt="spotify-logo"/>
+                                    </div>
+                                </Button>
+                            </section>
+                        }
+                    </CardContainer>
+
+                    {/*TODO: Logic for displaying all playlist names and descriptions?*/}
+                    <CardContainer className="card--my-playlists-wrapper">
+                        <Link to={`/playlist-overview`}>
+                            <CardTopBar cardName="my-playlists" color="primary">
+                                <div className="link-to-my-playlists">
+                                    <Star size={30} weight="fill"/>
+                                    <h3> Go to my saved playlists</h3>
+                                </div>
+                            </CardTopBar>
+                        </Link>
+                        <div className="card--my-playlists">
+                            <ul className="my-playlists">
+                                {playlistFullData && playlistFullData.length > 0 ?
+                                    playlistFullData.map((playlist) => (
+                                        <li key={playlist.id}>{playlist.name}</li>
+                                    )) : <>
+                                        <p>You have not saved any playlists yet. Go to the home-page to check out playlists.</p>
+                                        <Button
+                                            type="button"
+                                            className="light-button to-home-page"
+                                            buttonText="Go to home-page"
+                                        >
+                                            <House size={24}/>
+                                        </Button>
+                                    </>
+                                }
+                            </ul>
+                        </div>
+                    </CardContainer>
                 </PageContainer>
             </OuterContainer>
         </main>)

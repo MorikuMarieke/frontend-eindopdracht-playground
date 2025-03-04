@@ -1,10 +1,38 @@
 .playlist-overview-card-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 0.5em;
     background-color: var(--color-main-white);
     padding: 1em;
     border-radius: 0 0 1.2em 1.2em;
+}
+
+.playlist-overview-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 100%;
+}
+
+.playlist-overview-card-wrapper-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
+.link-back-home {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.5em;
+    padding: 0.3em 0.6em;
+    background-color: var(--color-secondary);
+    color: var(--color-main-white);
+
 }
 
 .playlist-favorites-list-item {
@@ -12,6 +40,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 1em;
+    width: 100%;
     background-color: var(--color-secondary);
     list-style: none;
     border-radius: 1em;
@@ -24,7 +53,12 @@
 
 .playlist-favorites-list-item h3 {
     color: var(--color-main-white);
+}
 
+.trash-button-container {
+    display: flex;
+    justify-content: center;
+    width: 2.5em;
 }
 
 .playlist-favorites-img-wrapper {

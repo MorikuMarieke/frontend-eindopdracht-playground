@@ -18,6 +18,9 @@ button {
 /* ===== 2.1 Sign in, Sign out and Registration Button ===== */
 
 .secondary-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
     background-color: var(--color-secondary);
     color: var(--color-main-white);
     padding: 0.3em 1.6em;
@@ -25,6 +28,9 @@ button {
 }
 
 .light-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
     background-color: var(--color-main-white);
     padding: 0.3em 1.6em;
 }
@@ -32,8 +38,24 @@ button {
 .to-home-page {
     display: inline-flex;
     align-items: center;
-    justify-items: center;
+    align-self: center;
     gap: 0.5em;
+}
+
+.remove-playlists-button {
+    display: flex;
+    gap: 0.5em;
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    padding: 0.3em 1em;
+    margin-top: 0.5em;
+}
+
+.trash-icon-button {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    padding: 0.5em;
 }
 
 .connect-spotify-button {
@@ -112,6 +134,16 @@ button {
 /* ===== 2.3 Button - Edit my playlists ===== */
 
 .playlist-button {
+    display: flex;
+    flex-direction: row-reverse;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em 1em;
+}
+
+.edit-my-playlists-button {
     display: flex;
     flex-direction: row-reverse;
     flex: 0 0 auto;

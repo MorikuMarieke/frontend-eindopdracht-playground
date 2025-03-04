@@ -22,6 +22,7 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 import axios from 'axios';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import {genres} from '../../constants/genreArray.js';
+import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
 export default function Home() {
     // For sign in functionality
@@ -44,6 +45,7 @@ export default function Home() {
 
     // Context
     const {isAuth, signIn, signOut, user} = useContext(AuthContext);
+    const { spotifyProfileData } = useContext(SpotifyContext);
 
     useEffect(() => {
         async function fetchToken() {
@@ -258,7 +260,8 @@ export default function Home() {
                             </Button>}
                         </CardTopBar>
                         <div className="introduction">
-                            <p>Welcome to PLAYGROUND! This page was created for those that are always eager to find new
+                            <p>Welcome to the PLAYGROUND home-page! </p>
+                            <p>This page was created for those that are always eager to find new
                                 music!</p>
                             <p>Play around, tell us what you like, listen to the song selection and add them to your own
                                 personal library.</p>
@@ -276,7 +279,7 @@ export default function Home() {
                     </CardContainer>
 
                     {/*TODO: This section appears when user is logged in*/}
-                    {isAuth ?
+                    {isAuth && !spotifyProfileData &&
                         <CardContainer className="connect-spotify">
                             <div className="spotify-img-wrapper">
                                 <img src={spotifyLogo} alt="spotify-logo"/>
@@ -284,7 +287,8 @@ export default function Home() {
                             <p>Connect your Spotify account to your profile and import your playlists directly to
                                 Spotify</p>
                         </CardContainer>
-                        :
+                    }
+                    {!isAuth &&
                         <CardContainer>
                             <CardTopBar color="secondary">
                                 <h3>Log in to your account to save your playlists</h3>
