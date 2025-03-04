@@ -29,14 +29,11 @@ function Profile() {
     const [topTracks, setTopTracks] = useState([]);
     const [topArtists, setTopArtists] = useState([]);
     const [selectedTrackId, setSelectedTrackId] = useState(null);
-    const [playlistFullData, setPlaylistFullData] = useState([])
 
-    const {isAuth, user, signOut, favoritePlaylists} = useContext(AuthContext);
+    const {isAuth, user, signOut, playlistFullData} = useContext(AuthContext);
     const {
         spotifyAccessToken, spotifyProfileData, redirectToSpotifyAuth, handleSpotifyLogout,
     } = useContext(SpotifyContext);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         async function getUserData() {
@@ -51,12 +48,10 @@ function Profile() {
                 setEmail(response.data.email);
                 setPassword(response.data.password);
                 setInfo(response.data.info);
-                // console.log(response);
             } catch (e) {
                 console.error(e);
             }
         }
-
         getUserData();
     }, []);
 
@@ -130,7 +125,6 @@ function Profile() {
             });
             setEditMode(false);
             console.log("Profile updated:", response);
-            // als statuscode 204 dan roep e-mail package aan die email stuurt met bevestiging
         } catch (error) {
             if (error.response) {
                 console.error("Error updating profile: " + error.response.data);
@@ -145,55 +139,7 @@ function Profile() {
     function handleCancelClick() {
         setEditMode(false);
     }
-
-    useEffect(() => {
-        const fetchPlaylists = async () => {
-            const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
-
-            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
-
-            if (storedPlaylistIds.length === 0) {
-                setPlaylistFullData([]);
-                return;
-            }
-
-            try {
-                const token = localStorage.getItem("access_token");
-                if (!token) {
-                    console.error("No Spotify access token found.");
-                    return;
-                }
-
-                // Fetch playlist data
-                const playlistRequests = storedPlaylistIds.map(id => {
-                    console.log(`Fetching playlist ID: ${id}`);
-                    return axios.get(`${API_BASE}/playlists/${id}`, {
-                        headers: {Authorization: `Bearer ${token}`},
-                    });
-                });
-
-                const playlistResponses = await Promise.allSettled(playlistRequests);
-                console.log("Playlist Responses:", playlistResponses);
-
-                const validPlaylists = playlistResponses
-                    .filter(res => res.status === "fulfilled") // Only use successful responses
-                    .map(res => res.value.data);
-                console.log("valid playlists:", validPlaylists)
-
-                setPlaylistFullData(validPlaylists);
-
-                // Update localStorage to remove invalid playlists
-                const validIds = validPlaylists.map(p => p.id);
-                localStorage.setItem("favoritePlaylists", JSON.stringify(validIds));
-
-            } catch (error) {
-                console.error("Error fetching playlists:", error);
-            }
-        };
-
-        fetchPlaylists();
-    }, [favoritePlaylists]);
-    // TODO: saved playlists lijstje, edit to change password is UGLYYYY
+    // TODO: edit to change password is UGLYYYY
 
     return (
         <main>

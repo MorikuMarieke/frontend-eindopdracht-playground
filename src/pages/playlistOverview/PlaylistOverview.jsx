@@ -3,69 +3,19 @@ import './PlaylistOverview.css'
 import OuterContainer from '../../components/outerContainer/OuterContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import Button from '../../components/button/Button.jsx';
-import {Pencil, Trash, Dog, XCircle, House, ArrowArcLeft} from '@phosphor-icons/react';
+import {Pencil, Trash, Dog, XCircle, ArrowArcLeft} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
-import axios from 'axios';
-import {API_BASE} from '../../constants/constants.js';
+
 import {Link, useNavigate} from 'react-router-dom';
 
 function PlaylistOverview() {
-    const [playlistFullData, setPlaylistFullData] = useState([]);
     const [editMode, toggleEditmode] = useState(false);
 
-    const {favoritePlaylists, removeFavoritePlaylist, clearFavoritePlaylists} = useContext(AuthContext);
+    const {playlistFullData, removeFavoritePlaylist, clearFavoritePlaylists} = useContext(AuthContext);
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchPlaylists = async () => {
-            const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
-
-            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
-
-            if (storedPlaylistIds.length === 0) {
-                setPlaylistFullData([]);
-                return;
-            }
-
-            try {
-                const token = localStorage.getItem("access_token");
-                if (!token) {
-                    console.error("No Spotify access token found.");
-                    return;
-                }
-
-                // Fetch playlist data
-                const playlistRequests = storedPlaylistIds.map(id => {
-                    console.log(`Fetching playlist ID: ${id}`);
-                    return axios.get(`${API_BASE}/playlists/${id}`, {
-                        headers: {Authorization: `Bearer ${token}`},
-                    });
-                });
-
-                const playlistResponses = await Promise.allSettled(playlistRequests);
-                console.log("Playlist Responses:", playlistResponses);
-
-                const validPlaylists = playlistResponses
-                    .filter(res => res.status === "fulfilled") // Only use successful responses
-                    .map(res => res.value.data);
-                console.log("valid playlists:", validPlaylists)
-
-                setPlaylistFullData(validPlaylists);
-
-                // Update localStorage to remove invalid playlists
-                const validIds = validPlaylists.map(p => p.id);
-                localStorage.setItem("favoritePlaylists", JSON.stringify(validIds));
-
-            } catch (error) {
-                console.error("Error fetching playlists:", error);
-            }
-        };
-
-        fetchPlaylists();
-    }, [favoritePlaylists]);
 
     return (
         <>
