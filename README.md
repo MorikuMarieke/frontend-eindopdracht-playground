@@ -31,22 +31,21 @@ Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met
 2. Zoeken naar playlists:
 
     - playlist zoeken op basis van algemene search input, kan gelinkt worden aan description van playlist, dan een weergave van naam en description en doorlinken naar pagina waar je de playlist kunt afspelen, mogelijk maken om deze songs toe te voegen aan een eigen playlist (dat moet ik nog uitzoeken hoe het moet, maar dit komt veel later, andere feature) -> **DEZE EERST**
-    - playlists op basis van genre met de lijst die ik van github heb.
-    - Playlists op basis van categorie weergeven, **ik denk dat ik deze niet ga gebruiken**.
+    - playlists op basis van genre met de lijst die ik van github heb. [done]
 
 2. Artiest zoeken op basis van naam invoer, informatie weergeven, link naar pagina met muziek, of dit in component
    verwerken dat je artist info weergeeft met de eerste 5 populaire tracks van deze artiest. Of doorlinken naar een
-   andere pagina met meer info.
+   andere pagina met meer info. [done]
     - Artist page voorzien van een knop om snel terug naar home te linken. 
     - Indien mogelijk het invoer-veld voorzien van naam-suggesties. 
 
 3.
 
-Stap 4. Music player component maken. Zo schrijven dat het een variabele ID verwacht en te gebruiken is met map methode.
+Stap 4. Music player component maken. Zo schrijven dat het een variabele ID verwacht en te gebruiken is met map methode. [done] was alleen mogelijk met iframe
 
-Stap 5. Mogelijk maken om tracks toe te voegen aan een eigen gemaakte playlist voor ingelogde gebruikers.
+Stap 5. Mogelijk maken om tracks toe te voegen aan een zelfgemaakte playlist voor ingelogde gebruikers. [niet mogelijk] kan alleen playlists opslaan.
 
-Stap ?. Spotify user data koppelen
+Stap 6. Spotify user data koppelen [done]
 
 IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
 
@@ -62,3 +61,18 @@ IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
 
 - Het lijkt erop alsof je als je ingelogd bent in spotify web, dat deze informatie dan ook toepasselijk is voor de spotify componenten (zoals de web player, alleen preview mogelijk niet ingelogd, hele liedje af te luisteren met login)
 
+Notities voor 2-3-25: 
+- go back button niet handig, omdat ik ook door link vanaf webpagina playlist overview, hier iets anders voor verzinnen. 
+- add to favorites moet conditioneel verschijnen als de playlist nog niet is toegevoegd, anders verwijder knop condiitoneel laten verschijnen. 
+- finalizen look voor playlist overview pagina
+- edit mode toepassen voor playlist overview. 
+- error state moet overal nog geïmplementeerd worden. 
+- next button voor playlists vanuit genres.
+- general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen.
+- if time: aria labels
+- TODO: If it's a preselected name(from password manager), you cannot change the name, why? It does work on reload. Letters are small when unclickable.
+- playlist only saveable when you have an account! (how to fix, make ternary on isauth for this feature)
+- geldig e-mail adres regels bij registratie en aanpassen van e-mail adres
+- veilig wachtwoord eisen instellen bij aanpassen van wachtwoord en registreren
+- artist page playlists ophalen waar artist in gefeatured is dmv artiest naam als zoekterm.
+- fetchplaylists naar context verplaatsen omdat ik het op 2 paginas gebruik.

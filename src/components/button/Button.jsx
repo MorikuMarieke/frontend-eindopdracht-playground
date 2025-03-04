@@ -4,12 +4,13 @@ import {useState} from 'react';
 export default function Button({
             type,
             onClick,
-            className,
+            className = '',
             buttonText,
             isSelected,
             defaultIcon,
             hoveredIcon,
             disabled,
+            style,
             children
 }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -18,13 +19,13 @@ export default function Button({
         <button
             type={type}
             onClick={onClick}
-            className={`button ${className} ${isHovered ? 'hover' : ''} ${disabled ? 'disabled' : ''}`}
+            className={`${className} ${isHovered ? 'hover' : ''} ${disabled ? 'disabled' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             disabled={disabled}
+            style={style}
         >
             {buttonText}
-            {/* Show the check icon by default if selected, otherwise nothing */}
             {isSelected && (isHovered ? hoveredIcon : defaultIcon)}
             {children}
         </button>

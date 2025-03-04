@@ -12,7 +12,10 @@ export function AuthContextProvider({ children }) {
         user: {},
         status: 'pending',
     });
-
+    const [favoritePlaylists, setFavoritePlaylists] = useState(() => {
+        const storedFavorites = localStorage.getItem("favoritePlaylists");
+        return storedFavorites ? JSON.parse(storedFavorites) : [];
+    });
 
     const navigate = useNavigate();
 
@@ -105,14 +108,42 @@ export function AuthContextProvider({ children }) {
         }
     }
 
+    const addFavoritePlaylist = (playlistId) => {
+        if (!playlistId) return;
 
+        setFavoritePlaylists((prevFavorites) => {
+            if (!prevFavorites.includes(playlistId)) {
+                const updatedFavorites = [...prevFavorites, playlistId];
+                localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
+                console.log(updatedFavorites);
+                return updatedFavorites;
+            }
+            return prevFavorites;
+        });
+    };
+
+    const removeFavoritePlaylist = (playlistId) => {
+        setFavoritePlaylists((prevFavorites) => {
+            const updatedFavorites = prevFavorites.filter((id) => id !== playlistId);
+            localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
+            return updatedFavorites;
+        });
+    };
+
+    const clearFavoritePlaylists = () => {
+        setFavoritePlaylists([]);
+        localStorage.removeItem("favoritePlaylists");
+    };
 
     const contextData = {
         isAuth: isAuth.isAuth,
         user: isAuth.user,
         signIn,
         signOut,
-
+        favoritePlaylists,
+        addFavoritePlaylist,
+        removeFavoritePlaylist,
+        clearFavoritePlaylists,
     };
 
     return (

@@ -1,9 +1,17 @@
 .profile-greeting {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 1em;
     justify-content: space-between;
     background-color: var(--color-main-white);
     padding: 1em;
+}
+
+.profile-greeting-message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
 }
 
 .card--my-playlists {
@@ -12,8 +20,20 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
+.link-to-my-playlists {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
 .my-playlists {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    list-style: none;
+    gap: 0.5em;
     background-color: var(--color-secondary);
+    color: var(--color-main-white);
     border-radius: 1em;
     padding: 1em;
 }
@@ -21,6 +41,14 @@
 .login-form-button-container {
     display: flex;
     justify-content: space-evenly;
+}
+
+.log-in-spotify {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: var(--color-main-white);
+    padding: 1em;
 }
 
 .spotify-user-info {
@@ -34,8 +62,9 @@
 
 .spotify-img-wrapper-profile {
     display: flex;
-    justify-content: center;
+    flex: 0 0 2.5em;
     width: 2.5em;
+    justify-content: center;
 }
 
 .spotify-img-wrapper-profile img {
@@ -45,7 +74,6 @@
 .spotify-log-out-button {
     display: flex;
     flex: 0 0 150px;
-    /*flex-direction: row-reverse;*/
     background-color: var(--color-main-white);
     justify-content: space-between;
     gap: 1em;
@@ -68,6 +96,7 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 .user-advice-tracks .pointer-icon {
@@ -90,6 +119,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: var(--color-primary);
+    color: var(--color-main-white);
     flex: 0 1 60%;
     gap: 0.5em;
     padding: 0.5em;
@@ -161,7 +191,7 @@
 }
 
 .top-artist-card:hover h4 {
-    font-size: 2em;
+    font-size: 1.6em;
     font-weight: bold;
 }
 

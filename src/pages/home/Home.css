@@ -63,7 +63,6 @@
 
 /* ===== 2.4 Genre & Category Selection Card ===== */
 
-.selected-categories-display,
 .selected-genres-display {
     display: flex;
     flex-direction: column;
@@ -73,12 +72,17 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
-.selected-categories-display h3,
 .selected-genres-display h3 {
     color: var(--color-main-white);
 }
 
-.selected-categories-list,
+.delete-selected-genres-button {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    margin-top: 1em;
+}
+
 .selected-genres-list {
     display: flex;
     flex-wrap: wrap;
@@ -113,6 +117,30 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
+.playlist-list-item {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    gap: 1em;
+    width: 100%;
+    background-color: var(--color-main-white);
+    padding: 0.5em;
+    text-align: left;
+    border-radius: 0.8em;
+}
+
+.playlist-img-wrapper {
+    height: 4em;
+    width: 4em;
+}
+
+.playlist-img {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 0.4em;
+}
+
 /* ===== 2.5 Artist Selection Card ===== */
 
 .artist-selection {
@@ -131,7 +159,7 @@
 /* ===== 2.6 Artist Info Card ===== */
 
 .artist-info-link {
-    display: inline-flex; /* Makes the container fit its content */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 1em;
@@ -166,17 +194,12 @@
     align-items: center;
 }
 
+/*==== Media Queries ====*/
 
-/* ===== 2.7 Music Suggestions Card ===== */
+@media screen and (min-width: 768px) {
 
-.music-suggestions {
-    background-color: var(--color-main-white);
-    padding: 1em;
-    border-radius: 0 0 1.2em 1.2em;
 }
 
-.music-suggestions-playlist {
-    background-color: var(--color-secondary);
-    border-radius: 1em;
-    padding: 1em;
+@media screen and  (min-width: 768px) and (max-width: 1024px) {
+
 }

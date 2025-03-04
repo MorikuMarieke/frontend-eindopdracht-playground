@@ -18,6 +18,9 @@ button {
 /* ===== 2.1 Sign in, Sign out and Registration Button ===== */
 
 .secondary-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
     background-color: var(--color-secondary);
     color: var(--color-main-white);
     padding: 0.3em 1.6em;
@@ -25,7 +28,43 @@ button {
 }
 
 .light-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background-color: var(--color-main-white);
+    padding: 0.3em 1.6em;
+}
 
+.to-home-page {
+    display: inline-flex;
+    align-items: center;
+    align-self: center;
+    gap: 0.5em;
+}
+
+.remove-playlists-button {
+    display: flex;
+    gap: 0.5em;
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    padding: 0.3em 1em;
+    margin-top: 0.5em;
+}
+
+.trash-icon-button {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    padding: 0.5em;
+}
+
+.connect-spotify-button {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.3em;
+    background-color: transparent;
+    padding: 0.3em;
 }
 
 .sign-out-button {
@@ -48,13 +87,14 @@ button {
 
 /* ===== 2.2 Search Button -- Genre ===== */
 
-.search-button--genre {
+.search-icon-button {
     background-color: transparent;
     padding: 0 0.5em 0 0;
 }
 
 .genre-selection-button,
-.genre-search-button {
+.genre-search-button,
+.delete-selected-genres-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -63,7 +103,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.button--select-genres {
+.select-genres-button {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -72,7 +112,7 @@ button {
     padding: 0.3em 1em;
 }
 
-.selectable-genre{
+.selectable-genre {
     display: inline flex;
     align-items: center;
     justify-content: center;
@@ -91,30 +131,19 @@ button {
     color: var(--color-main-white);
 }
 
-.playlist-list-item {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: left;
-    gap: 1em;
-    width: 100%;
-    background-color: var(--color-main-white);
-    padding: 0.5em;
-    text-align: left;
-    border-radius: 0.8em;
-}
-
-.playlist-img-wrapper {
-    height: 80px;
-}
-
-.playlist-img {
-    height: 100%;
-    border-radius: 0.4em;
-}
-
 /* ===== 2.3 Button - Edit my playlists ===== */
 
 .playlist-button {
+    display: flex;
+    flex-direction: row-reverse;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3em;
+    padding: 0.3em 1em;
+}
+
+.edit-my-playlists-button {
     display: flex;
     flex-direction: row-reverse;
     flex: 0 0 auto;

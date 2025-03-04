@@ -57,3 +57,12 @@
     gap: 0.5em;
     align-items: center;
 }
+
+/*==== Media Queries ====*/
+
+@media screen and (max-width: 768px) {
+    .top-bar-introduction {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
