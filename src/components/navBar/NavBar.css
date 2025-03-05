@@ -126,7 +126,6 @@
 
 /*-------------Media queries--------------------------------------------------*/
 
-
 /* Hide hamburger button on desktop */
 @media screen and (min-width: 768px) {
     .menu-toggle {

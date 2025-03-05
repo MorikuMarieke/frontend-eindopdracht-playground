@@ -51,7 +51,7 @@ IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
 
 Notities voor 2-3-25: 
 - go back button niet handig, omdat ik ook door link vanaf webpagina playlist overview, hier iets anders voor verzinnen.  nu nog een button go to my playlists toevoegen [done]
-- add to favorites moet conditioneel verschijnen als de playlist nog niet is toegevoegd, anders verwijder knop condiitoneel laten verschijnen. [done]
+- add to favorites moet conditioneel verschijnen als de playlist nog niet is toegevoegd, anders verwijder knop conditoneel laten verschijnen. [done]
 - finalizen look voor playlist overview pagina [done]
 - edit mode toepassen voor playlist overview. [done]
 - error state moet overal nog geïmplementeerd worden. Dit moet ik nog ff checken met Sam [TODO]
@@ -65,3 +65,8 @@ Notities voor 2-3-25:
 - artist page playlists ophalen waar artist in gefeatured is dmv artiest naam als zoekterm. [DEZE VIND IK NOG WEL LEUK OM TE DOEN]
 - fetchplaylists naar context verplaatsen omdat ik het op 2 paginas gebruik. [done]
 - playlist zoeken op basis van algemene search input, kan gelinkt worden aan description van playlist, dan een weergave van naam en description en doorlinken naar pagina waar je de playlist kunt afspelen, mogelijk maken om deze songs toe te voegen aan een eigen playlist (dat moet ik nog uitzoeken hoe het moet, maar dit komt veel later, andere feature) [MAYBE, ALS VERSLAG AF IS]
+- localstorage behouden bij uitlog, maar isAuth bepaalt weergave van playlists
+- infoveld in application gebruiken voor genrearray. 
+- sign out button nav bar werkte niet, deze nog fixen [TODO]
+- genre selection is a lot of scrolling, arrow up to get the user back up if they are done selecting. [MAYBE ALS VERSLAG AF IS]
+- 

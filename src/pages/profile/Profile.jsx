@@ -24,7 +24,9 @@ function Profile() {
     const [info, setInfo] = useState('');
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
-
+    const [error, setError] = useState(null);
+    const [apiError, setApiError] = useState(null);
+    const [successfulProfileUpdate, toggleSuccessfulProfileUpdate] = useState(false);
 
     const [topTracks, setTopTracks] = useState([]);
     const [topArtists, setTopArtists] = useState([]);
@@ -50,8 +52,10 @@ function Profile() {
                 setInfo(response.data.info);
             } catch (e) {
                 console.error(e);
+                setError('Error fetching user data.')
             }
         }
+
         getUserData();
     }, []);
 
@@ -92,11 +96,11 @@ function Profile() {
                     }
                 });
                 setTopArtists(response.data.items)
-                console.log("User top artists:", response.data.items)
             } catch (e) {
                 console.error(e)
             }
         }
+
         getTopArtists();
     }, [spotifyAccessToken]);
 
@@ -125,6 +129,8 @@ function Profile() {
             });
             setEditMode(false);
             console.log("Profile updated:", response);
+            toggleSuccessfulProfileUpdate(true);
+            setTimeout(() => toggleSuccessfulProfileUpdate(false), 5000);
         } catch (error) {
             if (error.response) {
                 console.error("Error updating profile: " + error.response.data);
@@ -139,6 +145,7 @@ function Profile() {
     function handleCancelClick() {
         setEditMode(false);
     }
+
     // TODO: edit to change password is UGLYYYY
 
     return (
@@ -183,7 +190,6 @@ function Profile() {
                                 value={email}
                                 disabled={!editMode}
                             />
-                            <p>Click 'Edit' to change password.</p>
                             {editMode && <>
                                 <InputField
                                     type="password"
@@ -194,14 +200,20 @@ function Profile() {
                                     disabled={!editMode}
                                 />
                             </>}
+                            {successfulProfileUpdate && <p>Profile updated successfully!</p>}
 
                             <div className="login-form-button-container">
                                 {!editMode && <Button
-                                    buttonText="Edit"
+                                    buttonText="Edit profile data or password"
                                     type="button"
                                     className="secondary-button"
-                                    onClick={() => setEditMode(true)}
-                                />}
+                                    onClick={() => {
+                                        setEditMode(true);
+                                        toggleSuccessfulProfileUpdate(false)
+                                    }}
+                                >
+                                    <Pencil size={24}/>
+                                </Button>}
                                 {editMode && <>
                                     <Button
                                         buttonText="Cancel"
@@ -352,7 +364,8 @@ function Profile() {
                                     playlistFullData.map((playlist) => (
                                         <li key={playlist.id}>{playlist.name}</li>
                                     )) : <>
-                                        <p>You have not saved any playlists yet. Go to the home-page to check out playlists.</p>
+                                        <p>You have not saved any playlists yet. Go to the home-page to check out
+                                            playlists.</p>
                                         <Button
                                             type="button"
                                             className="light-button to-home-page"

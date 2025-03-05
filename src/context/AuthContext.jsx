@@ -44,6 +44,52 @@ export function AuthContextProvider({ children }) {
         }
     }, []);
 
+    useEffect(() => {
+        const fetchPlaylists = async () => {
+            const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
+
+            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
+
+            if (storedPlaylistIds.length === 0) {
+                setPlaylistFullData([]);
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem("access_token");
+                if (!token) {
+                    console.error("No Spotify access token found.");
+                    return;
+                }
+
+                const playlistRequests = storedPlaylistIds.map(id => {
+                    console.log(`Fetching playlist ID: ${id}`);
+                    return axios.get(`${API_BASE}/playlists/${id}`, {
+                        headers: {Authorization: `Bearer ${token}`},
+                    });
+                });
+
+                const playlistResponses = await Promise.allSettled(playlistRequests);
+                console.log("Playlist Responses:", playlistResponses);
+
+                const validPlaylists = playlistResponses
+                    .filter(res => res.status === "fulfilled")
+                    .map(res => res.value.data);
+                console.log("valid playlists:", validPlaylists)
+
+                setPlaylistFullData(validPlaylists);
+
+                const validIds = validPlaylists.map(p => p.id);
+                localStorage.setItem("favoritePlaylists", JSON.stringify(validIds));
+
+            } catch (error) {
+                console.error("Error fetching playlists:", error);
+            }
+        };
+
+        fetchPlaylists();
+    }, [favoritePlaylists]);
+
     async function signIn(JWT) {
         try {
             localStorage.setItem('token', JWT);
@@ -62,20 +108,20 @@ export function AuthContextProvider({ children }) {
     }
 
     function signOut() {
-        localStorage.removeItem('token');
+        console.log("Signing out...");
         toggleIsAuth( {
             isAuth: false,
             user: {},
             status: 'done',
         });
-
-        console.log( 'Gebruiker is uitgelogd!' );
+        localStorage.removeItem("token");
+        localStorage.removeItem("selectedGenres");
+        localStorage.removeItem("genrePlaylistSelection");
         navigate('/');
     }
 
     async function fetchUserData(username, token, redirectUrl) {
         try {
-            // haal gebruikersdata op met de token en id van de gebruiker
             const result = await axios.get( `${NOVI_PLAYGROUND_BACKEND}/users/${username}`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -135,52 +181,6 @@ export function AuthContextProvider({ children }) {
         setFavoritePlaylists([]);
         localStorage.removeItem("favoritePlaylists");
     };
-
-    useEffect(() => {
-        const fetchPlaylists = async () => {
-            const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
-
-            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
-
-            if (storedPlaylistIds.length === 0) {
-                setPlaylistFullData([]);
-                return;
-            }
-
-            try {
-                const token = localStorage.getItem("access_token");
-                if (!token) {
-                    console.error("No Spotify access token found.");
-                    return;
-                }
-
-                const playlistRequests = storedPlaylistIds.map(id => {
-                    console.log(`Fetching playlist ID: ${id}`);
-                    return axios.get(`${API_BASE}/playlists/${id}`, {
-                        headers: {Authorization: `Bearer ${token}`},
-                    });
-                });
-
-                const playlistResponses = await Promise.allSettled(playlistRequests);
-                console.log("Playlist Responses:", playlistResponses);
-
-                const validPlaylists = playlistResponses
-                    .filter(res => res.status === "fulfilled")
-                    .map(res => res.value.data);
-                console.log("valid playlists:", validPlaylists)
-
-                setPlaylistFullData(validPlaylists);
-
-                const validIds = validPlaylists.map(p => p.id);
-                localStorage.setItem("favoritePlaylists", JSON.stringify(validIds));
-
-            } catch (error) {
-                console.error("Error fetching playlists:", error);
-            }
-        };
-
-        fetchPlaylists();
-    }, [favoritePlaylists]);
 
     const contextData = {
         isAuth: isAuth.isAuth,

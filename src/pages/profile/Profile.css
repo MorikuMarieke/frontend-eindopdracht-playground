@@ -43,6 +43,15 @@
     justify-content: space-evenly;
 }
 
+.form p {
+    color: var(--color-primary);
+    margin-bottom: 0.5em;
+    text-align: center;
+    font-family: 'Jura', 'Tahoma', serif;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
 .log-in-spotify {
     display: flex;
     align-items: center;
