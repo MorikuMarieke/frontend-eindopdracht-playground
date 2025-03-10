@@ -10,6 +10,11 @@
     background-color: var(--color-primary);
 }
 
+.desktop-menu {
+    display: flex;
+    gap: 1em;
+}
+
 .desktop-menu-list {
     display: flex;
     align-items: center;
@@ -136,6 +141,14 @@
 @media screen and  (min-width: 768px) and (max-width: 1024px) {
     .desktop-menu-list {
         gap: 1em;
+    }
+
+    .desktop-menu-list a {
+        font-size: 0.8em;
+    }
+
+    .sign-out-button {
+        font-size: 0.8em;
     }
 
     .logo-subtitle-wrapper h1 {

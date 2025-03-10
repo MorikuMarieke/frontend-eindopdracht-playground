@@ -205,6 +205,15 @@
     align-items: center;
 }
 
+.artist-details-home-page .search-difference {
+    margin-bottom: 1em;
+    color: var(--color-main-white);
+}
+
+.search-difference strong {
+    text-decoration: underline;
+}
+
 /*==== Media Queries ====*/
 
 @media screen and (min-width: 768px) {

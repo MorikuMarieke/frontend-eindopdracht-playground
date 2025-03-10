@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink} from 'react-router-dom';
 import Avatar from '../avatar/Avatar.jsx';
 import {SignOut} from '@phosphor-icons/react';
 import Button from '../button/Button.jsx';
+import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
-function DesktopNav({isAuth, logo}) {
+function DesktopNav({isAuth, logo, signOut}) {
+    const { spotifyProfileData } = useContext(SpotifyContext);
+
     return (
         <nav className="desktop-nav">
             {/* Logo & Title Section */}
@@ -32,7 +35,9 @@ function DesktopNav({isAuth, logo}) {
                                 <Button
                                     className="sign-out-button"
                                     buttonText="Sign out"
-                                    type="button">
+                                    type="button"
+                                    onClick={signOut}
+                                >
                                     <SignOut size={32}/>
                                 </Button>
                             </li>
@@ -44,6 +49,7 @@ function DesktopNav({isAuth, logo}) {
                         </>
                     )}
                 </ul>
+                {isAuth && spotifyProfileData?.images?.length > 0 && <Avatar imgSrc={spotifyProfileData.images[0]?.url} alt="Avatar" />}
             </div>
         </nav>
     );

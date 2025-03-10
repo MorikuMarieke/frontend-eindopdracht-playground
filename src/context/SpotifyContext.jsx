@@ -143,6 +143,7 @@ export function SpotifyContextProvider({children}) {
     const contextData = {
         spotifyAccessToken,
         spotifyProfileData,
+        setSpotifyProfileData,
         redirectToSpotifyAuth,
         handleSpotifyLogout,
     };

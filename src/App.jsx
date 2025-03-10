@@ -35,7 +35,7 @@ function App() {
                     element={isAuth === true ?
                         <Profile/>
                         :
-                        <Navigate to="/error"/>
+                        <Navigate to="/"/>
                     }
                 />
                 <Route
@@ -43,7 +43,7 @@ function App() {
                     element={isAuth === true ?
                         <PlaylistOverview/>
                         :
-                        <Navigate to="/error"/>
+                        <Navigate to="/"/>
                     }
                 />
                 <Route path="/genre-selection" element={<GenreSelection/>}/>

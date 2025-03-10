@@ -412,9 +412,11 @@ export default function Home() {
                             {artistDetails && artistDetails.name && (
                                 <div>
                                     <article className="artist-details-home-page">
-
+                                        {artistName.toLowerCase() !== artistDetails.name.toLowerCase() &&
+                                            <h3 className="search-difference">Did you mean <strong>[ {artistDetails.name} ]</strong> ? If not, try entering a different artist name. </h3>
+                                        }
                                         <div className="artist-img-wrapper">
-                                            <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                            <img src={artistDetails.images[0]?.url} alt={`${artistDetails.name} image`}/>
                                         </div>
                                         <Link to={`/artist/${artistDetails.id}`}>
                                             <div className="artist-info-link">

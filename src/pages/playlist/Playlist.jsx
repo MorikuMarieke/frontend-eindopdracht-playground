@@ -21,9 +21,13 @@ function Playlist() {
     const [playlist, setPlaylist] = useState([]);
     const [errorMessage, setErrorMessage] = useState('')
 
-    const {isAuth, addFavoritePlaylist, removeFavoritePlaylist, favoritePlaylists} = useContext(AuthContext);
+    const {isAuth, favoritePlaylists} = useContext(AuthContext);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         async function fetchToken() {

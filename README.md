@@ -69,4 +69,6 @@ Notities voor 2-3-25:
 - infoveld in application gebruiken voor genrearray. 
 - sign out button nav bar werkte niet, deze nog fixen [TODO]
 - genre selection is a lot of scrolling, arrow up to get the user back up if they are done selecting. [MAYBE ALS VERSLAG AF IS]
-- 
+- logging out still is fucked, need to add good conditioning when logging out and going to profile still manually gives error page. Or just skip it [MAYBE]
+- login/register pagina maken ipv alleen register
+- did you mean? Bij niet exact dezelfde naam

@@ -5,7 +5,7 @@ import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import InputField from '../../components/inputField/InputField.jsx';
 import Button from '../../components/button/Button.jsx';
 import spotifyLogo from '../../assets/Spotify logo black.png';
-import {HandPointing, House, Pencil, SignOut, Star} from '@phosphor-icons/react';
+import {HandPointing, House, Password, Pencil, SignOut, Star} from '@phosphor-icons/react';
 import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
@@ -15,7 +15,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
 import Rank from '../../components/rank/Rank.jsx';
-
+import isPasswordValid from '../../helpers/isPasswordValid.js';
 
 function Profile() {
     const [username, setUsername] = useState('');
@@ -24,8 +24,11 @@ function Profile() {
     const [info, setInfo] = useState('');
     const [loading, setLoading] = useState(false);
     const [editMode, setEditMode] = useState(false);
+
     const [error, setError] = useState(null);
     const [apiError, setApiError] = useState(null);
+    const [passwordError, setPasswordError] = useState(null);
+
     const [successfulProfileUpdate, toggleSuccessfulProfileUpdate] = useState(false);
 
     const [topTracks, setTopTracks] = useState([]);
@@ -112,41 +115,58 @@ function Profile() {
         e.preventDefault();
         setLoading(true);
 
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.put(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
-                username: username,
-                email: email,
-                password: password,
-                info: info,
-            }, {
-                headers: {
-                    'Accept': '/*',
-                    'Content-Type': 'application/json',
-                    'X-API-Key': import.meta.env.VITE_API_KEY,
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            setEditMode(false);
-            console.log("Profile updated:", response);
-            toggleSuccessfulProfileUpdate(true);
-            setTimeout(() => toggleSuccessfulProfileUpdate(false), 5000);
-        } catch (error) {
-            if (error.response) {
-                console.error("Error updating profile: " + error.response.data);
-            } else {
-                console.error("An error occurred while updating the profile.");
+        if (!isPasswordValid(password)) {
+            setPasswordError("Please enter a stronger password.");
+        } else {
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.put(`${NOVI_PLAYGROUND_BACKEND}/users/${user.username}`, {
+                    username: username,
+                    email: email,
+                    password: password,
+                    info: info,
+                }, {
+                    headers: {
+                        'Accept': '/*',
+                        'Content-Type': 'application/json',
+                        'X-API-Key': import.meta.env.VITE_API_KEY,
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                setEditMode(false);
+                console.log("Profile updated:", response);
+                toggleSuccessfulProfileUpdate(true);
+                setTimeout(() => toggleSuccessfulProfileUpdate(false), 5000);
+            } catch (error) {
+                if (error.response) {
+                    console.error("Error updating profile: " + error.response.data);
+                } else {
+                    console.error("An error occurred while updating the profile.");
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
+        }
+    }
+
+    function handlePasswordChange(e) {
+        const value = e.target.value;
+        setPassword(value);
+
+        if (value.length === 0) {
+            setPasswordError('Password cannot be empty.');
+        } else if (!isPasswordValid(value)) {
+            setPasswordError(
+                'Password must be at least 8 characters, include 1 uppercase, 1 lowercase, 1 number, and 1 special character.');
+        } else {
+            setPasswordError('');
         }
     }
 
     function handleCancelClick() {
         setEditMode(false);
     }
-
-    // TODO: edit to change password is UGLYYYY
 
     return (
         <main>
@@ -158,7 +178,7 @@ function Profile() {
                             <h3>Welcome to your profile page!</h3>
                             <Button
                                 className="sign-out-button"
-                                buttonText={loading ? "Signing out.." : "Sign out"}
+                                buttonText={"Sign out"}
                                 onClick={signOut}
                             >
                                 <SignOut size={32}/>
@@ -196,7 +216,7 @@ function Profile() {
                                     id="password"
                                     className="form-input"
                                     placeholder="New Password"
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={handlePasswordChange}
                                     disabled={!editMode}
                                 />
                             </>}
@@ -233,6 +253,19 @@ function Profile() {
                             </div>
                         </form>
                     </CardContainer>
+                    {passwordError &&
+                        <CardContainer>
+                            <CardTopBar color="primary" cardName="registration-error-message">
+                                <Password size={32}/><h3>Password rules</h3>
+                            </CardTopBar>
+                            <div className="card--register-error-message">
+                                {passwordError && <p className="error">{passwordError}</p>}
+
+                                {/*TODO: Still need to add password error with conditions.*/}
+
+                            </div>
+                        </CardContainer>
+                    }
 
                     {topTracks.length > 0 &&
                         <CardContainer>
@@ -313,23 +346,33 @@ function Profile() {
                                 <CardTopBar color="secondary">
                                     <h3>Spotify profile</h3>
                                 </CardTopBar>
-                                <div className="spotify-user-info">
-                                    <div>
-                                        <p>Username: {spotifyProfileData.display_name}</p>
-                                        {spotifyProfileData.images > 0 &&
-                                            <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>}
-                                        <p>Followers: {spotifyProfileData.followers.total}</p>
-                                    </div>
-                                    <Button
-                                        type="button"
-                                        className="spotify-log-out-button"
-                                        buttonText="Log out"
-                                        onClick={handleSpotifyLogout}
-                                    >
-                                        <div className="spotify-img-wrapper-profile">
-                                            <img src={spotifyLogo} alt="spotify-logo"/>
+                                <div className="spotify-user">
+                                    <p>Successful Spotify login! With a logged in Spotify profile you can listen to your
+                                        top tracks and see what
+                                        your top artists are. With a Spotify premium account you can listen to the full
+                                        tracks.</p>
+                                    <div className="user-info">
+                                        <div className="user-info-data">
+                                            {spotifyProfileData.images.length > 0 &&
+                                                <div className="spotify-avatar-wrapper">
+                                                    <img src={spotifyProfileData.images[0]?.url} alt="User Avatar"/>
+                                                </div>}
+                                            <div>
+                                                <p>Username: {spotifyProfileData.display_name}</p>
+                                                <p>Followers: {spotifyProfileData.followers.total}</p>
+                                            </div>
                                         </div>
-                                    </Button>
+                                        <Button
+                                            type="button"
+                                            className="spotify-log-out-button"
+                                            buttonText="Log out"
+                                            onClick={handleSpotifyLogout}
+                                        >
+                                            <div className="spotify-img-wrapper-profile">
+                                                <img src={spotifyLogo} alt="spotify-logo"/>
+                                            </div>
+                                        </Button>
+                                    </div>
                                 </div>
                             </> :
                             <section className="log-in-spotify">
