@@ -181,7 +181,7 @@ export default function Home() {
                 if (!e.response) {
                     setApiError('Network error. Please check your connection.');
                 } else if (e.response.status === 401) {
-                    setApiError('Unauthorized. Your Spotify token may have expired.');
+                    setApiError('Unauthorized. Your Spotify token may have expired. Please reload.');
                 } else if (e.response.status === 429) {
                     setApiError('Rate limit exceeded. Try again later.');
                 } else {
@@ -326,13 +326,15 @@ export default function Home() {
 
                     {/*TODO: This section appears when user is logged in*/}
                     {isAuth && !spotifyProfileData &&
-                        <CardContainer className="connect-spotify">
-                            <div className="spotify-img-wrapper">
-                                <img src={spotifyLogo} alt="spotify-logo"/>
-                            </div>
-                            <p>Connect your Spotify account to your profile and import your playlists directly to
-                                Spotify</p>
-                        </CardContainer>
+                        <Link to={'/profile'}>
+                            <CardContainer className="connect-spotify">
+                                <div className="spotify-img-wrapper">
+                                    <img src={spotifyLogo} alt="spotify-logo"/>
+                                </div>
+                                <p>Connect your Spotify account to your profile and import your playlists directly to
+                                    Spotify</p>
+                            </CardContainer>
+                        </Link>
                     }
                     {!isAuth &&
                         <CardContainer>
@@ -413,10 +415,13 @@ export default function Home() {
                                 <div>
                                     <article className="artist-details-home-page">
                                         {artistName.toLowerCase() !== artistDetails.name.toLowerCase() &&
-                                            <h3 className="search-difference">Did you mean <strong>[ {artistDetails.name} ]</strong> ? If not, try entering a different artist name. </h3>
+                                            <h3 className="search-difference">Did you
+                                                mean <strong>[ {artistDetails.name} ]</strong> ? If not, try entering a
+                                                different artist name. </h3>
                                         }
                                         <div className="artist-img-wrapper">
-                                            <img src={artistDetails.images[0]?.url} alt={`${artistDetails.name} image`}/>
+                                            <img src={artistDetails.images[0]?.url}
+                                                 alt={`${artistDetails.name} image`}/>
                                         </div>
                                         <Link to={`/artist/${artistDetails.id}`}>
                                             <div className="artist-info-link">

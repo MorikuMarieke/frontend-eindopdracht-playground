@@ -39,6 +39,7 @@ function Profile() {
     const {
         spotifyAccessToken, spotifyProfileData, redirectToSpotifyAuth, handleSpotifyLogout,
     } = useContext(SpotifyContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getUserData() {
@@ -224,7 +225,7 @@ function Profile() {
 
                             <div className="login-form-button-container">
                                 {!editMode && <Button
-                                    buttonText="Edit profile data or password"
+                                    buttonText="Edit account details or password"
                                     type="button"
                                     className="secondary-button"
                                     onClick={() => {
@@ -413,6 +414,7 @@ function Profile() {
                                             type="button"
                                             className="light-button to-home-page"
                                             buttonText="Go to home-page"
+                                            onClick={() => navigate('/')}
                                         >
                                             <House size={24}/>
                                         </Button>

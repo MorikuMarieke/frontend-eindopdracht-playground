@@ -1,74 +1,38 @@
-Notities, logging, dit later verwerken in verantwoordingsdocument:
+# Deelopdracht 4: Installatiehandleiding
 
-- Wat zijn de limieten van de Spotify API in samenwerking met backend, kan ik gebruik maken van de novi backend met EN
-  zonder spotify API.
-- Ik moet mijn eigen account hebben om calls te kunnen maken.
-- de novi backend kan maximaal 10.000 karakters hebben.
+## Titel van de applicatie
+Spotify Playground
 
-Stap 1. Sign Out functie maken [done]
+Het project kan worden gevonden op de onderstaande GitHub link:
 
-Stap 2. Andere user functionaliteiten
-~~- Hoe kan ik gebruiker verwijderen? --> Kan niet?~~
+https://github.com/MorikuMarieke/frontend-eindopdracht-playground
 
-- User data aanpassen (username, e-mail, password) [done]
-- Automatische e-mail instellen, gaat dat makkelijk? Dit uitzoeken. [ga ik niet doen, tenzij dit nodig is voor eindopdracht]
+### De home pagina:
+![img.png](src%2Fassets%2Fimg.png)
 
-Stap 3. Genre is niet mogelijk, welke nieuwe functionaliteit ga ik gebruiken met de spotify api?
+## Wat kun je met deze applicatie?
+Deze applicatie is ontwikkeld met de Spotify API. Je kunt artiesten opzoeken en informatie over de artiesten lezen op een artiesten pagina. Daarnaast kun je playlists selecteren op basis van een genre input, deze input geeft een aantal playlists terug die de gebruiker kan beluisteren op de playlist pagina. 
 
-1. Gekozen categorieën weergeven + verwijderen [done, met zelfgemaakte array van genres ipv de categorieën]
-
-2. Zoeken naar playlists:
-
-    - playlists op basis van genre met de lijst die ik van github heb. [done]
-
-2. Artiest zoeken op basis van naam invoer, informatie weergeven, link naar pagina met muziek, of dit in component
-   verwerken dat je artist info weergeeft met de eerste 5 populaire tracks van deze artiest. Of doorlinken naar een
-   andere pagina met meer info. [done]
-    - Artist page voorzien van een knop om snel terug naar home te linken. 
-    - Indien mogelijk het invoer-veld voorzien van naam-suggesties. 
-
-3.
-
-Stap 4. Music player component maken. Zo schrijven dat het een variabele ID verwacht en te gebruiken is met map methode. [done] was alleen mogelijk met iframe
-
-Stap 5. Mogelijk maken om tracks toe te voegen aan een zelfgemaakte playlist voor ingelogde gebruikers. [niet mogelijk] kan alleen playlists opslaan.
-
-Stap 6. Spotify user data koppelen [done]
-
-IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
-
-1. localstorage uitlezen op mount (categorieën aanwezig? Dan volgende stap, niet aanwezig? Dan klik hier om categorieën
-   te selecteren)
-2. categorieën in de state zetten als array
-3. mappen -> categorie-elementen weergeven op de pagina (op basis van state)
-    4. -> als je op 1 element klikt moet je die uit de state array verwijderen
-    5. -> daarna nieuwe array in local storage
-
-- Eerst implementeren wat mogelijk is, dus favoriete artiest invoeren en daar muziek van luisteren, favoriete artiest en
-  dan recommendations op basis daarvan. 
-
-- Het lijkt erop alsof je als je ingelogd bent in spotify web, dat deze informatie dan ook toepasselijk is voor de spotify componenten (zoals de web player, alleen preview mogelijk niet ingelogd, hele liedje af te luisteren met login)
-
-Notities voor 2-3-25: 
-- go back button niet handig, omdat ik ook door link vanaf webpagina playlist overview, hier iets anders voor verzinnen.  nu nog een button go to my playlists toevoegen [done]
-- add to favorites moet conditioneel verschijnen als de playlist nog niet is toegevoegd, anders verwijder knop conditoneel laten verschijnen. [done]
-- finalizen look voor playlist overview pagina [done]
-- edit mode toepassen voor playlist overview. [done]
-- error state moet overal nog geïmplementeerd worden. Dit moet ik nog ff checken met Sam [TODO]
-- next button voor playlists vanuit genres. [MAYBE]
-- general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen. [MAYBE EERST POLISH EN VERSLAG]
-- if time: aria labels [MAYBE, EERST POLISH EN VERSLAG]
-- TODO: If it's a preselected name(from password manager), you cannot change the name, why? It does work on reload. Letters are small when unclickable. [NAVRAGEN]
-- playlist only saveable when you have an account! (how to fix, make ternary on isauth for this feature) [done, dit via localStorage gedaan]
-- geldig e-mail adres regels bij registratie en aanpassen van e-mail adres [MAYBE, WEL MEER PRIO DAN DE REST]
-- veilig wachtwoord eisen instellen bij aanpassen van wachtwoord en registreren [MAYBE]
-- artist page playlists ophalen waar artist in gefeatured is dmv artiest naam als zoekterm. [DEZE VIND IK NOG WEL LEUK OM TE DOEN]
-- fetchplaylists naar context verplaatsen omdat ik het op 2 paginas gebruik. [done]
-- playlist zoeken op basis van algemene search input, kan gelinkt worden aan description van playlist, dan een weergave van naam en description en doorlinken naar pagina waar je de playlist kunt afspelen, mogelijk maken om deze songs toe te voegen aan een eigen playlist (dat moet ik nog uitzoeken hoe het moet, maar dit komt veel later, andere feature) [MAYBE, ALS VERSLAG AF IS]
-- localstorage behouden bij uitlog, maar isAuth bepaalt weergave van playlists
-- infoveld in application gebruiken voor genrearray. 
-- sign out button nav bar werkte niet, deze nog fixen [TODO]
-- genre selection is a lot of scrolling, arrow up to get the user back up if they are done selecting. [MAYBE ALS VERSLAG AF IS]
-- logging out still is fucked, need to add good conditioning when logging out and going to profile still manually gives error page. Or just skip it [MAYBE]
-- login/register pagina maken ipv alleen register
-- did you mean? Bij niet exact dezelfde naam
+## Hoe kun je de applicatie runnen?
+1. Kopieer de SSH link uit het GitHub project.
+2. Open WebStorm op je computer.
+3. Kies rechts bovenin voor 'New project from version control'. 
+4. Vul de SSH link in van de github link.
+5. deze applicatie te draaien heb je de volgende codes nodig. Deze kun je invoeren in het env.dist bestand:
+```
+VITE_API_KEY=playground:kpTCrF45XuuluvvATUSC
+VITE_SPOTIFY_CLIENT_ID=8986546153b549719e7bc9ddf907607f
+VITE_SPOTIFY_CLIENT_SECRET=8f11e9a8271c4b859abc12d656ba9154
+```
+6. Draai het programma met het ```npm run dev```
+7. Je kunt de applicatie openen op http://localhost:5173/
+8. Je kunt zelf een account aanmaken of gebruikmaken van deze account die ik heb aangemaakt.
+```
+Gebruikersnaam:     banaantje
+Wachtwoord:         12345678
+```
+9. Om gebruik te maken van de Spotify-gerelateerde functionaliteiten heb ik jullie voorzien van een Spotify-account. Je kunt ook inloggen met je eigen Spotify-account! De login gegevens zijn:
+```
+E-mailadres:        marieke.van.der.staaij@novi-education.nl
+Wachtwoord:         Novi_Eindopdracht1
+```

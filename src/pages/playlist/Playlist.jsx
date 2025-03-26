@@ -11,7 +11,6 @@ import {API_BASE} from '../../constants/constants.js';
 import {useNavigate, useParams} from 'react-router-dom';
 import {AuthContext} from '../../context/AuthContext.jsx';
 import DOMPurify from "dompurify";
-
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
 import FavoriteIcon from '../../components/favoriteIcon/FavoriteIcon.jsx';
 

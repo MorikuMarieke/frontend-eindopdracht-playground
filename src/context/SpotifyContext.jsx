@@ -37,7 +37,6 @@ export function SpotifyContextProvider({children}) {
 
     const exchangeCodeForAccessToken = async (authorizationCode) => {
         const redirectUri = 'http://localhost:5173/profile';
-        console.log("Authorization code", authorizationCode)
         try {
             const response = await axios.post(
                 `${SPOTIFY_TOKEN_URL}`,

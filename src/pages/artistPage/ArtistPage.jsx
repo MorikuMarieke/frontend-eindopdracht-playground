@@ -9,6 +9,7 @@ import '../../constants/genreArray.js'
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import RadioPlayer from '../../components/radioPlayer/RadioPlayer.jsx';
+import fallbackImage from '../../assets/default-fallback-image.png';
 
 function ArtistPage() {
     const {id} = useParams();
@@ -62,7 +63,7 @@ function ArtistPage() {
                     },
                 });
                 setArtistDetails(response.data);
-                console.log(response.data);
+                console.log("Artist details from useEffect: ", response.data);
             } catch (error) {
                 console.error("Error fetching artist details:", error);
             }
@@ -87,37 +88,44 @@ function ArtistPage() {
 
     }, [token, id]);
 
+    useEffect(() => {
+        console.log("Artist Details:", artistDetails);
+    }, [artistDetails]);
+
 
     return (
         <main>
             <OuterContainer type="artist-info">
                 <PageContainer className="page-artist-info">
-                    {artistDetails && artistDetails.name && artistDetails.popularity && artistDetails.followers?.total && (
+                    {artistDetails?.name && artistDetails?.popularity && artistDetails?.followers?.total && (
                         <>
+                            {/* Artist Info Card */}
                             <CardContainer className="artist-info-page-card">
-                                <CardTopBar
-                                    cardName="artist-info"
-                                    color="secondary"
-                                >
+                                <CardTopBar cardName="artist-info" color="secondary">
                                     <h3>{artistDetails.name}</h3>
                                 </CardTopBar>
                                 <div className="artist-page-image-container">
                                     <div className="artist-img-wrapper">
-                                        <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                        <img
+                                            src={artistDetails.images?.[0]?.url || fallbackImage}
+                                            alt={`${artistDetails.name} image`}
+                                        />
                                     </div>
                                 </div>
                             </CardContainer>
+
+                            {/* Artist Details */}
                             <CardContainer>
                                 <CardTopBar color="primary">
                                     <h3>Info</h3>
                                 </CardTopBar>
                                 <div className="artist-info-card">
                                     <div className="artist-info-box">
-                                        <h3>Follower total</h3>
-                                        <p>{artistDetails.followers.total}</p>
+                                        <h3>Follower Total</h3>
+                                        <p>{artistDetails.followers?.total.toLocaleString()}</p>
                                     </div>
                                     <div className="artist-info-box">
-                                        <h3>Popularity score</h3>
+                                        <h3>Popularity Score</h3>
                                         <p>{artistDetails.popularity}/100</p>
                                     </div>
                                 </div>
@@ -126,14 +134,16 @@ function ArtistPage() {
                     )}
                     <CardContainer>
                         <CardTopBar cardName="top-tracks" color="secondary">
-                            <h3>{artistDetails.name}'s top tracks</h3>
+                            <h3>{artistDetails?.name ? artistDetails.name : "Artist"}'s top tracks</h3>
                         </CardTopBar>
                         <div className="playlist-container">
-                            <ul className="playlist-background" >
+                            <ul className="playlist-background">
                                 {artistTopTracks && artistTopTracks.map((track) => {
                                     return (
                                         <li className="top-track-list-item" key={track.id}>
-                                            <RadioPlayer src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`} height={80}/>
+                                            <RadioPlayer
+                                                src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
+                                                height={80}/>
                                         </li>
                                     )
                                 })}
