@@ -16,6 +16,8 @@ function ArtistPage() {
     const [artistDetails, setArtistDetails] = useState({});
     const [artistTopTracks, setArtistTopTracks] = useState([]);
     const [token, setToken] = useState(null);
+    const [topTracksError, setTopTracksError] = useState(null);
+    const [artistDetailsError, setArtistDetailsError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -66,12 +68,13 @@ function ArtistPage() {
                 console.log("Artist details from useEffect: ", response.data);
             } catch (error) {
                 console.error("Error fetching artist details:", error);
+                setArtistDetailsError("Something went wrong while loading artist details. Please try again.");
             }
         }
 
         async function fetchArtistTopTracks() {
             try {
-                const response = await axios.get(`${API_BASE}/artists/${id}/top-tracks`, {
+                const response = await axios.get(`${API_BASE}/artists/${id}/top-tracksx`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
@@ -80,6 +83,7 @@ function ArtistPage() {
                 setArtistTopTracks(response.data.tracks);
             } catch (e) {
                 console.error(e);
+                setTopTracksError("Something went wrong while loading artist top tracks. Please try again.");
             }
         }
 
@@ -97,9 +101,10 @@ function ArtistPage() {
         <main>
             <OuterContainer type="artist-info">
                 <PageContainer className="page-artist-info">
-                    {artistDetails?.name && artistDetails?.popularity && artistDetails?.followers?.total && (
+                    {artistDetails?.name != null &&
+                        artistDetails?.popularity != null &&
+                        artistDetails?.followers?.total != null && (
                         <>
-                            {/* Artist Info Card */}
                             <CardContainer className="artist-info-page-card">
                                 <CardTopBar cardName="artist-info" color="secondary">
                                     <h3>{artistDetails.name}</h3>
@@ -114,7 +119,6 @@ function ArtistPage() {
                                 </div>
                             </CardContainer>
 
-                            {/* Artist Details */}
                             <CardContainer>
                                 <CardTopBar color="primary">
                                     <h3>Info</h3>
@@ -132,6 +136,18 @@ function ArtistPage() {
                             </CardContainer>
                         </>
                     )}
+
+                    {artistDetailsError && (
+                        <CardContainer>
+                            <CardTopBar color="primary">
+                                <h3>Error</h3>
+                            </CardTopBar>
+                            <div className="error-message">
+                                <p>{artistDetailsError}</p>
+                            </div>
+                        </CardContainer>
+                    )}
+                    {artistTopTracks && artistTopTracks.length > 0 &&
                     <CardContainer>
                         <CardTopBar cardName="top-tracks" color="secondary">
                             <h3>{artistDetails?.name ? artistDetails.name : "Artist"}'s top tracks</h3>
@@ -150,6 +166,17 @@ function ArtistPage() {
                             </ul>
                         </div>
                     </CardContainer>
+                    }
+                    {topTracksError && (
+                        <CardContainer>
+                            <CardTopBar color="primary">
+                                <h3>Error</h3>
+                            </CardTopBar>
+                            <div className="error-message">
+                                <p>{topTracksError}</p>
+                            </div>
+                        </CardContainer>
+                    )}
                 </PageContainer>
             </OuterContainer>
         </main>

@@ -18,7 +18,7 @@ function Playlist() {
     const {id} = useParams();
     const [token, setToken] = useState(null);
     const [playlist, setPlaylist] = useState([]);
-    const [errorMessage, setErrorMessage] = useState('')
+    const [error, setError] = useState('')
 
     const {isAuth, favoritePlaylists} = useContext(AuthContext);
 
@@ -49,7 +49,7 @@ function Playlist() {
                 localStorage.setItem("spotifyToken", response.data.access_token);
                 setToken(response.data.access_token);
             } catch (e) {
-                setErrorMessage("Failed to authenticate with Spotify. Please try again later.");
+                setError("Failed to authenticate with Spotify. Please try again later.");
                 console.error("Error fetching token:", e);
             }
         }
@@ -75,7 +75,7 @@ function Playlist() {
                 setPlaylist(response.data);
                 console.log(response.data);
             } catch (error) {
-                setErrorMessage("Failed to load playlist. Please check your connection and try again.");
+                setError("Failed to load playlist. Please check your connection and try again.");
                 console.error("Error fetching artist details:", error);
             }
         }
@@ -114,9 +114,9 @@ function Playlist() {
                                     </Button>}
                                 </div>
                             </CardTopBar>
-                            {errorMessage &&
+                            {error &&
                                 <div className="playlist-container">
-                                    <p>{errorMessage}</p>
+                                    <p>{error}</p>
                                 </div>
                             }
                             {playlist ?
@@ -144,7 +144,7 @@ function Playlist() {
                                 </div>
                                 :
                                 <div className="playlist-container">
-                                    !errorMessage && <p>Loading playlist...</p>
+                                    !error && <p>Loading playlist...</p>
                                 </div>}
                         </CardContainer>
                     </PageContainer>

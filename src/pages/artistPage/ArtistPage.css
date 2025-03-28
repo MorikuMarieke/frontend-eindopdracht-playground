@@ -30,3 +30,9 @@
 .top-track-list-item {
     list-style: none;
 }
+
+.error-message {
+    background-color: var(--color-main-white);
+    border-radius: 0 0 0.8em 0.8em;
+    padding: 1em;
+}

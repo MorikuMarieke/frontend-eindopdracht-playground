@@ -49,31 +49,52 @@ IMPLEMENTATIE STRATEGIE VOOR CATEGORIEËN EN GENRE ELEMENTEN
 ``
 - Het lijkt erop alsof je als je ingelogd bent in spotify web, dat deze informatie dan ook toepasselijk is voor de spotify componenten (zoals de web player, alleen preview mogelijk niet ingelogd, hele liedje af te luisteren met login)
 
-Notities voor 2-3-25:
+Notities voor TODO/done:
+
+DONE:
 - go back button niet handig, omdat ik ook door link vanaf webpagina playlist overview, hier iets anders voor verzinnen.  nu nog een button go to my playlists toevoegen [done]
 - add to favorites moet conditioneel verschijnen als de playlist nog niet is toegevoegd, anders verwijder knop conditoneel laten verschijnen. [done]
 - finalizen look voor playlist overview pagina [done]
 - edit mode toepassen voor playlist overview. [done]
-- error state moet overal nog geïmplementeerd worden. Dit moet ik nog ff checken met Sam [TODO]
-- next button voor playlists vanuit genres. [MAYBE]
-- general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen. [MAYBE EERST POLISH EN VERSLAG]
-- if time: aria labels [MAYBE, EERST POLISH EN VERSLAG]
-- TODO: If it's a preselected name(from password manager), you cannot change the name, why? It does work on reload. Letters are small when unclickable. [NAVRAGEN]
 - playlist only saveable when you have an account! (how to fix, make ternary on isauth for this feature) [done, dit via localStorage gedaan]
 - geldig e-mail adres regels bij registratie en aanpassen van e-mail adres [MAYBE, WEL MEER PRIO DAN DE REST]
 - veilig wachtwoord eisen instellen bij aanpassen van wachtwoord en registreren [MAYBE]
 - artist page playlists ophalen waar artist in gefeatured is dmv artiest naam als zoekterm. [DEZE VIND IK NOG WEL LEUK OM TE DOEN]
 - fetchplaylists naar context verplaatsen omdat ik het op 2 paginas gebruik. [done]
-- playlist zoeken op basis van algemene search input, kan gelinkt worden aan description van playlist, dan een weergave van naam en description en doorlinken naar pagina waar je de playlist kunt afspelen, mogelijk maken om deze songs toe te voegen aan een eigen playlist (dat moet ik nog uitzoeken hoe het moet, maar dit komt veel later, andere feature) [MAYBE, ALS VERSLAG AF IS]
 - localstorage behouden bij uitlog, maar isAuth bepaalt weergave van playlists [done?]
-- infoveld in application gebruiken voor genrearray.
+- infoveld in application gebruiken voor genrearray. [nee]
 - sign out button nav bar werkte niet, deze nog fixen [done]
-- genre selection is a lot of scrolling, arrow up to get the user back up if they are done selecting. [MAYBE ALS VERSLAG AF IS]
-- logging out still is fucked, need to add good conditioning when logging out and going to profile still manually gives error page. Or just skip it [MAYBE]
-- login/register pagina maken ipv alleen register [MAYBE]
 - did you mean? Bij niet exact dezelfde naam [done]
+- maramono werkt niet bij artist page?! [done] waarmee heeft dat te maken? Falsy values is ook 0, popularity score messed things up.
+- genre selection is a lot of scrolling, arrow up to get the user back up if they are done selecting. [done]
+
+
+MUST:
+- error state moet overal nog geïmplementeerd worden. Dit moet ik nog ff checken met Sam [TODO]
+-> pages:
+        - artistPage [done]
+        - homePage [done]
+        - genreSelectionPage [not needed?]
+        - playlistPage [done]
+        - profilePage
+        - playlistOverview [done]
+        - registrationPage
+
+
+SHOULD:
+- TODO: If it's a preselected name(from password manager), you cannot change the name, why? It does work on reload. Letters are small when unclickable. [NAVRAGEN]
 - on hover playlists verschijnt tekst: Go to playlist en kleur van letters verandert. [TODO]
+- playlist zoeken op basis van algemene search input, kan gelinkt worden aan description van playlist, dan een weergave van naam en description en doorlinken naar pagina waar je de playlist kunt afspelen, mogelijk maken om deze songs toe te voegen aan een eigen playlist (dat moet ik nog uitzoeken hoe het moet, maar dit komt veel later, andere feature) [MAYBE, ALS VERSLAG AF IS]
+
+COULD:
+- general input maken voor de playlist search, zodat mensen ook bijv. op mood kunnen zoeken of whatever ze willen. [MAYBE EERST POLISH EN VERSLAG]
 - navbar links in desktop version show which page is currently active. [MAYBE]
-- maramono werkt niet bij artist page?! [TODO] waarmee heeft dat te maken?
+- login/register pagina maken ipv alleen register [MAYBE]
+- logging out still is fucked, need to add good conditioning when logging out and going to profile still manually gives error page. Or just skip it [MAYBE]
+
+WOULD:
+- next button voor playlists vanuit genres. [MAYBE]
+- if time: aria labels [MAYBE, EERST POLISH EN VERSLAG]
 - bij meerdere accounts wordt nu de localstorage gebruikt met dezelfde spotify account. [TODO]
--
+
+

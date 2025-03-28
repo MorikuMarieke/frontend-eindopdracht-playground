@@ -28,6 +28,9 @@ function Profile() {
     const [error, setError] = useState(null);
     const [apiError, setApiError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
+    const [spotifyTopTracksError, setSpotifyTopTracksError] = useState(null);
+    const [spotifyTopArtistsError, setSpotifyTopArtistsError] = useState(null);
+
 
     const [successfulProfileUpdate, toggleSuccessfulProfileUpdate] = useState(false);
 
