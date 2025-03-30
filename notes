@@ -76,9 +76,9 @@ MUST:
         - homePage [done]
         - genreSelectionPage [not needed?]
         - playlistPage [done]
-        - profilePage
+        - profilePage [done]
         - playlistOverview [done]
-        - registrationPage
+        - registrationPage [done]
 
 
 SHOULD:

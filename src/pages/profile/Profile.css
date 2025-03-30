@@ -83,6 +83,13 @@
     gap: 1em;
 }
 
+.error-user-data {
+    display: flex;
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
+}
+
 .spotify-img-wrapper-profile {
     display: flex;
     flex: 0 0 2.5em;
@@ -108,7 +115,6 @@
     object-fit: cover;
     border-radius: 50%;
     border: 3px solid var(--color-main-white);
-
 }
 
 .spotify-log-out-button {

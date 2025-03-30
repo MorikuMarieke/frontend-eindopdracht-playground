@@ -11,6 +11,7 @@ export const SpotifyContext = createContext({});
 export function SpotifyContextProvider({children}) {
     const [spotifyAccessToken, setSpotifyAccessToken] = useState(localStorage.getItem('access_token') || null);
     const [spotifyProfileData, setSpotifyProfileData] = useState(JSON.parse(localStorage.getItem('spotify_profile')) || null);
+    const [spotifyProfileDataError, setSpotifyUserDataError] = useState(null);
 
     const navigate = useNavigate();
 
@@ -84,6 +85,8 @@ export function SpotifyContextProvider({children}) {
             console.log("User details:", response.data);
         } catch (error) {
             console.error('Error fetching user profile', error);
+            setSpotifyUserDataError("Error fetching Spotify user profile.")
+
         }
     };
 
@@ -145,6 +148,7 @@ export function SpotifyContextProvider({children}) {
         setSpotifyProfileData,
         redirectToSpotifyAuth,
         handleSpotifyLogout,
+        spotifyProfileDataError,
     };
 
     return (
