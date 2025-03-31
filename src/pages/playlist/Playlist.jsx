@@ -73,7 +73,6 @@ function Playlist() {
                     },
                 });
                 setPlaylist(response.data);
-                console.log(response.data);
             } catch (error) {
                 setError("Failed to load playlist. Please check your connection and try again.");
                 console.error("Error fetching artist details:", error);
@@ -83,8 +82,6 @@ function Playlist() {
         fetchPlaylist();
 
     }, [token, id]);
-
-    console.log("DOMPurify:", DOMPurify)
 
     return (
         <>

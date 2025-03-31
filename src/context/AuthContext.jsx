@@ -48,8 +48,6 @@ export function AuthContextProvider({ children }) {
         const fetchPlaylists = async () => {
             const storedPlaylistIds = JSON.parse(localStorage.getItem("favoritePlaylists")) || [];
 
-            console.log("Fetching Playlists for IDs:", storedPlaylistIds);
-
             if (storedPlaylistIds.length === 0) {
                 setPlaylistFullData([]);
                 return;
@@ -63,19 +61,16 @@ export function AuthContextProvider({ children }) {
                 }
 
                 const playlistRequests = storedPlaylistIds.map(id => {
-                    console.log(`Fetching playlist ID: ${id}`);
                     return axios.get(`${API_BASE}/playlists/${id}`, {
                         headers: {Authorization: `Bearer ${token}`},
                     });
                 });
 
                 const playlistResponses = await Promise.allSettled(playlistRequests);
-                console.log("Playlist Responses:", playlistResponses);
 
                 const validPlaylists = playlistResponses
                     .filter(res => res.status === "fulfilled")
                     .map(res => res.value.data);
-                console.log("valid playlists:", validPlaylists)
 
                 setPlaylistFullData(validPlaylists);
 
@@ -95,7 +90,6 @@ export function AuthContextProvider({ children }) {
             localStorage.setItem('token', JWT);
             const decodedToken = jwtDecode(JWT);
             await fetchUserData(decodedToken.sub, JWT, '/profile');
-            console.log(decodedToken);
         } catch (e) {
             console.error('Error signing in:', e);
             localStorage.removeItem('token');
@@ -108,7 +102,6 @@ export function AuthContextProvider({ children }) {
     }
 
     function signOut() {
-        console.log("Signing out...");
         toggleIsAuth( {
             isAuth: false,
             user: {},
@@ -142,7 +135,6 @@ export function AuthContextProvider({ children }) {
             if (redirectUrl) {
                 navigate(redirectUrl);
             }
-            console.log(result.data);
 
         } catch (e) {
             console.error('Error fetching user data:', e);
@@ -162,7 +154,6 @@ export function AuthContextProvider({ children }) {
             if (!prevFavorites.includes(playlistId)) {
                 const updatedFavorites = [...prevFavorites, playlistId];
                 localStorage.setItem("favoritePlaylists", JSON.stringify(updatedFavorites));
-                console.log(updatedFavorites);
                 return updatedFavorites;
             }
             return prevFavorites;

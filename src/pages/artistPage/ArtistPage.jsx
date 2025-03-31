@@ -19,8 +19,6 @@ function ArtistPage() {
     const [topTracksError, setTopTracksError] = useState(null);
     const [artistDetailsError, setArtistDetailsError] = useState(null);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         async function fetchToken() {
             const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
@@ -40,7 +38,7 @@ function ArtistPage() {
                     }
                 );
                 localStorage.setItem("spotifyToken", response.data.access_token);
-                setToken(response.data.access_token);  // Update token state
+                setToken(response.data.access_token);
             } catch (e) {
                 console.error("Error fetching token:", e);
             }
@@ -65,7 +63,6 @@ function ArtistPage() {
                     },
                 });
                 setArtistDetails(response.data);
-                console.log("Artist details from useEffect: ", response.data);
             } catch (error) {
                 console.error("Error fetching artist details:", error);
                 setArtistDetailsError("Something went wrong while loading artist details. Please try again.");
@@ -74,12 +71,11 @@ function ArtistPage() {
 
         async function fetchArtistTopTracks() {
             try {
-                const response = await axios.get(`${API_BASE}/artists/${id}/top-tracksx`, {
+                const response = await axios.get(`${API_BASE}/artists/${id}/top-tracks`, {
                     headers: {
                         Authorization: 'Bearer ' + token,
                     },
                 });
-                console.log(response.data.tracks);
                 setArtistTopTracks(response.data.tracks);
             } catch (e) {
                 console.error(e);
@@ -89,13 +85,7 @@ function ArtistPage() {
 
         fetchArtist();
         fetchArtistTopTracks();
-
     }, [token, id]);
-
-    useEffect(() => {
-        console.log("Artist Details:", artistDetails);
-    }, [artistDetails]);
-
 
     return (
         <main>

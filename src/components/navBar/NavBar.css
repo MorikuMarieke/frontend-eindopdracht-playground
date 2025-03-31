@@ -1,3 +1,7 @@
+/* ========================================
+   Component: NavBar
+======================================== */
+
 /*===== Desktop Navbar =====*/
 .desktop-nav {
     display: flex;
@@ -51,6 +55,13 @@
     color: var(--color-main-white);
 }
 
+.active-link {
+    border-bottom: 2px solid var(--color-main-white);
+}
+
+.default-link {
+    border-bottom: 2px solid transparent;
+}
 
 /*---------------------------------------------------------------*/
 
@@ -61,7 +72,7 @@
     width: 100vw;
 }
 
-/* Mobile Logo & Title */
+/* ----- Mobile Logo & Title ----- */
 .logo-title-wrapper.mobile {
     display: flex;
     gap: 1em;
@@ -82,7 +93,7 @@
     font-size: 0.85rem;
 }
 
-/* Mobile Menu (Slides from the Right) */
+/* ----- Mobile Menu (Slides from the Right) ----- */
 .mobile-menu {
     position: fixed;
     top: 0;
@@ -104,7 +115,7 @@
     right: 0;
 }
 
-.mobile-menu.open ul {
+.mobile-menu ul {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,7 +127,7 @@
     text-transform: uppercase;
 }
 
-/* Hamburger Button */
+/* ----- Hamburger Button ----- */
 .menu-toggle {
     position: absolute;
     top: 10px;
@@ -129,9 +140,9 @@
     z-index: 101;
 }
 
-/*-------------Media queries--------------------------------------------------*/
+/* ------------- Media queries ------------ */
 
-/* Hide hamburger button on desktop */
+/* ----- Hide hamburger button on desktop ----- */
 @media screen and (min-width: 768px) {
     .menu-toggle {
         display: none;

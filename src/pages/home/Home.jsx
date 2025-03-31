@@ -11,7 +11,7 @@ import {
     UserCircle,
     XCircle,
     ArrowFatRight,
-    Trash, WarningCircle
+    Trash, WarningCircle, Headphones, Heart
 } from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
@@ -23,6 +23,7 @@ import axios from 'axios';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import {genres} from '../../constants/genreArray.js';
 import {SpotifyContext} from '../../context/SpotifyContext.jsx';
+import FavoriteIcon from '../../components/favoriteIcon/FavoriteIcon.jsx';
 
 export default function Home() {
     // For sign in functionality
@@ -45,7 +46,7 @@ export default function Home() {
     const navigate = useNavigate();
 
     // Context
-    const {isAuth, signIn, signOut, user} = useContext(AuthContext);
+    const {isAuth, signIn, signOut, user, favoritePlaylists} = useContext(AuthContext);
     const {spotifyProfileData} = useContext(SpotifyContext);
 
     useEffect(() => {
@@ -484,17 +485,24 @@ export default function Home() {
                                     {playlistsByGenre.slice(0, 10).map((playlist) => (
                                         <Link to={`/playlist/${playlist.id}`} key={playlist.id}>
                                             <li>
-
                                                 <Button
                                                     className="playlist-list-item"
                                                     type="button"
-                                                    buttonText={playlist.name}
-
                                                 >
                                                     <div className="playlist-img-wrapper">
                                                         <img className="playlist-img" src={playlist.images[0].url}
                                                              alt="playlist-image"/>
                                                     </div>
+                                                    <div className="playlist-info-container">
+                                                        <h3>{playlist.name}</h3>
+                                                        <h3 className="playlist-hover-text"><Headphones size={24} />Go to playlist</h3>
+                                                    </div>
+                                                    {favoritePlaylists.includes(playlist.id) &&
+                                                        <>
+                                                        <Heart className="favorite-heart" size={32} weight="fill" />
+                                                        <Heart className="favorite-heart-outline" size={32} />
+                                                        </>
+                                                }
                                                 </Button>
                                             </li>
                                         </Link>

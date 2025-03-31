@@ -1,3 +1,7 @@
+/* ========================================
+   Page: Genre Selection
+======================================== */
+
 .selected-genres-container {
     display: flex;
     align-items: center;
@@ -6,7 +10,6 @@
     gap: 0.5em 0.5em;
     padding: 1em;
     background-color: var(--color-main-white);
-    /*border-radius: 0 0 1.2em 1.2em;*/
 }
 
 .selected-genres-container h3 {
@@ -27,7 +30,6 @@
     flex-wrap: wrap;
     list-style: none;
     gap: 0.5em 0.5em;
-
 }
 
 .category-selection {

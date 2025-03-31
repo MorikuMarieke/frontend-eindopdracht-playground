@@ -129,9 +129,15 @@
     border-radius: 0 0 1.2em 1.2em;
 }
 
+.playlist-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
 .playlist-list-item {
     display: flex;
-    flex-direction: row-reverse;
     justify-content: left;
     gap: 1em;
     width: 100%;
@@ -140,6 +146,29 @@
     text-align: left;
     border-radius: 0.8em;
     word-break: break-word;
+    border: 3px solid transparent;
+    position: relative;
+}
+
+.playlist-list-item:hover {
+    border: 3px solid var(--color-secondary);
+    transition: color 0.3s ease;
+}
+
+.playlist-hover-text {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    color: transparent;
+    background-color: transparent;
+    align-self: flex-end;
+}
+
+.playlist-list-item:hover .playlist-hover-text {
+    color: var(--color-main-white);
+    background-color: var(--color-secondary);
+    border-radius: 1em;
+    padding: 0.2em 0.8em;
 }
 
 .playlist-img-wrapper {
@@ -152,6 +181,20 @@
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 0.4em;
+}
+
+.favorite-heart {
+    color: var(--color-primary);
+    position: absolute;
+    bottom: 0.1em;
+    left: 3.5em;
+}
+
+.favorite-heart-outline {
+    color: var(--color-tertiary);
+    position: absolute;
+    bottom: 0.1em;
+    left: 3.5em;
 }
 
 /* ===== 1.6 Artist Selection Card ===== */

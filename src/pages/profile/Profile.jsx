@@ -139,7 +139,6 @@ function Profile() {
                     },
                 });
                 setEditMode(false);
-                console.log("Profile updated:", response);
                 toggleSuccessfulProfileUpdate(true);
                 setTimeout(() => toggleSuccessfulProfileUpdate(false), 5000);
             } catch (error) {

@@ -5,13 +5,11 @@ import OuterContainer from '../outerContainer/OuterContainer.jsx';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import DesktopNav from './DesktopNav.jsx';
 import MobileNav from './MobileNav.jsx';
-import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
 function NavBar() {
     const { isAuth, signOut } = useContext(AuthContext);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
 
-    // Track screen size for switching between desktop & mobile versions
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 767);
         window.addEventListener('resize', handleResize);

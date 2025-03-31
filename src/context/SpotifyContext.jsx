@@ -54,8 +54,6 @@ export function SpotifyContextProvider({children}) {
                     }
                 }
             );
-            console.log(response.data)
-
             const {access_token, refresh_token} = response.data;
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', refresh_token);
@@ -80,13 +78,10 @@ export function SpotifyContextProvider({children}) {
             const response = await axios.get('https://api.spotify.com/v1/me', {
                 headers: {Authorization: `Bearer ${token}`},
             });
-
             setSpotifyProfileData(response.data);
-            console.log("User details:", response.data);
         } catch (error) {
             console.error('Error fetching user profile', error);
             setSpotifyUserDataError("Error fetching Spotify user profile.")
-
         }
     };
 

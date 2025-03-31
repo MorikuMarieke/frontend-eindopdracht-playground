@@ -7,14 +7,12 @@ import {AuthContext} from '../../context/AuthContext.jsx';
 import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
 function MobileNav({isAuth, logo, signOut}) {
-    const { spotifyProfileData } = useContext(SpotifyContext);
+    const {spotifyProfileData} = useContext(SpotifyContext);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-
     return (
         <nav className="mobile-nav">
-            {/* Logo & Hamburger Button */}
             <div className="mobile-header">
                 <div className="logo-title-wrapper mobile">
                     <div className="logo-img-wrapper mobile">
@@ -34,12 +32,12 @@ function MobileNav({isAuth, logo, signOut}) {
 
             </div>
 
-            {/* Mobile Menu (Slides In) */}
             <div className={`mobile-menu ${isMenuOpen ? "open" : ""}`}>
                 <ul className="mobile-menu-list">
                     <h3>Menu</h3>
-                    {isAuth && spotifyProfileData?.images?.length > 0 && <Avatar imgSrc={spotifyProfileData.images[0]?.url} alt="Avatar" />}
-
+                    {isAuth && spotifyProfileData?.images?.length > 0 &&
+                        <Avatar imgSrc={spotifyProfileData.images[0]?.url} alt="Avatar"/>
+                    }
                     {isAuth ? (
                         <>
                             <li><NavLink to="/"
