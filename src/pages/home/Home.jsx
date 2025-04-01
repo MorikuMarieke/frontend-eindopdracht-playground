@@ -96,7 +96,6 @@ export default function Home() {
             if (savedPlaylists) {
                 const parsedData = JSON.parse(savedPlaylists)
                 setPlaylistsByGenre(parsedData);
-                console.log('Saved playlists:', playlistsByGenre)
                 togglePlaylistSearchDone(true);
             } else {
                 togglePlaylistSearchDone(false);
@@ -114,7 +113,6 @@ export default function Home() {
 
     useEffect(() => {
         if (!isAuth) {
-            console.log('User logged out. Clearing search results and genres...');
             setPlaylistsByGenre([]);
             setSelectedGenres([]);
             togglePlaylistSearchDone(false);
@@ -125,16 +123,13 @@ export default function Home() {
         async function fetchPlaylistsByGenre() {
             setApiError(null);
             if (!selectedGenres.length) {
-                console.log('No genres selected');
                 setPlaylistsByGenre([]);
                 return;
             }
 
-            console.log('Selected Genres:', selectedGenres);
             togglePlaylistSearchDone(false);
 
             const genreString = selectedGenres.map(genre => genre.name).join(' ');
-            console.log('Searching playlists with genres:', genreString);
 
             try {
                 const response = await axios.get(`${API_BASE}/search`, {
@@ -215,12 +210,10 @@ export default function Home() {
                     Authorization: 'Bearer ' + localStorage.getItem('spotifyToken'),
                 }
             });
-            console.log(response.data);
             const artist = response.data.artists.items[0];
             if (artist) {
                 setArtistId(artist.id);
                 setArtistDetails(artist)
-                console.log(artist);
             } else {
                 setApiError('Could not find artist with matching name.');
             }
@@ -238,7 +231,6 @@ export default function Home() {
                     Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
                 },
             });
-            console.log(response.data);
         } catch (e) {
             console.error('Error fetching playlists by genre', e.response || e);
             setApiError('Could not fetch artist information. Please try again.');

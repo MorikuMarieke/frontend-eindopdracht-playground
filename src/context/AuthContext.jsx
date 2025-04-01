@@ -110,7 +110,7 @@ export function AuthContextProvider({ children }) {
         localStorage.removeItem("token");
         localStorage.removeItem("selectedGenres");
         localStorage.removeItem("genrePlaylistSelection");
-        navigate('/');
+        navigate('/', { replace: true, state: { logout: true } });
     }
 
     async function fetchUserData(username, token, redirectUrl) {
