@@ -9,7 +9,7 @@ import {SpotifyContextProvider} from './context/SpotifyContext.jsx';
 
 
 createRoot(document.getElementById('root')).render(
-    // <StrictMode>
+    <StrictMode>
         <HelmetProvider>
             <Router>
                 <AuthContextProvider>
@@ -19,5 +19,5 @@ createRoot(document.getElementById('root')).render(
                 </AuthContextProvider>
             </Router>
         </HelmetProvider>
-    // </StrictMode>,
+    </StrictMode>,
 );

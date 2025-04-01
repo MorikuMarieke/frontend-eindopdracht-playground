@@ -11,7 +11,7 @@ import {
     UserCircle,
     XCircle,
     ArrowFatRight,
-    Trash
+    Trash, WarningCircle, Headphones, Heart
 } from "@phosphor-icons/react";
 import Button from '../../components/button/Button.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
@@ -23,6 +23,7 @@ import axios from 'axios';
 import {API_BASE, NOVI_PLAYGROUND_BACKEND} from '../../constants/constants.js';
 import {genres} from '../../constants/genreArray.js';
 import {SpotifyContext} from '../../context/SpotifyContext.jsx';
+import FavoriteIcon from '../../components/favoriteIcon/FavoriteIcon.jsx';
 
 export default function Home() {
     // For sign in functionality
@@ -40,12 +41,13 @@ export default function Home() {
     const [artistName, setArtistName] = useState('');
     const [artistId, setArtistId] = useState('');
     const [artistDetails, setArtistDetails] = useState([]);
+    const [apiError, setApiError] = useState(null);
 
     const navigate = useNavigate();
 
     // Context
-    const {isAuth, signIn, signOut, user} = useContext(AuthContext);
-    const { spotifyProfileData } = useContext(SpotifyContext);
+    const {isAuth, signIn, signOut, user, favoritePlaylists} = useContext(AuthContext);
+    const {spotifyProfileData} = useContext(SpotifyContext);
 
     useEffect(() => {
         async function fetchToken() {
@@ -60,10 +62,10 @@ export default function Home() {
                             'Authorization': `Basic ${authString}`, 'Content-Type': 'application/x-www-form-urlencoded'
                         }
                     });
-                // console.log(response.data); //logs the access_token
-                localStorage.setItem("spotifyToken", response.data["access_token"]);
+                localStorage.setItem('spotifyToken', response.data['access_token']);
             } catch (e) {
                 console.error(e);
+                setApiError('Error fetching Spotify token.')
             }
         }
 
@@ -72,14 +74,14 @@ export default function Home() {
 
     useEffect(() => {
         function getSelectedGenresFromStorage() {
-            const storedData = localStorage.getItem("selectedGenres");
+            const storedData = localStorage.getItem('selectedGenres');
 
             if (storedData) {
                 try {
                     const parsedData = JSON.parse(storedData);
                     setSelectedGenres(parsedData);
                 } catch (e) {
-                    console.error("Error parsing selectedGenres from LocalStorage:", e);
+                    console.error('Error parsing selectedGenres from LocalStorage:', e);
                 }
             }
         }
@@ -94,7 +96,6 @@ export default function Home() {
             if (savedPlaylists) {
                 const parsedData = JSON.parse(savedPlaylists)
                 setPlaylistsByGenre(parsedData);
-                console.log("Saved playlists:", playlistsByGenre)
                 togglePlaylistSearchDone(true);
             } else {
                 togglePlaylistSearchDone(false);
@@ -110,6 +111,137 @@ export default function Home() {
         }
     }, [artistId]);
 
+    useEffect(() => {
+        if (!isAuth) {
+            setPlaylistsByGenre([]);
+            setSelectedGenres([]);
+            togglePlaylistSearchDone(false);
+        }
+    }, [isAuth]);
+
+    useEffect(() => {
+        async function fetchPlaylistsByGenre() {
+            setApiError(null);
+            if (!selectedGenres.length) {
+                setPlaylistsByGenre([]);
+                return;
+            }
+
+            togglePlaylistSearchDone(false);
+
+            const genreString = selectedGenres.map(genre => genre.name).join(' ');
+
+            try {
+                const response = await axios.get(`${API_BASE}/search`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
+                    },
+                    params: {
+                        q: `${encodeURIComponent(genreString)}`,
+                        type: 'playlist',
+                        limit: 50,
+                    },
+                });
+
+                if (!response.data.playlists || !response.data.playlists.items) {
+                    console.warn('No playlists found for selected genres.');
+                    setPlaylistsByGenre([]);
+                    setApiError('No playlists found for the selected genres.');
+                    return;
+                }
+
+                const validPlaylists = (response.data.playlists?.items || []).filter(playlist => playlist !== null);
+
+                const sortedPlaylists = [...validPlaylists].sort((a, b) => {
+                    const aName = a.name?.toLowerCase() || '';
+                    const bName = b.name?.toLowerCase() || '';
+
+                    const aDesc = a.description?.toLowerCase() || '';
+                    const bDesc = b.description?.toLowerCase() || '';
+
+                    const aNameMatch = selectedGenres.reduce((acc, genre) => acc + (aName.includes(genre.name.toLowerCase()) ? 2 : 0), 0);
+                    const bNameMatch = selectedGenres.reduce((acc, genre) => acc + (bName.includes(genre.name.toLowerCase()) ? 2 : 0), 0);
+
+                    const aDescMatch = selectedGenres.reduce((acc, genre) => acc + (aDesc.includes(genre.name.toLowerCase()) ? 1 : 0), 0);
+                    const bDescMatch = selectedGenres.reduce((acc, genre) => acc + (bDesc.includes(genre.name.toLowerCase()) ? 1 : 0), 0);
+
+                    return (bNameMatch + bDescMatch) - (aNameMatch + aDescMatch);
+                });
+
+                setPlaylistsByGenre(sortedPlaylists);
+                localStorage.setItem('genrePlaylistSelection', JSON.stringify(sortedPlaylists));
+
+            } catch (e) {
+                console.error('Error fetching playlists', e.response || e);
+
+                if (!e.response) {
+                    setApiError('Network error. Please check your connection.');
+                } else if (e.response.status === 401) {
+                    setApiError('Unauthorized. Your Spotify token may have expired. Please reload.');
+                } else if (e.response.status === 429) {
+                    setApiError('Rate limit exceeded. Try again later.');
+                } else {
+                    setApiError('Could not fetch playlists. Please try again.');
+                }
+
+                setPlaylistsByGenre([]);
+            } finally {
+                togglePlaylistSearchDone(true);
+            }
+        }
+
+        fetchPlaylistsByGenre();
+    }, [selectedGenres]);
+
+    function deleteSelectedGenres() {
+        localStorage.removeItem('selectedGenres');
+        setPlaylistsByGenre([]);
+        setSelectedGenres([]);
+    }
+
+    // Functions related to searching an artist by name
+    async function searchArtist(artistName) {
+        setApiError(null);
+        try {
+            const response = await axios.get(`${API_BASE}/search`, {
+                params: {
+                    q: artistName, type: 'artist',
+                }, headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('spotifyToken'),
+                }
+            });
+            const artist = response.data.artists.items[0];
+            if (artist) {
+                setArtistId(artist.id);
+                setArtistDetails(artist)
+            } else {
+                setApiError('Could not find artist with matching name.');
+            }
+        } catch (e) {
+            console.error(e);
+            setApiError('Could not find artist with matching name.');
+        }
+    }
+
+    async function getArtistInfo(artistId) {
+        setApiError(null);
+        try {
+            const response = await axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
+                },
+            });
+        } catch (e) {
+            console.error('Error fetching playlists by genre', e.response || e);
+            setApiError('Could not fetch artist information. Please try again.');
+        }
+    }
+
+    async function handleArtistSubmit(e) {
+        e.preventDefault();
+        await searchArtist(artistName);
+    }
+
     async function handleLoginSubmit(e) {
         e.preventDefault();
         setError(false);
@@ -122,9 +254,7 @@ export default function Home() {
             signIn(result.data.jwt);
         } catch (err) {
             console.error(err.response)
-            // Check if the error response exists
             if (err.response) {
-                // For example, if the API returns 404 for a non-existent user
                 if (err.response.status === 400 && err.response.data === 'User not found') {
                     setError('User not found');
                 } else if (err.response.status === 401 && err.response.data === 'Invalid username/password') {
@@ -138,111 +268,6 @@ export default function Home() {
         } finally {
             toggleLoading(false);
         }
-    }
-
-    // Functions related to searching playlists by selected genres.
-    useEffect(() => {
-        async function fetchPlaylistsByGenre() {
-            if (!selectedGenres.length) {
-                console.log("No genres selected");
-                return;
-            }
-
-            console.log(selectedGenres)
-            togglePlaylistSearchDone(false);
-
-            const genreString = selectedGenres.map(genre => genre.name).join(" ");
-            console.log("Searching playlists with genres:", genreString)
-
-            try {
-                const response = await axios.get(`${API_BASE}/search`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
-                    }, params: {
-                        q: `${encodeURIComponent(genreString)}`,
-                        type: "playlist", limit: 50,
-                    },
-                });
-
-                if (!response.data.playlists || !response.data.playlists.items) return [];
-
-                const validPlaylists = response.data.playlists.items.filter(playlist => playlist !== null);
-
-                const sortedPlayLists = validPlaylists.sort((a, b) => {
-                    const queryLowerCase = genreString.toLowerCase();
-
-                    const aNameMatch = a.name.toLowerCase().includes(queryLowerCase) ? 2 : 0;
-                    const bNameMatch = b.name.toLowerCase().includes(queryLowerCase) ? 2 : 0;
-
-                    const aDescMatch = a.description?.toLowerCase().includes(queryLowerCase) ? 1 : 0;
-                    const bDescMatch = b.description?.toLowerCase().includes(queryLowerCase) ? 1 : 0;
-
-                    return (bNameMatch + bDescMatch) - (aNameMatch + aDescMatch); // Prioritize name matches first
-                });
-
-
-                console.log("Filtered and sorted playlists:", sortedPlayLists);
-                setPlaylistsByGenre(sortedPlayLists);
-                localStorage.setItem('genrePlaylistSelection', JSON.stringify(sortedPlayLists));
-
-            } catch (e) {
-                console.error("Error fetching playlists", e.response || e);
-                togglePlaylistSearchDone(true);
-            } finally {
-                togglePlaylistSearchDone(true);
-            }
-        }
-        fetchPlaylistsByGenre()
-    }, [selectedGenres]);
-
-    function deleteSelectedGenres() {
-        localStorage.removeItem("selectedGenres");
-        setPlaylistsByGenre([]);
-        setSelectedGenres([]);
-    }
-
-    // TODO: Consider removing the CardContainer classnames, as I don't use them for css (yet)?
-
-    async function getArtistInfo(artistId) {
-        try {
-            const response = await axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('spotifyToken')}`,
-                },
-            });
-            console.log(response.data);
-        } catch (e) {
-            console.error('Error fetching playlists by genre', e.response || e);
-        }
-    }
-
-    // Functions related to searching an artist by name
-    async function searchArtist(artistName) {
-        try {
-            const response = await axios.get(`${API_BASE}/search`, {
-                params: {
-                    q: artistName, type: 'artist',
-                }, headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('spotifyToken'),
-                }
-            });
-            console.log(response.data);
-            const artist = response.data.artists.items[0];
-            if (artist) {
-                setArtistId(artist.id);
-                setArtistDetails(artist)
-                console.log(artist);
-            } else {
-                console.log("No artist found!");
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    async function handleArtistSubmit(e) {
-        e.preventDefault();
-        await searchArtist(artistName);
     }
 
     return (
@@ -278,15 +303,31 @@ export default function Home() {
                         </div>
                     </CardContainer>
 
+                    {apiError &&
+                        <CardContainer>
+                            <CardTopBar color="primary">
+                                <h3>Oopsie. An error occured.</h3>
+                            </CardTopBar>
+                            <div className="error-message-container">
+                                <WarningCircle size={60}/>
+                                <p className="error-message">{apiError}</p>
+                            </div>
+                        </CardContainer>
+
+
+                    }
+
                     {/*TODO: This section appears when user is logged in*/}
                     {isAuth && !spotifyProfileData &&
-                        <CardContainer className="connect-spotify">
-                            <div className="spotify-img-wrapper">
-                                <img src={spotifyLogo} alt="spotify-logo"/>
-                            </div>
-                            <p>Connect your Spotify account to your profile and import your playlists directly to
-                                Spotify</p>
-                        </CardContainer>
+                        <Link to={'/profile'}>
+                            <CardContainer className="connect-spotify">
+                                <div className="spotify-img-wrapper">
+                                    <img src={spotifyLogo} alt="spotify-logo"/>
+                                </div>
+                                <p>Connect your Spotify account to your profile and import your playlists directly to
+                                    Spotify</p>
+                            </CardContainer>
+                        </Link>
                     }
                     {!isAuth &&
                         <CardContainer>
@@ -366,9 +407,14 @@ export default function Home() {
                             {artistDetails && artistDetails.name && (
                                 <div>
                                     <article className="artist-details-home-page">
-
+                                        {artistName.toLowerCase() !== artistDetails.name.toLowerCase() &&
+                                            <h3 className="search-difference">Did you
+                                                mean <strong>[ {artistDetails.name} ]</strong> ? If not, try entering a
+                                                different artist name. </h3>
+                                        }
                                         <div className="artist-img-wrapper">
-                                            <img src={artistDetails.images[0].url} alt={`${artistDetails.name} image`}/>
+                                            <img src={artistDetails.images[0]?.url}
+                                                 alt={`${artistDetails.name} image`}/>
                                         </div>
                                         <Link to={`/artist/${artistDetails.id}`}>
                                             <div className="artist-info-link">
@@ -429,19 +475,26 @@ export default function Home() {
                                 </CardTopBar>
                                 <ul className="playlist-list-container">
                                     {playlistsByGenre.slice(0, 10).map((playlist) => (
-                                        <Link to={`/playlist/${playlist.id}`}>
+                                        <Link to={`/playlist/${playlist.id}`} key={playlist.id}>
                                             <li>
-
                                                 <Button
                                                     className="playlist-list-item"
                                                     type="button"
-                                                    buttonText={playlist.name}
-
                                                 >
                                                     <div className="playlist-img-wrapper">
                                                         <img className="playlist-img" src={playlist.images[0].url}
                                                              alt="playlist-image"/>
                                                     </div>
+                                                    <div className="playlist-info-container">
+                                                        <h3>{playlist.name}</h3>
+                                                        <h3 className="playlist-hover-text"><Headphones size={24} />Go to playlist</h3>
+                                                    </div>
+                                                    {favoritePlaylists.includes(playlist.id) &&
+                                                        <>
+                                                        <Heart className="favorite-heart" size={32} weight="fill" />
+                                                        <Heart className="favorite-heart-outline" size={32} />
+                                                        </>
+                                                }
                                                 </Button>
                                             </li>
                                         </Link>

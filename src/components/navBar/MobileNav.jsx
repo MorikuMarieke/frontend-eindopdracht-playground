@@ -4,14 +4,15 @@ import Avatar from '../avatar/Avatar.jsx';
 import {SignOut, List, X} from '@phosphor-icons/react';
 import Button from '../button/Button.jsx';
 import {AuthContext} from '../../context/AuthContext.jsx';
+import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
 function MobileNav({isAuth, logo, signOut}) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const {spotifyProfileData} = useContext(SpotifyContext);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
         <nav className="mobile-nav">
-            {/* Logo & Hamburger Button */}
             <div className="mobile-header">
                 <div className="logo-title-wrapper mobile">
                     <div className="logo-img-wrapper mobile">
@@ -28,12 +29,15 @@ function MobileNav({isAuth, logo, signOut}) {
                 <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <X size={32}/> : <List size={32}/>}
                 </button>
+
             </div>
 
-            {/* Mobile Menu (Slides In) */}
             <div className={`mobile-menu ${isMenuOpen ? "open" : ""}`}>
                 <ul className="mobile-menu-list">
                     <h3>Menu</h3>
+                    {isAuth && spotifyProfileData?.images?.length > 0 &&
+                        <Avatar imgSrc={spotifyProfileData.images[0]?.url} alt="Avatar"/>
+                    }
                     {isAuth ? (
                         <>
                             <li><NavLink to="/"

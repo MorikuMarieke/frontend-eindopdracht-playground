@@ -1,14 +1,22 @@
-/* Desktop Navbar */
+/* ========================================
+   Component: NavBar
+======================================== */
+
+/*===== Desktop Navbar =====*/
 .desktop-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     gap: 0.6em;
-
     max-width: 1200px;
     padding: 0 1em 0 1em;
     background-color: var(--color-primary);
+}
+
+.desktop-menu {
+    display: flex;
+    gap: 1em;
 }
 
 .desktop-menu-list {
@@ -26,7 +34,7 @@
     color: var(--color-main-white);
 }
 
-/* 🖥️ Desktop Logo & Title */
+/* Desktop Logo & Title */
 .logo-title-wrapper.desktop {
     display: flex;
     align-items: center;
@@ -47,14 +55,24 @@
     color: var(--color-main-white);
 }
 
-/* Mobile Navbar */
+.active-link {
+    border-bottom: 2px solid var(--color-main-white);
+}
+
+.default-link {
+    border-bottom: 2px solid transparent;
+}
+
+/*---------------------------------------------------------------*/
+
+/*===== Mobile Navbar =====*/
 .mobile-nav {
     background-color: var(--color-primary);
     padding: 1em 1em 0.5em 0.5em;
     width: 100vw;
 }
 
-/* Mobile Logo & Title */
+/* ----- Mobile Logo & Title ----- */
 .logo-title-wrapper.mobile {
     display: flex;
     gap: 1em;
@@ -75,7 +93,7 @@
     font-size: 0.85rem;
 }
 
-/* Mobile Menu (Slides from the Right) */
+/* ----- Mobile Menu (Slides from the Right) ----- */
 .mobile-menu {
     position: fixed;
     top: 0;
@@ -97,7 +115,7 @@
     right: 0;
 }
 
-.mobile-menu.open ul {
+.mobile-menu ul {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -109,7 +127,7 @@
     text-transform: uppercase;
 }
 
-/* 📌 Hamburger Button */
+/* ----- Hamburger Button ----- */
 .menu-toggle {
     position: absolute;
     top: 10px;
@@ -122,7 +140,9 @@
     z-index: 101;
 }
 
-/* Hide hamburger button on desktop */
+/* ------------- Media queries ------------ */
+
+/* ----- Hide hamburger button on desktop ----- */
 @media screen and (min-width: 768px) {
     .menu-toggle {
         display: none;
@@ -134,13 +154,19 @@
         gap: 1em;
     }
 
+    .desktop-menu-list a {
+        font-size: 0.8em;
+    }
+
+    .sign-out-button {
+        font-size: 0.8em;
+    }
+
     .logo-subtitle-wrapper h1 {
         font-size: 2.5rem;
-        /*color: var(--color-main-white);*/
     }
 
     .logo-subtitle-wrapper p {
         font-size: 0.9rem;
-        /*color: var(--color-main-white);*/
     }
 }

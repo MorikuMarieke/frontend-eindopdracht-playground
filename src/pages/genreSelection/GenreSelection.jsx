@@ -5,7 +5,7 @@ import PageContainer from '../../components/pageContainer/PageContainer.jsx';
 import CardContainer from '../../components/cardContainer/CardContainer.jsx';
 import CardTopBar from '../../components/cardTopBar/CardTopBar.jsx';
 import Button from '../../components/button/Button.jsx';
-import {CheckCircle, XCircle} from '@phosphor-icons/react';
+import {ArrowUp, CheckCircle, XCircle} from '@phosphor-icons/react';
 import {useNavigate} from 'react-router-dom';
 import '../../constants/genreArray.js'
 import {genres} from '../../constants/genreArray.js';
@@ -15,12 +15,33 @@ function GenreSelection() {
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredGenres, setFilteredGenres] = useState(genres);
+    const [showButton, setShowButton] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 300) {
+                setShowButton(true);
+            } else {
+                setShowButton(false);
+            }
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
         filterGenres(searchQuery);
     }, [searchQuery]);
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
     function handleGenreToggle(genre) {
         setSelectedGenres((prevSelectedGenres) => {
@@ -29,12 +50,10 @@ function GenreSelection() {
             );
 
             if (isSelected) {
-                // Deselect genre
                 return prevSelectedGenres.filter(
                     (selected) => selected.id !== genre.id
                 );
             } else {
-                // Select genre
                 return [...prevSelectedGenres, genre];
             }
         });
@@ -124,6 +143,11 @@ function GenreSelection() {
                             </ul>
                         </div>
                     </CardContainer>
+                    {showButton && (
+                        <button className="back-to-top" onClick={scrollToTop}>
+                            <ArrowUp size={24} />
+                        </button>
+                    )}
                 </PageContainer>
             </OuterContainer>
         </main>

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink} from 'react-router-dom';
 import Avatar from '../avatar/Avatar.jsx';
 import {SignOut} from '@phosphor-icons/react';
 import Button from '../button/Button.jsx';
+import {SpotifyContext} from '../../context/SpotifyContext.jsx';
 
-function DesktopNav({isAuth, logo}) {
+function DesktopNav({isAuth, logo, signOut}) {
+    const { spotifyProfileData } = useContext(SpotifyContext);
+
     return (
         <nav className="desktop-nav">
-            {/* Logo & Title Section */}
             <NavLink to="/">
                 <div className="logo-title-wrapper desktop">
                     <div className="logo-img-wrapper">
@@ -20,30 +22,32 @@ function DesktopNav({isAuth, logo}) {
                 </div>
             </NavLink>
 
-            {/* Desktop Navigation Menu */}
             <div className="desktop-menu">
                 <ul className="desktop-menu-list">
                     {isAuth ? (
                         <>
-                            <li><NavLink to="/">Home</NavLink></li>
-                            <li><NavLink to="/playlist-overview">Playlists</NavLink></li>
-                            <li><NavLink to="/profile">Profile</NavLink></li>
+                            <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home</NavLink></li>
+                            <li><NavLink to="/playlist-overview" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Playlists</NavLink></li>
+                            <li><NavLink to="/profile" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Profile</NavLink></li>
                             <li>
                                 <Button
                                     className="sign-out-button"
                                     buttonText="Sign out"
-                                    type="button">
+                                    type="button"
+                                    onClick={signOut}
+                                >
                                     <SignOut size={32}/>
                                 </Button>
                             </li>
                         </>
                     ) : (
                         <>
-                        <li><NavLink to="/">Home</NavLink></li>
-                        <li><NavLink to="/registration">Register</NavLink></li>
+                        <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home</NavLink></li>
+                        <li><NavLink to="/registration" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Register</NavLink></li>
                         </>
                     )}
                 </ul>
+                {isAuth && spotifyProfileData?.images?.length > 0 && <Avatar imgSrc={spotifyProfileData.images[0]?.url} alt="Avatar" />}
             </div>
         </nav>
     );

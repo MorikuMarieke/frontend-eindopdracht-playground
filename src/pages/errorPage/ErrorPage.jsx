@@ -12,8 +12,8 @@ function ErrorPage() {
                     <PageContainer className="page-error">
                             <section className="error-card">
                                 <h2>Oops something went wrong!</h2>
-                                <p>Click <NavLink to="/">here</NavLink> to go back to the home-page
-                                    te gaan.</p>
+                                <p>Register or log into your account to visit this page.</p>
+                                <p>Click <NavLink to="/">here</NavLink> to go back to the home-page.</p>
                             </section>
                     </PageContainer>
                 </OuterContainer>

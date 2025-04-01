@@ -1,7 +1,3 @@
-
-/* ------------------ 1. Layout ------------------ */
-/* ------------------       1.1. Reusables ------------------ */
-
 main {
     flex: 1;
 }
@@ -23,19 +19,4 @@ main section {
     height: auto;
     margin-bottom: 1em;
 }
-/* ------------------ 4. Pages ------------------ */
 
-
-
-/* ------------------------------- 5. Media Queries -------------------------------- */
-/*Base website is built for desktop/laptop width*/
-
-/*------For Smartphones------*/
-@media screen and (max-width: 767px) {
-
-}
-
-/*------For Tablets------*/
-@media screen and  (min-width: 768px) and (max-width: 1024px) {
-
-}

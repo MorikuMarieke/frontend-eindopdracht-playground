@@ -1,11 +1,19 @@
+/* ========================================
+   Page: Genre Selection
+======================================== */
+
 .selected-genres-container {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     list-style: none;
     gap: 0.5em 0.5em;
     padding: 1em;
     background-color: var(--color-main-white);
-    /*border-radius: 0 0 1.2em 1.2em;*/
+}
+
+.selected-genres-container h3 {
+    padding-right: 1em;
 }
 
 .selectable-genres-container {
@@ -22,7 +30,6 @@
     flex-wrap: wrap;
     list-style: none;
     gap: 0.5em 0.5em;
-
 }
 
 .category-selection {
@@ -39,4 +46,32 @@
 
 .selectable-genres-container h3 {
     color: var(--color-main-white);
+}
+
+/*==== Scroll button ====*/
+.back-to-top {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    background-color: var(--color-primary);
+    color: var(--color-main-white);
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    opacity: 0.5;
+}
+
+.back-to-top:hover {
+    background-color: var(--color-secondary);
+    opacity: 1;
+}
+
+.back-to-top.show {
+    opacity: 0.3;
+    visibility: visible;
 }

@@ -1,4 +1,11 @@
+/* ========================================
+   Page: Error
+======================================== */
+
 .error-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     background-color: var(--color-main-white);
     padding: 1em;
     margin: 1em;
@@ -7,7 +14,7 @@
 
 .error-card h2 {
     color: var(--color-primary);
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 }
 
 .error-card a {

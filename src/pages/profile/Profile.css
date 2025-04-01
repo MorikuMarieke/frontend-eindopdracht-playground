@@ -1,3 +1,7 @@
+/* ========================================
+   Page: Profile
+======================================== */
+
 .profile-greeting {
     display: flex;
     flex-direction: column;
@@ -43,6 +47,15 @@
     justify-content: space-evenly;
 }
 
+.form p {
+    color: var(--color-primary);
+    margin-bottom: 0.5em;
+    text-align: center;
+    font-family: 'Jura', 'Tahoma', serif;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
 .log-in-spotify {
     display: flex;
     align-items: center;
@@ -51,13 +64,34 @@
     padding: 1em;
 }
 
-.spotify-user-info {
+.spotify-user {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    gap: 1em;
     background-color: var(--color-primary);
     color: var(--color-main-white);
     border-radius: 0 0 1.2em 1.2em;
     padding: 1em;
+}
+
+.user-info {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+}
+
+.user-info-data {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.error-user-data {
+    display: flex;
+    background-color: var(--color-main-white);
+    padding: 1em;
+    border-radius: 0 0 1.2em 1.2em;
 }
 
 .spotify-img-wrapper-profile {
@@ -69,6 +103,22 @@
 
 .spotify-img-wrapper-profile img {
     width: 100%;
+}
+
+.spotify-avatar-wrapper {
+    display: flex;
+    flex: 0 0 2.5em;
+    width: 3em;
+    height: 3em;
+    justify-content: center;
+}
+
+.spotify-avatar-wrapper img {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--color-main-white);
 }
 
 .spotify-log-out-button {

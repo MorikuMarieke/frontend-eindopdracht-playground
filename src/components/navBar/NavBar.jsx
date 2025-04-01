@@ -10,7 +10,6 @@ function NavBar() {
     const { isAuth, signOut } = useContext(AuthContext);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
 
-    // Track screen size for switching between desktop & mobile versions
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 767);
         window.addEventListener('resize', handleResize);
